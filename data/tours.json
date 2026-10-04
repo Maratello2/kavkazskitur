@@ -1,0 +1,383 @@
+[
+  {
+    "id": 1,
+    "slug": "elbrus-south-classic",
+    "name": "Elbrus Climb South Side (8 Days)",
+    "title": "Elbrus Climb South Side (8 Days)",
+    "category_name": "Expeditions",
+    "category": "climbing",
+    "difficulty": "Demanding",
+    "altitude": "5,642 m",
+    "duration": "8 days / 7 nights",
+    "price": 85000,
+    "priceRub": 85000,
+    "priceUsd": 920,
+    "capacity": 12,
+    "is_published": true,
+    "is_featured": true,
+    "status": "Active",
+    "start_date": "2026-06-15",
+    "end_date": "2026-09-25",
+    "cover_image": "/tours/elbrus-south.webp",
+    "gallery": [
+      "/tours/barrels_garabashi.webp",
+      "/tours/auth_elbrus_south_0.webp",
+      "/tours/auth_elbrus_south_1.webp",
+      "/tours/auth_elbrus_south_2.webp",
+      "/tours/elbrus_summit_orig.jpg",
+      "/tours/elbrus_climb_orig.jpg"
+    ],
+    "description": "The classic and most reliable route to the Western Summit of Mount Elbrus (5,642 m) via the southern slope. Ascend by modern gondola cableway from Azau Meadow to 3,850 m (Gara-Bashi) with accommodation at our private high-altitude Barrels Refuge. A balanced stepped acclimatization program with radial sorties to Pastukhov Rocks (4,800 m) and Refuge 11 (4,050 m).",
+    "schedule2026": [
+      {
+        "dates": "01.05.2026 — 08.05.2026",
+        "spotsLeft": 3,
+        "capacity": 12,
+        "status": "few_spots"
+      },
+      {
+        "dates": "17.05.2026 — 24.05.2026",
+        "spotsLeft": 0,
+        "capacity": 12,
+        "status": "sold_out"
+      },
+      {
+        "dates": "07.06.2026 — 14.06.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "21.06.2026 — 28.06.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "05.07.2026 — 12.07.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "19.07.2026 — 26.07.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "02.08.2026 — 09.08.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "16.08.2026 — 23.08.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "06.09.2026 — 13.09.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "elbrus-north-wild",
+    "name": "Climbing Elbrus From North Route (8 Days)",
+    "title": "Climbing Elbrus From North Route (8 Days)",
+    "category_name": "Expeditions",
+    "category": "climbing",
+    "difficulty": "Extreme",
+    "altitude": "5,621 m",
+    "duration": "8 days / 7 nights",
+    "price": 85000,
+    "priceRub": 85000,
+    "priceUsd": 920,
+    "capacity": 12,
+    "is_published": true,
+    "is_featured": true,
+    "status": "Active",
+    "start_date": "2026-06-15",
+    "end_date": "2026-09-25",
+    "cover_image": "/tours/elbrus-north.webp",
+    "gallery": [
+      "/tours/djily_su.webp",
+      "/tours/auth_elbrus_north_0.webp",
+      "/tours/auth_elbrus_north_1.webp",
+      "/tours/auth_elbrus_north_2.webp",
+      "/tours/elbrus_north_orig.jpg",
+      "/tours/climbing-elbrus-from-the-north-route-8-days-trip.webp"
+    ],
+    "description": "A fully self-sufficient, wild ascent along the historic 1829 first-ascent route (General Emmanuel's expedition). No cableways, hotels, or snowcats. Start from the scenic Dzhily-Su valley with warm mineral hot springs. All transitions are exclusively on foot through the Mushroom Rocks, Moon Meadow, and Lenz Rocks (4,600–4,800 m) to the East Summit of Elbrus (5,621 m).",
+    "schedule2026": [
+      {
+        "dates": "15.06.2026 — 22.06.2026",
+        "spotsLeft": 3,
+        "capacity": 12,
+        "status": "few_spots"
+      },
+      {
+        "dates": "29.06.2026 — 06.07.2026",
+        "spotsLeft": 0,
+        "capacity": 12,
+        "status": "sold_out"
+      },
+      {
+        "dates": "13.07.2026 — 20.07.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "27.07.2026 — 03.08.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "10.08.2026 — 17.08.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "24.08.2026 — 31.08.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "ski-tour-elbrus",
+    "name": "Elbrus Ski-Tour & Freeride (8 Days)",
+    "title": "Elbrus Ski-Tour & Freeride (8 Days)",
+    "category_name": "Ski Touring",
+    "category": "skitour",
+    "difficulty": "Extreme",
+    "altitude": "5,642 m",
+    "duration": "8 days / 7 nights",
+    "price": 85000,
+    "priceRub": 85000,
+    "priceUsd": 920,
+    "capacity": 12,
+    "is_published": true,
+    "is_featured": true,
+    "status": "Active",
+    "start_date": "2026-06-15",
+    "end_date": "2026-09-25",
+    "cover_image": "/tours/elbrus-skitour.webp",
+    "gallery": [
+      "/tours/auth_skitour_elbrus_0.webp",
+      "/tours/auth_skitour_elbrus_1.webp",
+      "/tours/auth_skitour_elbrus_2.webp",
+      "/tours/elbrus_skitour_orig.jpg",
+      "/tours/elbrus-ski-tour-8-days.webp"
+    ],
+    "description": "A unique ski-mountaineering program — skin up on skis to the summit of Elbrus and enjoy an unbroken, epic descent with over 3,300 vertical meters of drop all the way down to Azau Meadow. Perfect late-spring snow conditions on the Gara-Bashi and Maly Azau glaciers.",
+    "schedule2026": [
+      {
+        "dates": "18.04.2026 — 25.04.2026",
+        "spotsLeft": 3,
+        "capacity": 12,
+        "status": "few_spots"
+      },
+      {
+        "dates": "02.05.2026 — 09.05.2026",
+        "spotsLeft": 0,
+        "capacity": 12,
+        "status": "sold_out"
+      },
+      {
+        "dates": "16.05.2026 — 23.05.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "30.05.2026 — 06.06.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "irikchat-gorge-trek",
+    "name": "Climbing Elbrus + Irikchat Gorge (10 Days)",
+    "title": "Climbing Elbrus + Irikchat Gorge (10 Days)",
+    "category_name": "Trekking",
+    "category": "trekking",
+    "difficulty": "Demanding",
+    "altitude": "5,621 m",
+    "duration": "10 days / 9 nights",
+    "price": 95000,
+    "priceRub": 95000,
+    "priceUsd": 1030,
+    "capacity": 12,
+    "is_published": true,
+    "is_featured": false,
+    "status": "Sold Out",
+    "start_date": "2026-06-15",
+    "end_date": "2026-09-25",
+    "cover_image": "/tours/irikchat.webp",
+    "gallery": [
+      "/tours/auth_irikchat_0.webp",
+      "/tours/auth_irikchat_1.webp",
+      "/tours/auth_irikchat_2.webp",
+      "/tours/irikchat_orig.jpg",
+      "/tours/climbing-elbrus-irikchat-gorge-10-days.webp"
+    ],
+    "description": "The most beautiful and secluded route to Elbrus from the east via the pristine Irikchat Gorge, sandstone canyons of the Sand Castles, and mountain passes. Ideal smooth natural acclimatization without abrupt altitude jumps.",
+    "schedule2026": [
+      {
+        "dates": "20.06.2026 — 29.06.2026",
+        "spotsLeft": 3,
+        "capacity": 12,
+        "status": "few_spots"
+      },
+      {
+        "dates": "10.07.2026 — 19.07.2026",
+        "spotsLeft": 0,
+        "capacity": 12,
+        "status": "sold_out"
+      },
+      {
+        "dates": "01.08.2026 — 10.08.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "20.08.2026 — 29.08.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "slug": "terskol-scenic-climb",
+    "name": "Elbrus Climb Through Terskol Gorge (8 Days)",
+    "title": "Elbrus Climb Through Terskol Gorge (8 Days)",
+    "category_name": "Expeditions",
+    "category": "climbing",
+    "difficulty": "Demanding",
+    "altitude": "5,642 m",
+    "duration": "8 days / 7 nights",
+    "price": 85000,
+    "priceRub": 85000,
+    "priceUsd": 920,
+    "capacity": 12,
+    "is_published": true,
+    "is_featured": false,
+    "status": "Active",
+    "start_date": "2026-06-15",
+    "end_date": "2026-09-25",
+    "cover_image": "/tours/tour_terskol_orig.jpg",
+    "gallery": [
+      "/tours/barrels_garabashi.webp",
+      "/tours/auth_elbrus_south_1.webp",
+      "/tours/auth_elbrus_south_2.webp",
+      "/tours/elbrus_south.webp",
+      "/tours/elbrus_summit_orig.jpg"
+    ],
+    "description": "A signature combined route with in-depth acclimatization through Terskol Gorge, basalt prisms, the Maiden Braids Waterfall, and the Russian Academy of Sciences observatory on Terskol Peak (3,100 m). Followed by ascent to Barrels Refuge and summit push to the West Peak of Elbrus (5,642 m).",
+    "schedule2026": [
+      {
+        "dates": "10.06.2026 — 17.06.2026",
+        "spotsLeft": 3,
+        "capacity": 12,
+        "status": "few_spots"
+      },
+      {
+        "dates": "24.06.2026 — 01.07.2026",
+        "spotsLeft": 0,
+        "capacity": 12,
+        "status": "sold_out"
+      },
+      {
+        "dates": "15.07.2026 — 22.07.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "05.08.2026 — 12.08.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "26.08.2026 — 02.09.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "slug": "kazbek-climb-south",
+    "name": "Mount Kazbek Climb (South Route — 9 Days)",
+    "title": "Mount Kazbek Climb (South Route — 9 Days)",
+    "category_name": "Expeditions",
+    "category": "climbing",
+    "difficulty": "Demanding",
+    "altitude": "5,033 m",
+    "duration": "9 days / 8 nights",
+    "price": 95000,
+    "priceRub": 95000,
+    "priceUsd": 1030,
+    "capacity": 12,
+    "is_published": true,
+    "is_featured": false,
+    "status": "Active",
+    "start_date": "2026-06-15",
+    "end_date": "2026-09-25",
+    "cover_image": "/tours/kazbek.webp",
+    "gallery": [
+      "/tours/kazbek_summit.webp",
+      "/tours/auth_kazbek_0.webp",
+      "/tours/auth_kazbek_1.webp",
+      "/tours/auth_kazbek_2.webp",
+      "/tours/kazbek_church_orig.jpg",
+      "/tours/mount-kazbek-climb-5033-m-south-route-9-days-trip.webp"
+    ],
+    "description": "Summit the legendary five-thousander Mount Kazbek (5,033 m) via the southern slope, past the ancient 14th-century Gergeti Trinity Church, across the Gergeti Glacier, and through the high-altitude Betlemi Hut meteorological station (3,650 m). Stunning views of the Georgian Military Highway and Caucasus peaks.",
+    "schedule2026": [
+      {
+        "dates": "05.07.2026 — 13.07.2026",
+        "spotsLeft": 3,
+        "capacity": 12,
+        "status": "few_spots"
+      },
+      {
+        "dates": "19.07.2026 — 27.07.2026",
+        "spotsLeft": 0,
+        "capacity": 12,
+        "status": "sold_out"
+      },
+      {
+        "dates": "09.08.2026 — 17.08.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      },
+      {
+        "dates": "23.08.2026 — 31.08.2026",
+        "spotsLeft": 8,
+        "capacity": 12,
+        "status": "available"
+      }
+    ]
+  }
+]

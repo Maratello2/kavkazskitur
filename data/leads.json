@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1789663920297,
+    "name": "Dmitry Volkov",
+    "phone": "+79281234567",
+    "tourName": "Mount Elbrus South Route (Classic 8-Day Climb)",
+    "dates": "2026-07-20",
+    "comment": "Crampons and high-altitude boots rental required.",
+    "createdAt": "2026-09-17T16:52:00.297Z",
+    "status": "new"
+  },
+  {
+    "id": 101,
+    "name": "Alexander Morgan",
+    "phone": "+79286914405",
+    "tourName": "Mount Elbrus South Route (Classic 8-Day Climb)",
+    "dates": "2026-07-12",
+    "comment": "Need airport pickup in Mineralnye Vody and double boot rental.",
+    "createdAt": "2026-09-17T14:30:00.000Z",
+    "status": "confirmed"
+  },
+  {
+    "id": 102,
+    "name": "Elena Rostova",
+    "phone": "+79001234567",
+    "tourName": "Mount Kazbek Climb (5,033 m)",
+    "dates": "2026-08-01",
+    "comment": "Questions regarding FSB border pass registration timeline.",
+    "createdAt": "2026-09-17T15:20:00.000Z",
+    "status": "new"
+  }
+]

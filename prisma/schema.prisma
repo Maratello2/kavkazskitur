@@ -1,0 +1,28 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Booking {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  tourSlug        String
+  tourTitle       String
+  clientName      String
+  clientEmail     String
+  clientPhone     String
+  participants    Int      @default(1)
+  preferredDate   String?
+  experienceLevel String   // "Beginner" | "Intermediate" | "Advanced"
+  status          String   @default("NEW") // "NEW" | "CONTACTED" | "DEPOSIT_PAID" | "CONFIRMED" | "CANCELLED"
+  managerNotes    String?
+  consent152      Boolean  @default(true)
+  clientIp        String?
+
+  @@map("bookings")
+}
