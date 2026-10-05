@@ -34,13 +34,13 @@ export const NAVIGATION_DATA: NavCategory[] = [
           },
           {
             title: 'Elbrus North Side Route',
-            href: '/tours/elbrus-climb-8-days',
+            href: '/tours/elbrus-north-wild',
             badge: 'Wild',
             description: 'Autonomous wilderness route via historic Emmanuel glade & warm Narzan springs.',
           },
           {
             title: 'Elbrus Traverse Expedition',
-            href: '/tours/elbrus-climb-south-side-8-days',
+            href: '/tours/elbrus-south-classic',
             description: 'Ascend the wild northern glacier and descend via the southern volcanic slopes.',
           },
         ],
@@ -50,13 +50,13 @@ export const NAVIGATION_DATA: NavCategory[] = [
         items: [
           {
             title: 'Elbrus Ski-Tour & Freeride',
-            href: '/expeditions',
+            href: '/tours/ski-tour-elbrus',
             badge: 'Freeride',
             description: 'Spring ski-mountaineering ascent with 3,000m continuous off-piste descent.',
           },
           {
             title: 'Kazbek + Elbrus Combo',
-            href: '/tours/kazbek-elbrus',
+            href: '/tours/kazbek-climb-south',
             badge: 'Double Summit',
             description: 'Climb two legendary 5,000m Caucasian summits in a single continuous expedition.',
           },
@@ -74,12 +74,12 @@ export const NAVIGATION_DATA: NavCategory[] = [
         items: [
           {
             title: 'Mount Kazbek Summit (5,033m)',
-            href: '/tours/kazbek-south',
+            href: '/tours/kazbek-climb-south',
             description: 'Classic ascent from Stepantsminda via Gergeti glacier and the historic Betlemi hut.',
           },
           {
             title: 'Bezengi 5,000m Mountaineering',
-            href: '/tours/bezengi',
+            href: '/expeditions?search=bezengi',
             badge: 'Technical 5000m',
             description: 'Technical walls and iconic ridges of Shkhara, Dykhtau, and the Bezengi Wall.',
           },

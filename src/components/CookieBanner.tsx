@@ -29,7 +29,7 @@ export default function CookieBanner() {
 
   return (
     <div 
-      className="fixed bottom-3 inset-x-3 sm:bottom-auto sm:top-24 sm:right-6 sm:left-auto sm:max-w-xs z-50 bg-[#070F1C]/96 backdrop-blur-md border border-white/15 p-3 rounded-xl shadow-2xl flex flex-col gap-2.5 animate-in fade-in duration-300"
+      className="fixed bottom-4 inset-x-4 sm:inset-x-auto sm:bottom-6 sm:left-6 sm:max-w-sm z-50 bg-[#070F1C]/96 backdrop-blur-md border border-white/15 p-3.5 rounded-xl shadow-2xl flex flex-col gap-2.5 animate-in fade-in duration-300"
     >
       <div className="flex items-start gap-2.5">
         <Cookie className="w-4 h-4 text-[#FF6A00] shrink-0 mt-0.5" />

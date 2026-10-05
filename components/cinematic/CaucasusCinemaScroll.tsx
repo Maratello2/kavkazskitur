@@ -258,7 +258,7 @@ export default function CaucasusCinemaScroll() {
       {/* =========================================================================
           TOP MISSION CONTROL HUD (PRECISION ALPINE EXPEDITION TELEMETRY)
       ========================================================================= */}
-      <div className="relative z-20 w-full pt-24 sm:pt-28 lg:pt-24 px-4 sm:px-6 md:px-8 max-w-5xl mx-auto flex flex-col pointer-events-auto">
+      <div className="relative z-20 w-full pt-28 sm:pt-32 lg:pt-32 scroll-mt-32 px-4 sm:px-6 md:px-8 max-w-5xl mx-auto flex flex-col pointer-events-auto">
         <div className="w-full flex items-center justify-between gap-2.5 px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-2xl bg-[#070F1C]/92 border border-white/[0.08] shadow-2xl backdrop-blur-none">
           
           {/* Coordinates & Location Tag */}
@@ -292,19 +292,24 @@ export default function CaucasusCinemaScroll() {
             </div>
 
             {/* Quick Realm Indicator Dots */}
-            <div className="flex items-center gap-1 pl-1">
+            <div className="flex items-center gap-0.5 pl-1">
               {CAUCASUS_REALMS.map((realm, idx) => (
                 <button
                   key={realm.id}
+                  type="button"
                   onClick={() => handleSelectRealm(idx)}
-                  className={`transition-all duration-300 rounded-full cursor-pointer flex items-center justify-center ${
-                    idx === activeRealmIdx 
-                      ? 'w-4 sm:w-5 h-1.5 bg-[#FF6A00] shadow-sm shadow-orange-500/50' 
-                      : 'w-1.5 h-1.5 bg-white/30 hover:bg-white/60'
-                  }`}
+                  className="p-1 sm:p-1.5 cursor-pointer flex items-center justify-center focus:outline-none"
                   aria-label={`Switch to ${realm.title}`}
                   title={`${realm.title} (${realm.altitudeStr})`}
-                />
+                >
+                  <span
+                    className={`block transition-all duration-300 rounded-full ${
+                      idx === activeRealmIdx 
+                        ? 'w-4 sm:w-5 h-1.5 bg-[#FF6A00] shadow-sm shadow-orange-500/50' 
+                        : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/80'
+                    }`}
+                  />
+                </button>
               ))}
             </div>
           </div>
