@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
-import { ExternalLink, ArrowRight, ShieldCheck, Sparkles, Terminal, Activity, Layers, Code2 } from 'lucide-react';
+import { ExternalLink, ArrowRight } from 'lucide-react';
 
 interface ProjectCard3DProps {
   id: 'wonderwell' | 'kavkazskitur';
@@ -21,6 +21,11 @@ interface ProjectCard3DProps {
   onLeave?: () => void;
 }
 
+/**
+ * ProjectCard3D
+ * Ultra-optimized 3D Tilt Card using direct DOM transforms (Zero React re-renders on mousemove)
+ * and solid alpha backgrounds (Zero GPU backdrop-filter blur bottleneck).
+ */
 export default function ProjectCard3D({
   id,
   title,
@@ -38,11 +43,7 @@ export default function ProjectCard3D({
   onLeave,
 }: ProjectCard3DProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [rotateX, setRotateX] = useState(0);
-  const [rotateY, setRotateY] = useState(0);
-  const [glarePos, setGlarePos] = useState({ x: 50, y: 50, opacity: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-
+  const glareRef = useRef<HTMLDivElement>(null);
   const isCyan = accentColor === 'cyan';
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -52,34 +53,40 @@ export default function ProjectCard3D({
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    // Subtle 3D tilt (max 12 deg)
-    const rotX = -((y - centerY) / centerY) * 10;
-    const rotY = ((x - centerX) / centerX) * 10;
+    const rotX = -((y - centerY) / centerY) * 8;
+    const rotY = ((x - centerX) / centerX) * 8;
 
-    setRotateX(rotX);
-    setRotateY(rotY);
+    // Direct DOM transformation for silky 60 FPS without React re-render overhead
+    card.style.transform = `perspective(800px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale3d(1.015, 1.015, 1)`;
 
-    setGlarePos({
-      x: (x / rect.width) * 100,
-      y: (y / rect.height) * 100,
-      opacity: 0.15,
-    });
+    if (glareRef.current) {
+      const px = ((x / rect.width) * 100).toFixed(1);
+      const py = ((y / rect.height) * 100).toFixed(1);
+      glareRef.current.style.opacity = '0.15';
+      glareRef.current.style.background = `radial-gradient(circle 300px at ${px}% ${py}%, ${
+        isCyan ? 'rgba(0, 240, 255, 0.35)' : 'rgba(255, 106, 0, 0.35)'
+      }, transparent 80%)`;
+    }
   };
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
+    if (cardRef.current) {
+      cardRef.current.style.transition = 'transform 0.08s ease-out';
+    }
     if (onHover) onHover();
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
-    setRotateX(0);
-    setRotateY(0);
-    setGlarePos((p) => ({ ...p, opacity: 0 }));
+    if (cardRef.current) {
+      cardRef.current.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+      cardRef.current.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    }
+    if (glareRef.current) {
+      glareRef.current.style.opacity = '0';
+    }
     if (onLeave) onLeave();
   };
 
@@ -90,29 +97,24 @@ export default function ProjectCard3D({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{
-        transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(${isHovered ? 1.02 : 1}, ${isHovered ? 1.02 : 1}, 1)`,
-        transition: isHovered ? 'transform 0.08s ease-out' : 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+        transform: 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
+        willChange: 'transform',
       }}
-      className={`relative w-full rounded-3xl p-6 sm:p-8 bg-[#070D18]/92 border backdrop-blur-xl shadow-2xl transition-all duration-300 overflow-hidden flex flex-col justify-between group ${
+      className={`relative w-full rounded-3xl p-6 sm:p-8 bg-[#060C16] border shadow-2xl overflow-hidden flex flex-col justify-between group ${
         isCyan
-          ? 'border-sky-500/20 hover:border-sky-400/60 hover:shadow-[0_20px_60px_rgba(0,240,255,0.18)]'
-          : 'border-orange-500/20 hover:border-[#FF6A00]/60 hover:shadow-[0_20px_60px_rgba(255,106,0,0.18)]'
+          ? 'border-sky-500/20 hover:border-sky-400/50 hover:shadow-[0_15px_45px_rgba(0,240,255,0.12)]'
+          : 'border-orange-500/20 hover:border-[#FF6A00]/50 hover:shadow-[0_15px_45px_rgba(255,106,0,0.12)]'
       }`}
     >
-      {/* Specular Holographic Glare Follower */}
+      {/* Specular Glare Follower (Direct DOM update) */}
       <div
-        className="pointer-events-none absolute inset-0 transition-opacity duration-300 mix-blend-screen"
-        style={{
-          opacity: glarePos.opacity,
-          background: `radial-gradient(circle 350px at ${glarePos.x}% ${glarePos.y}%, ${
-            isCyan ? 'rgba(0, 240, 255, 0.35)' : 'rgba(255, 106, 0, 0.35)'
-          }, transparent 80%)`,
-        }}
+        ref={glareRef}
+        className="pointer-events-none absolute inset-0 transition-opacity duration-200 mix-blend-screen opacity-0"
       />
 
       {/* Top Ambient Glow Pill */}
       <div
-        className={`absolute -top-24 left-1/2 -translate-x-1/2 w-72 h-32 rounded-full blur-3xl pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity duration-500 ${
+        className={`absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-28 rounded-full blur-3xl pointer-events-none opacity-15 group-hover:opacity-30 transition-opacity duration-300 ${
           isCyan ? 'bg-cyan-500' : 'bg-[#FF6A00]'
         }`}
       />
@@ -128,7 +130,7 @@ export default function ProjectCard3D({
               }`}
             />
             <span
-              className={`font-mono text-[10px] sm:text-[11px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-full border ${
+              className={`font-mono text-[10px] sm:text-[11px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full border ${
                 isCyan
                   ? 'bg-cyan-950/60 text-cyan-300 border-cyan-500/30'
                   : 'bg-orange-950/60 text-orange-300 border-orange-500/30'
@@ -166,7 +168,7 @@ export default function ProjectCard3D({
         {/* Metrics Bar */}
         <div className="grid grid-cols-3 gap-2.5 pt-3 pb-2 border-y border-white/[0.08]">
           {metrics.map((m, idx) => (
-            <div key={idx} className="bg-white/[0.02] p-2.5 rounded-xl border border-white/[0.05]">
+            <div key={idx} className="bg-white/[0.03] p-2.5 rounded-xl border border-white/[0.05]">
               <span className="font-mono text-[9px] uppercase tracking-wider text-slate-400 block truncate">
                 {m.label}
               </span>
@@ -199,11 +201,11 @@ export default function ProjectCard3D({
             rel="noopener noreferrer"
             className={`w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-bold text-xs uppercase tracking-wider text-white transition-all shadow-lg active:scale-95 cursor-pointer ${
               isCyan
-                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 shadow-cyan-950/60'
-                : 'bg-gradient-to-r from-[#FF6A00] to-orange-600 hover:from-orange-500 hover:to-orange-600 shadow-orange-950/60'
+                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 shadow-cyan-950/40'
+                : 'bg-gradient-to-r from-[#FF6A00] to-orange-600 hover:from-orange-500 hover:to-orange-600 shadow-orange-950/40'
             }`}
           >
-            <span>Launch {domain}</span>
+            <span>Открыть {domain}</span>
             <ExternalLink size={14} strokeWidth={2} />
           </a>
         ) : (
@@ -211,11 +213,11 @@ export default function ProjectCard3D({
             href={ctaUrl}
             className={`w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-bold text-xs uppercase tracking-wider text-white transition-all shadow-lg active:scale-95 cursor-pointer ${
               isCyan
-                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 shadow-cyan-950/60'
-                : 'bg-gradient-to-r from-[#FF6A00] to-orange-600 hover:from-orange-500 hover:to-orange-600 shadow-orange-950/60'
+                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 shadow-cyan-950/40'
+                : 'bg-gradient-to-r from-[#FF6A00] to-orange-600 hover:from-orange-500 hover:to-orange-600 shadow-orange-950/40'
             }`}
           >
-            <span>Explore {domain}</span>
+            <span>Исследовать {domain}</span>
             <ArrowRight size={14} strokeWidth={2} />
           </Link>
         )}
