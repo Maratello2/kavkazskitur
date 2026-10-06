@@ -1,0 +1,67 @@
+from playwright.sync_api import sync_playwright
+
+def test():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page(viewport={"width": 1440, "height": 900})
+
+        console_errors = []
+        page_errors = []
+
+        page.on("console", lambda msg: console_errors.append(msg.text) if msg.type == "error" else None)
+        page.on("pageerror", lambda err: page_errors.append(str(err)))
+
+        print("Navigating to http://localhost:3000/maratello ...")
+        res = page.goto("http://localhost:3000/maratello", wait_until="networkidle", timeout=15000)
+        assert res.status == 200, f"Expected 200 but got {res.status}"
+
+        page.wait_for_timeout(1500)
+
+        # Check title
+        title = page.title()
+        print(f"Page Title: {title}")
+
+        # Check canvas presence
+        canvas = page.query_selector("canvas")
+        assert canvas is not None, "WebGL Canvas must be present!"
+        print("WebGL Canvas verified successfully!")
+
+        # Click sound toggle
+        sound_btn = page.query_selector("button:has-text('AUDIO')")
+        if sound_btn:
+            sound_btn.click()
+            print("Clicked Audio Toggle button successfully!")
+
+        # Click copy telegram
+        copy_btn = page.query_selector("button:has-text('TELEGRAM')")
+        if copy_btn:
+            copy_btn.click()
+            print("Clicked Copy Telegram button successfully!")
+
+        # Click filter button
+        wonderwell_btn = page.query_selector("button:has-text('Wonderwell')")
+        if wonderwell_btn:
+            wonderwell_btn.click()
+            print("Clicked Wonderwell filter button successfully!")
+
+        # Click terminal chip
+        chip_btn = page.query_selector("button:has-text('$stack')")
+        if chip_btn:
+            chip_btn.click()
+            print("Clicked $stack terminal chip successfully!")
+
+        page.wait_for_timeout(1000)
+
+        # Assert no page errors
+        print(f"Total Page Errors: {len(page_errors)}")
+        print(f"Total Console Errors: {len(console_errors)}")
+        if page_errors:
+            print(f"Errors: {page_errors}")
+
+        assert len(page_errors) == 0, f"Page errors encountered: {page_errors}"
+
+        browser.close()
+        print("ALL MARATELLO SHOWCASE TESTS PASSED WITH 100% SUCCESS!")
+
+if __name__ == "__main__":
+    test()

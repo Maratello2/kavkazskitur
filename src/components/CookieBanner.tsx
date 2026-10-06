@@ -9,7 +9,7 @@ export default function CookieBanner() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  if (pathname && pathname.startsWith('/admin')) {
+  if (pathname && (pathname.startsWith('/admin') || pathname.startsWith('/maratello'))) {
     return null;
   }
 

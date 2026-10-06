@@ -9,8 +9,9 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
   const pathname = usePathname();
   const isHome = pathname === '/';
   const isAdmin = pathname?.startsWith('/admin');
+  const isStandalone = pathname?.startsWith('/maratello');
 
-  if (isAdmin || isHome) {
+  if (isAdmin || isHome || isStandalone) {
     return <>{children}</>;
   }
 

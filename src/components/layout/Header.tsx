@@ -119,8 +119,8 @@ export default function Header() {
     setExpandedMobileCategory((prev) => (prev === categoryId ? null : categoryId));
   };
 
-  // Do not render public header on admin paths
-  if (pathname && pathname.startsWith('/admin')) {
+  // Do not render public header on admin paths or standalone showcase
+  if (pathname && (pathname.startsWith('/admin') || pathname.startsWith('/maratello'))) {
     return null;
   }
 

@@ -8,7 +8,7 @@ export default function FloatingActions() {
   const pathname = usePathname();
   const [showTopBtn, setShowTopBtn] = useState(false);
 
-  if (pathname && pathname.startsWith('/admin')) {
+  if (pathname && (pathname.startsWith('/admin') || pathname.startsWith('/maratello'))) {
     return null;
   }
 
