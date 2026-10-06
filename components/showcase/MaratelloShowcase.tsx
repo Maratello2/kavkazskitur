@@ -12,22 +12,109 @@ import {
   Github,
   Sparkles,
   Mountain,
-  Globe,
   Code2,
   Cpu,
   Layers,
   ArrowUpRight,
-  Compass,
   Activity,
   Zap,
+  Gamepad2,
+  Swords,
+  Skull,
+  Flame,
+  Radio,
+  ExternalLink,
 } from 'lucide-react';
 import ThreeCanvasBackground from './ThreeCanvasBackground';
 import ProjectCard3D from './ProjectCard3D';
+
+interface GameItem {
+  id: string;
+  title: string;
+  genre: string;
+  tagline: string;
+  developer: string;
+  accent: string;
+  borderClass: string;
+  glowClass: string;
+  badge: string;
+  quote: string;
+  tags: string[];
+}
+
+const FAVORITE_GAMES: GameItem[] = [
+  {
+    id: 'cyberpunk',
+    title: 'Cyberpunk 2077',
+    genre: 'Dystopian Sci-Fi RPG',
+    developer: 'CD PROJEKT RED',
+    tagline: 'Night City, Chrome, High-Tech Low-Life & Relic Interfaces',
+    badge: 'NEON DYSTOPIA',
+    accent: '#FCEE0A',
+    borderClass: 'border-yellow-400/30 hover:border-yellow-400/70',
+    glowClass: 'shadow-yellow-500/10 hover:shadow-yellow-500/25',
+    quote: '"Never fade away. The city of dreams, the city of chrome."',
+    tags: ['Night City', 'Ray Tracing', 'Sandevistan', 'Relic Neuro-Link'],
+  },
+  {
+    id: 'lies-of-p',
+    title: 'Lies of P',
+    genre: 'Belle Époque Dark Souls-like',
+    developer: 'Round8 / Neowiz',
+    tagline: 'Krat Gothic Architecture, Ergo Power & Mechanical Puppets',
+    badge: 'GOTHIC SOULS-LIKE',
+    accent: '#38BDF8',
+    borderClass: 'border-sky-400/30 hover:border-sky-400/70',
+    glowClass: 'shadow-sky-500/10 hover:shadow-sky-500/25',
+    quote: '"Lies make you human. How many lies will you weave to wake up?"',
+    tags: ['Ergo Energy', 'Legion Arm', 'Victorian Krat', 'Puppet String'],
+  },
+  {
+    id: 'ultrakill',
+    title: 'ULTRAKILL',
+    genre: 'Hyper-Kinetic Retro FPS',
+    developer: 'Arsi "Hakita" Patala',
+    tagline: 'Blood is Fuel, Hell is Full, Relentless SSStyle Velocity',
+    badge: 'SSSTYLE VELOCITY',
+    accent: '#EF4444',
+    borderClass: 'border-red-500/30 hover:border-red-500/70',
+    glowClass: 'shadow-red-500/10 hover:shadow-red-500/25',
+    quote: '"MANKIND IS DEAD. BLOOD IS FUEL. HELL IS FULL."',
+    tags: ['Coin Ricochet', 'Cyber Grind', 'Parry Mechanics', 'Frail Velocity'],
+  },
+  {
+    id: 'doom',
+    title: 'DOOM: The Dark Ages',
+    genre: 'Medieval Cosmic Warfare FPS',
+    developer: 'id Software',
+    tagline: 'Shield Saw, Flail of Torment, Gods, Demons & Heavy Metal Fury',
+    badge: 'COSMIC HELLFIRE',
+    accent: '#F97316',
+    borderClass: 'border-orange-500/30 hover:border-orange-500/70',
+    glowClass: 'shadow-orange-500/10 hover:shadow-orange-500/25',
+    quote: '"Before the modern era, the Slayer fought with steel, wrath and saw."',
+    tags: ['Shield Saw', 'Heavy Metal', 'Medieval Brutality', 'Cosmic Gods'],
+  },
+  {
+    id: 'nier',
+    title: 'NieR: Automata',
+    genre: 'Philosophical Android Masterpiece',
+    developer: 'PlatinumGames / Yoko Taro',
+    tagline: '2B & 9S, Melancholic Violin Symphonies & Bullet-Hell Elegance',
+    badge: 'EXISTENTIAL OPERA',
+    accent: '#E2E8F0',
+    borderClass: 'border-slate-300/30 hover:border-slate-100/70',
+    glowClass: 'shadow-slate-400/10 hover:shadow-slate-400/25',
+    quote: '"Everything that lives is designed to end. We are perpetually trapped in a never-ending spiral."',
+    tags: ['Glory to Mankind', 'Yoko Taro', 'Keiichi Okabe', 'Ending E'],
+  },
+];
 
 export default function MaratelloShowcase() {
   const [activeProject, setActiveProject] = useState<'all' | 'wonderwell' | 'kavkazskitur'>('all');
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [copiedTg, setCopiedTg] = useState(false);
+  const [copiedDiscord, setCopiedDiscord] = useState(false);
   const [fps, setFps] = useState(60);
   const [timeStr, setTimeStr] = useState('');
   const [terminalInput, setTerminalInput] = useState('');
@@ -35,6 +122,7 @@ export default function MaratelloShowcase() {
     'MARATELLO LABS // OS v2.6.4 INITIALIZED',
     'WebGL 2.0 Spatial Engine: ACTIVE (60 FPS)',
     'Flagships Loaded: Wonderwell.ru & KavKazSkiTur.com',
+    'Gaming Matrix: 5 Influences Synced (Cyberpunk, Lies of P, Ultrakill, DOOM, NieR)',
     'Type "help" or click quick chips below to explore commands.',
   ]);
 
@@ -109,10 +197,10 @@ export default function MaratelloShowcase() {
   const handleCopyTelegram = async () => {
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText('@maratello');
+        await navigator.clipboard.writeText('@directorbabok');
       } else {
         const textarea = document.createElement('textarea');
-        textarea.value = '@maratello';
+        textarea.value = '@directorbabok';
         textarea.style.position = 'fixed';
         textarea.style.opacity = '0';
         document.body.appendChild(textarea);
@@ -121,10 +209,9 @@ export default function MaratelloShowcase() {
         document.body.removeChild(textarea);
       }
     } catch {
-      // Fallback
       try {
         const textarea = document.createElement('textarea');
-        textarea.value = '@maratello';
+        textarea.value = '@directorbabok';
         textarea.style.position = 'fixed';
         textarea.style.opacity = '0';
         document.body.appendChild(textarea);
@@ -136,6 +223,37 @@ export default function MaratelloShowcase() {
     setCopiedTg(true);
     playChime(880, 'triangle', 0.18);
     setTimeout(() => setCopiedTg(false), 2200);
+  };
+
+  const handleCopyDiscord = async () => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText('maratello');
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = 'maratello';
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+    } catch {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = 'maratello';
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      } catch {}
+    }
+    setCopiedDiscord(true);
+    playChime(920, 'triangle', 0.18);
+    setTimeout(() => setCopiedDiscord(false), 2200);
   };
 
   const handleTerminalSubmit = (cmd?: string) => {
@@ -152,6 +270,7 @@ export default function MaratelloShowcase() {
           'Available commands:',
           '  • wonderwell  - Details about Wonderwell.ru ecosystem',
           '  • kavkaz      - Details about KavKazSkiTur platform',
+          '  • games       - Favorite aesthetic game inspirations',
           '  • stack       - Technical engineering stack matrix',
           '  • whoami      - Creator credentials and mission',
           '  • contact     - Direct communications channels',
@@ -175,6 +294,16 @@ export default function MaratelloShowcase() {
         );
         setActiveProject('kavkazskitur');
         break;
+      case 'games':
+        newLogs.push(
+          'CORE GAMING & AESTHETIC INSPIRATIONS:',
+          '  [1] Cyberpunk 2077       - Dystopian Night City & Chrome Futurism',
+          '  [2] Lies of P            - Krat Gothic Steampunk & Ergo Souls-like',
+          '  [3] ULTRAKILL            - Blood is Fuel, SSStyle Hyper-Velocity',
+          '  [4] DOOM: The Dark Ages  - Heavy Metal Shield-Saw Cosmic Warfare',
+          '  [5] NieR: Automata       - Glory to Mankind, Android Existential Elegance'
+        );
+        break;
       case 'stack':
         newLogs.push(
           'CORE STACK:',
@@ -193,7 +322,8 @@ export default function MaratelloShowcase() {
       case 'contact':
         newLogs.push(
           'DIRECT CHANNELS:',
-          '  - Telegram: https://t.me/maratello (@maratello)',
+          '  - Telegram: https://t.me/directorbabok (@directorbabok)',
+          '  - Discord:  maratello',
           '  - GitHub:   https://github.com/Maratello2',
           '  - WhatsApp: +7 (928) 082-84-13'
         );
@@ -321,29 +451,39 @@ export default function MaratelloShowcase() {
             bulletproof digital products.
           </p>
 
-          {/* Quick Action Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+          {/* Direct Contacts Action Matrix */}
+          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 pt-2">
             {/* Telegram Copy */}
             <button
               type="button"
               onClick={handleCopyTelegram}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] active:scale-95 border border-white/[0.1] text-xs font-mono font-bold text-slate-200 transition-all cursor-pointer shadow-md"
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] active:scale-95 border border-white/[0.1] text-xs font-mono font-bold text-slate-200 transition-all cursor-pointer shadow-md"
             >
               {copiedTg ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} className="text-sky-400" />}
-              <span>{copiedTg ? 'COPIED TO CLIPBOARD!' : 'TELEGRAM: @MARATELLO'}</span>
+              <span>{copiedTg ? 'COPIED TG!' : 'TG: @DIRECTORBABOK'}</span>
             </button>
 
-            {/* Direct TG Link */}
+            {/* Direct Telegram Chat */}
             <a
-              href="https://t.me/maratello"
+              href="https://t.me/directorbabok"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => playChime(700, 'sine', 0.1)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0088cc]/20 hover:bg-[#0088cc]/30 text-sky-300 border border-[#0088cc]/40 text-xs font-mono font-bold transition-all active:scale-95 cursor-pointer shadow-md"
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#0088cc]/20 hover:bg-[#0088cc]/30 text-sky-300 border border-[#0088cc]/40 text-xs font-mono font-bold transition-all active:scale-95 cursor-pointer shadow-md"
             >
               <Send size={14} />
-              <span>SEND MESSAGE</span>
+              <span>TELEGRAM CHAT</span>
             </a>
+
+            {/* Discord Copy */}
+            <button
+              type="button"
+              onClick={handleCopyDiscord}
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#5865F2]/15 hover:bg-[#5865F2]/25 text-[#9ba5ff] hover:text-white border border-[#5865F2]/30 text-xs font-mono font-bold transition-all active:scale-95 cursor-pointer shadow-md"
+            >
+              {copiedDiscord ? <Check size={14} className="text-emerald-400" /> : <Radio size={14} className="text-[#5865F2]" />}
+              <span>{copiedDiscord ? 'COPIED DISCORD!' : 'DISCORD: MARATELLO'}</span>
+            </button>
 
             {/* GitHub */}
             <a
@@ -351,7 +491,7 @@ export default function MaratelloShowcase() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => playChime(600, 'sine', 0.1)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/[0.1] text-xs font-mono font-bold transition-all active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/[0.1] text-xs font-mono font-bold transition-all active:scale-95 cursor-pointer shadow-md"
             >
               <Github size={14} />
               <span>GITHUB: @MARATELLO2</span>
@@ -433,7 +573,7 @@ export default function MaratelloShowcase() {
                 tagline="Mount Elbrus & Caucasus Expeditions Infrastructure"
                 description="Comprehensive commercial mountaineering platform built with Next.js 15 and Three.js. Features 3D mountain flythroughs, interactive altitude charts, Garabashi Barrels refuge booking, and 152-FZ compliance."
                 metrics={[
-                  { label: 'PAGES', value: '47 STATIC' },
+                  { label: 'PAGES', value: '48 STATIC' },
                   { label: 'RENDER', value: '60 FPS 3D' },
                   { label: 'LEADS', value: 'WHATSAPP' },
                 ]}
@@ -447,7 +587,81 @@ export default function MaratelloShowcase() {
           </div>
         </section>
 
-        {/* 7. Engineering Matrix Bento Grid */}
+        {/* 7. Favorite Games & Aesthetic Matrix */}
+        <section className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-white/[0.08]">
+            <div className="flex items-center gap-2.5">
+              <Gamepad2 className="w-5 h-5 text-[#FF6A00]" />
+              <div>
+                <h2 className="text-xl sm:text-2xl font-black uppercase text-white tracking-tight">
+                  Aesthetic Radar &amp; Core Gaming Influences
+                </h2>
+                <p className="text-xs text-slate-400 mt-0.5 font-light">
+                  Dark Gothic, Kinetic Cyberpunk, High-Velocity Warfare &amp; Melancholic Existentialism
+                </p>
+              </div>
+            </div>
+            <span className="font-mono text-[10px] text-slate-400 uppercase tracking-widest">
+              CURATED LIST // 5 MASTERPIECES
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {FAVORITE_GAMES.map((game) => (
+              <div
+                key={game.id}
+                onMouseEnter={() => playChime(game.id === 'ultrakill' ? 880 : 640, 'triangle', 0.06)}
+                className={`rounded-2xl p-5 sm:p-6 bg-[#060B14]/90 border backdrop-blur-md shadow-xl transition-all duration-300 hover:scale-[1.015] flex flex-col justify-between group ${game.borderClass} ${game.glowClass}`}
+              >
+                <div className="space-y-3">
+                  {/* Top Badge */}
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] px-2 py-0.5 rounded-full bg-white/[0.05] border border-white/10 text-slate-300">
+                      {game.badge}
+                    </span>
+                    <span className="font-mono text-[10px] text-slate-500">
+                      {game.developer}
+                    </span>
+                  </div>
+
+                  {/* Title & Genre */}
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-black uppercase text-white tracking-tight group-hover:text-slate-100 transition-colors">
+                      {game.title}
+                    </h3>
+                    <span className="font-mono text-[11px] text-slate-400 block mt-0.5">
+                      {game.genre}
+                    </span>
+                  </div>
+
+                  {/* Tagline */}
+                  <p className="text-xs text-slate-300 font-light leading-relaxed">
+                    {game.tagline}
+                  </p>
+
+                  {/* Quote */}
+                  <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] font-serif italic text-xs text-slate-300 leading-snug">
+                    {game.quote}
+                  </div>
+                </div>
+
+                {/* Chips */}
+                <div className="pt-4 mt-4 border-t border-white/[0.06] flex items-center gap-1.5 flex-wrap">
+                  {game.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-white/[0.03] border border-white/[0.06] text-slate-400"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 8. Engineering Disciplines & Tech Radar */}
         <section className="space-y-6">
           <div className="flex items-center gap-2">
             <Cpu className="w-4 h-4 text-cyan-400" />
@@ -491,7 +705,7 @@ export default function MaratelloShowcase() {
           </div>
         </section>
 
-        {/* 8. Interactive Command Terminal */}
+        {/* 9. Interactive Command Terminal */}
         <section className="space-y-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
@@ -535,7 +749,7 @@ export default function MaratelloShowcase() {
             {/* Quick Interactive Command Chips */}
             <div className="flex items-center gap-1.5 flex-wrap pt-2 border-t border-white/[0.06]">
               <span className="text-[10px] uppercase text-slate-400 mr-1">Chips:</span>
-              {['help', 'wonderwell', 'kavkaz', 'stack', 'whoami', 'contact'].map((cmd) => (
+              {['help', 'wonderwell', 'kavkaz', 'games', 'stack', 'whoami', 'contact'].map((cmd) => (
                 <button
                   key={cmd}
                   type="button"
@@ -560,7 +774,7 @@ export default function MaratelloShowcase() {
                 type="text"
                 value={terminalInput}
                 onChange={(e) => setTerminalInput(e.target.value)}
-                placeholder="type command (e.g. help, wonderwell, stack)..."
+                placeholder="type command (e.g. help, games, contact)..."
                 className="flex-1 bg-transparent border-none text-white focus:outline-none placeholder:text-slate-600 text-xs font-mono"
               />
               <button
@@ -573,7 +787,7 @@ export default function MaratelloShowcase() {
           </div>
         </section>
 
-        {/* 9. Direct Contact & Footer */}
+        {/* 10. Direct Contact & Footer */}
         <footer className="pt-8 pb-4 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
           <div>
             <p className="text-xs text-slate-400 font-mono">
@@ -584,14 +798,31 @@ export default function MaratelloShowcase() {
             </p>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 flex-wrap justify-center">
             <a
-              href="https://t.me/maratello"
+              href="https://t.me/directorbabok"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs font-mono font-bold text-sky-400 hover:text-sky-300 transition-colors"
             >
-              TELEGRAM
+              TG: @DIRECTORBABOK
+            </a>
+            <span className="text-white/20">•</span>
+            <button
+              type="button"
+              onClick={handleCopyDiscord}
+              className="text-xs font-mono font-bold text-[#9ba5ff] hover:text-white transition-colors cursor-pointer"
+            >
+              DISCORD: MARATELLO
+            </button>
+            <span className="text-white/20">•</span>
+            <a
+              href="https://github.com/Maratello2"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-mono font-bold text-slate-300 hover:text-white transition-colors"
+            >
+              GITHUB
             </a>
             <span className="text-white/20">•</span>
             <a

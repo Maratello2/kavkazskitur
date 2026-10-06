@@ -44,11 +44,23 @@ def test():
             wonderwell_btn.click()
             print("Clicked Wonderwell filter button successfully!")
 
+        # Click Discord button
+        discord_btn = page.query_selector("button:has-text('DISCORD')")
+        if discord_btn:
+            discord_btn.click()
+            print("Clicked Copy Discord button successfully!")
+
+        # Verify games are rendered
+        for game_title in ["Cyberpunk 2077", "Lies of P", "ULTRAKILL", "DOOM: The Dark Ages", "NieR: Automata"]:
+            game_el = page.query_selector(f"text='{game_title}'")
+            assert game_el is not None, f"Game '{game_title}' was not found on page!"
+            print(f"Verified game: {game_title}")
+
         # Click terminal chip
-        chip_btn = page.query_selector("button:has-text('$stack')")
+        chip_btn = page.query_selector("button:has-text('$games')")
         if chip_btn:
             chip_btn.click()
-            print("Clicked $stack terminal chip successfully!")
+            print("Clicked $games terminal chip successfully!")
 
         page.wait_for_timeout(1000)
 
