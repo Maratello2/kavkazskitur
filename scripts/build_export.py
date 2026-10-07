@@ -71,6 +71,7 @@ ErrorDocument 404 /404.html
     ExpiresActive On
     ExpiresDefault "access plus 1 month"
     ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType application/json "access plus 0 seconds"
     ExpiresByType text/css "access plus 1 year"
     ExpiresByType application/javascript "access plus 1 year"
     ExpiresByType text/javascript "access plus 1 year"
@@ -251,6 +252,9 @@ header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
+header('Cache-Control: no-cache, no-store, must-revalidate');
+header('Pragma: no-cache');
+header('Expires: 0');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -431,6 +435,8 @@ def run_build():
         shutil.copy2(os.path.join(ROOT_DIR, "data", "siteSettings.json"), os.path.join(out_data, "siteSettings.json"))
     if os.path.exists(os.path.join(ROOT_DIR, "data", "adminUsers.json")):
         shutil.copy2(os.path.join(ROOT_DIR, "data", "adminUsers.json"), os.path.join(out_data, "adminUsers.json"))
+    if os.path.exists(os.path.join(ROOT_DIR, "data", "leads.json")):
+        shutil.copy2(os.path.join(ROOT_DIR, "data", "leads.json"), os.path.join(out_data, "leads.json"))
 
     # Ensure api php handlers
     out_api = os.path.join(OUT_DIR, "api")

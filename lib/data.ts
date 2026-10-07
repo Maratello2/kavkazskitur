@@ -356,40 +356,9 @@ export async function getReviews(limit = 6): Promise<{ reviews: ReviewItem[], av
     };
   } catch {
     return {
-      reviews: [
-        {
-          id: 1,
-          tour_id: 1,
-          author: "Marcus Vance (UK)",
-          rating: 5,
-          text: "Exceptional ascent via the South route. The Barrels refuge is comfortable, food prepared by the team chef was great, and guides kept safety as top priority during the storm window.",
-          status: "approved",
-          created_at: "2026-08-14T10:00:00Z",
-          tour_name: "Elbrus Climb South Side (8 Days)"
-        },
-        {
-          id: 2,
-          tour_id: 1,
-          author: "Elena Rostova (DE)",
-          rating: 5,
-          text: "Perfect organization from Mineralnye Vody airport pickup to summit day. Highly recommend the private Barrels hut stay!",
-          status: "approved",
-          created_at: "2026-07-28T14:30:00Z",
-          tour_name: "Elbrus Climb South Side (8 Days)"
-        },
-        {
-          id: 3,
-          tour_id: 2,
-          author: "Jean-Paul Dubois (FR)",
-          rating: 5,
-          text: "The wild North route was pure mountaineering. No chairlifts, genuine expedition feel. The guides were world-class professionals.",
-          status: "approved",
-          created_at: "2026-08-02T09:15:00Z",
-          tour_name: "Elbrus Climb North Side (9 Days)"
-        }
-      ],
-      avgRating: 4.98,
-      totalCount: 48
+      reviews: [],
+      avgRating: 5.0,
+      totalCount: 0
     };
   }
 }

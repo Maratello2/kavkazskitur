@@ -261,53 +261,7 @@ export default function AdminDashboardClient() {
         setBookings(list);
       })
       .catch(() => {
-        setBookings([
-          {
-            id: 101,
-            name: 'Alexander Morgan',
-            phone: '+79286914405',
-            email: 'a.morgan@adventure-corp.com',
-            tour_name: 'Mount Elbrus South Route (Classic 8-Day Climb)',
-            departure_date: '2026-07-12',
-            people_count: 2,
-            comment: 'Need airport pickup in Mineralnye Vody and double boot rental.',
-            gear_requests: 'High-altitude double boots (43 EU), technical crampons x2',
-            transfer: 'Mineralnye Vody (MRV) -> Terskol Basecamp',
-            manager_notes: 'Confirmed flight SU-1302 arriving 11:45 AM. WhatsApp sent on deposit instructions.',
-            status: 'confirmed',
-            created_at: new Date(Date.now() - 3600000 * 5).toISOString(),
-          },
-          {
-            id: 102,
-            name: 'Elena Rostova',
-            phone: '+79001234567',
-            email: 'elena.rostova@mountains.ru',
-            tour_name: 'Mount Kazbek Climb (5,033 m)',
-            departure_date: '2026-08-01',
-            people_count: 1,
-            comment: 'Questions regarding FSB border pass registration timeline.',
-            gear_requests: 'Classic ice axe, harness and helmet',
-            transfer: 'Vladikavkaz Airport -> Stepantsminda transfer',
-            manager_notes: 'Waiting for passport scans for border zone permit application.',
-            status: 'whatsapp_sent',
-            created_at: new Date(Date.now() - 3600000 * 12).toISOString(),
-          },
-          {
-            id: 103,
-            name: 'Marcus Vance',
-            phone: '+447911123456',
-            email: 'marcus.vance@uk-alpine.org',
-            tour_name: 'Climbing Elbrus: Irikchat Gorge (10 Days)',
-            departure_date: '2026-08-15',
-            people_count: 3,
-            comment: 'Experienced mountaineers, need porter support for basecamp transition.',
-            gear_requests: 'Gas cartridges and expedition freeze-dried food rations',
-            transfer: 'Private 4x4 from Nalchik',
-            manager_notes: 'Deposit of 30% paid via invoice #1084. Group gear confirmed.',
-            status: 'deposit_paid',
-            created_at: new Date(Date.now() - 3600000 * 24).toISOString(),
-          },
-        ]);
+        setBookings([]);
       })
       .finally(() => setBookingsLoading(false));
 
@@ -2288,7 +2242,7 @@ export default function AdminDashboardClient() {
                       type="text"
                       value={editingUser.name || ''}
                       onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
-                      placeholder="e.g. Elena Rostova"
+                      placeholder="e.g. Full Name"
                       className="w-full px-4 py-2.5 rounded-xl text-xs bg-[#091422] border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[#C2410C]"
                     />
                   </div>

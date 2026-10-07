@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -84,7 +84,7 @@ export default function CabinetClient() {
   }, []);
 
   // FSB Permit State
-  const [permitStatus, setPermitStatus] = useState<'review' | 'issued' | 'required'>('review');
+  const [permitStatus, setPermitStatus] = useState<'review' | 'issued' | 'required'>('required');
   const [passportForm, setPassportForm] = useState({
     fullName: '',
     passportNumber: '',
@@ -142,11 +142,11 @@ export default function CabinetClient() {
           <div className="space-y-4 max-w-2xl">
             <div className="flex flex-wrap items-center gap-2.5">
               <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#C2410C] text-white shadow-lg">
-                Active Booking • ID #KK-2026-084
+                Expedition Portal • 2026 Season
               </span>
               <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
                 <CheckCircle2 size={13} />
-                <span>Confirmed &amp; Registered</span>
+                <span>Preparation &amp; Permit Tracking</span>
               </span>
             </div>
 
@@ -160,8 +160,8 @@ export default function CabinetClient() {
                 <span className="text-base font-extrabold text-white">5,642 m</span>
               </div>
               <div className="p-3 rounded-xl bg-white/[0.03] border border-white/5">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block">Departure Date</span>
-                <span className="text-base font-extrabold text-white">July 12, 2026</span>
+                <span className="text-[10px] uppercase font-bold text-slate-400 block">Next Departure</span>
+                <span className="text-base font-extrabold text-white">Summer 2026</span>
               </div>
               <div className="p-3 rounded-xl bg-white/[0.03] border border-white/5 col-span-2 sm:col-span-1">
                 <span className="text-[10px] uppercase font-bold text-slate-400 block">Assault Base</span>
@@ -174,7 +174,7 @@ export default function CabinetClient() {
           <div className="bg-[#08101A] border border-white/10 rounded-2xl p-5 sm:p-6 flex flex-col items-center justify-center shrink-0 min-w-[260px]">
             <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#C2410C] mb-3">
               <Clock size={14} />
-              <span>Expedition Countdown</span>
+              <span>Season Launch Countdown</span>
             </div>
 
             <div className="grid grid-cols-4 gap-2 text-center w-full">
@@ -202,24 +202,24 @@ export default function CabinetClient() {
         <div className="mt-8 pt-6 border-t border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-[#1E392A] border-2 border-[#C2410C] flex items-center justify-center text-white font-black text-base shadow-lg">
-              VR
+              AG
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h4 className="text-sm font-bold text-white">Viktor Romanov</h4>
+                <h4 className="text-sm font-bold text-white">Artur Gazayev</h4>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400">
-                  UIAGM / Master of Mountain Sports
+                  Founder &amp; Senior Lead Guide
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Senior Lead Guide • 45+ successful Elbrus summits • Radio Call: &ldquo;Elbrus-1&rdquo;
+                85+ successful Elbrus summits • Veteran high-altitude rescuer • Radio Call: &ldquo;Elbrus-Leader&rdquo;
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 w-full md:w-auto">
             <a
-              href="https://wa.me/79286914405?text=Hello%20Viktor!%20I%20have%20a%20question%20regarding%20my%20upcoming%20expedition%20#KK-2026-084."
+              href="https://wa.me/79286914405?text=Hello%20Artur!%20I%20have%20a%20question%20regarding%20my%20upcoming%20expedition."
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 md:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-bold transition-all shadow-md"
@@ -293,7 +293,7 @@ export default function CabinetClient() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. ALEXANDER MORGAN"
+                  placeholder="e.g. FULL NAME (LATIN)"
                   value={passportForm.fullName}
                   onChange={(e) => setPassportForm({ ...passportForm, fullName: e.target.value })}
                   className="w-full px-4 py-2.5 rounded-xl text-xs bg-slate-900 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#C2410C]"

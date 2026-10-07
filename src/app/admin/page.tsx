@@ -146,88 +146,7 @@ export interface AdminUser {
   last_login?: string | null;
 }
 
-const INITIAL_INQUIRIES: BookingRow[] = [
-  {
-    id: 'WW-8491',
-    name: 'Julian Vance',
-    country: 'United States',
-    flag: '🇺🇸',
-    route: 'Elbrus South Classic (8 Days)',
-    dates: '12 Jul – 19 Jul 2026',
-    people_count: 2,
-    status: 'new',
-    amountUsd: 1960,
-    amountRub: 181300,
-    phone: '+1 415 555 2671',
-    comment: 'Need crampons, harness and 6,000m double boots rental for both participants.',
-    created_at: new Date(Date.now() - 12 * 60 * 1000).toISOString(),
-    timeAgo: '12 min ago'
-  },
-  {
-    id: 'WW-8490',
-    name: 'Marcus Lindholm',
-    country: 'Sweden',
-    flag: '🇸🇪',
-    route: 'Elbrus North Wild Traverse',
-    dates: '02 Aug – 10 Aug 2026',
-    people_count: 1,
-    status: 'whatsapp_sent',
-    amountUsd: 1150,
-    amountRub: 106375,
-    phone: '+46 70 123 4567',
-    comment: 'Solo climber with Alpine experience in Kebnekaise and Mont Blanc.',
-    created_at: new Date(Date.now() - 65 * 60 * 1000).toISOString(),
-    timeAgo: '1 hour ago'
-  },
-  {
-    id: 'WW-8488',
-    name: 'Elena Rostova',
-    country: 'Kazakhstan',
-    flag: '🇰🇿',
-    route: 'Bezengi Alpine Progression',
-    dates: '05 Sep – 12 Sep 2026',
-    people_count: 3,
-    status: 'deposit_paid',
-    amountUsd: 2850,
-    amountRub: 263625,
-    phone: '+7 701 555 4321',
-    comment: 'Team preparation for higher Pamir peaks. Need Mineralnye Vody 4x4 transfer.',
-    created_at: new Date(Date.now() - 180 * 60 * 1000).toISOString(),
-    timeAgo: '3 hours ago'
-  },
-  {
-    id: 'WW-8485',
-    name: 'David Chen',
-    country: 'Canada',
-    flag: '🇨🇦',
-    route: 'Kazbek & Elbrus Twin Summit',
-    dates: '18 Jul – 30 Jul 2026',
-    people_count: 2,
-    status: 'confirmed',
-    amountUsd: 3600,
-    amountRub: 333000,
-    phone: '+1 604 555 8912',
-    comment: 'Confirmed both permits and deposit paid. Requested high mountain hut upgrade.',
-    created_at: new Date(Date.now() - 300 * 60 * 1000).toISOString(),
-    timeAgo: '5 hours ago'
-  },
-  {
-    id: 'WW-8482',
-    name: 'Sophie Laurent',
-    country: 'France',
-    flag: '🇫🇷',
-    route: 'Elbrus Ski-Tour Express',
-    dates: '10 May – 17 May 2026',
-    people_count: 4,
-    status: 'whatsapp_sent',
-    amountUsd: 4200,
-    amountRub: 388500,
-    phone: '+33 6 12 34 56 78',
-    comment: 'Chamonix ski mountaineering team. Bringing own avalanche transceivers.',
-    created_at: new Date(Date.now() - 1440 * 60 * 1000).toISOString(),
-    timeAgo: 'Yesterday'
-  }
-];
+const INITIAL_INQUIRIES: BookingRow[] = [];
 
 const STATUS_CONFIG: Record<string, { label: string; badgeClass: string; iconColor: string }> = {
   new: { label: 'New Inquiry', badgeClass: 'bg-amber-500/10 text-amber-400 border-amber-500/20', iconColor: 'text-amber-400' },
@@ -337,31 +256,33 @@ function AdminPageContent() {
         const res = await fetch('/api/admin/leads');
         if (res.ok) {
           const data = await res.json();
-          if (data.bookings && Array.isArray(data.bookings) && data.bookings.length > 0) {
-            const mapped = data.bookings.map((b: any) => ({
-              id: b.id || `WW-${Math.floor(1000 + Math.random() * 9000)}`,
-              name: b.name || 'Anonymous Climber',
-              phone: b.phone || '',
-              email: b.email || null,
-              country: b.country || 'International',
-              flag: b.flag || '🏔️',
-              route: b.tour_name || b.route || 'Caucasus High Alpine',
-              tour_name: b.tour_name || b.route,
-              dates: b.departure_date || b.dates || 'Summer 2026',
-              people_count: b.people_count || 1,
-              comment: b.comment || b.gear_requests || '',
-              manager_notes: b.manager_notes || '',
-              status: b.status || 'new',
-              amountUsd: b.amountUsd || 1450,
-              amountRub: b.amountRub || 135000,
-              created_at: b.created_at || new Date().toISOString(),
-              timeAgo: 'Recently'
-            }));
-            setInquiries(mapped);
-          }
+          const rawList = Array.isArray(data.bookings) ? data.bookings : (Array.isArray(data.leads) ? data.leads : []);
+          const mapped = rawList.map((b: any) => ({
+            id: b.id || `WW-${Math.floor(1000 + Math.random() * 9000)}`,
+            name: b.name || 'Climber',
+            phone: b.phone || '',
+            email: b.email || null,
+            country: b.country || 'International',
+            flag: b.flag || '🏔️',
+            route: b.tour_name || b.tourName || b.route || 'Caucasus High Alpine',
+            tour_name: b.tour_name || b.tourName || b.route,
+            dates: b.departure_date || b.dates || 'Summer 2026',
+            people_count: b.people_count || 1,
+            comment: b.comment || b.gear_requests || '',
+            manager_notes: b.manager_notes || '',
+            status: b.status || 'new',
+            amountUsd: b.amountUsd || 0,
+            amountRub: b.amountRub || 0,
+            created_at: b.created_at || b.createdAt || new Date().toISOString(),
+            timeAgo: 'Recently'
+          }));
+          setInquiries(mapped);
+        } else {
+          setInquiries([]);
         }
       } catch (err) {
-        console.warn('Using local inquiries state:', err);
+        console.warn('Leads fetch error, using empty state:', err);
+        setInquiries([]);
       } finally {
         setLeadsLoading(false);
       }
@@ -1042,11 +963,11 @@ function AdminPageContent() {
                   <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
                 </div>
                 <div className="text-2xl font-black font-mono text-white mt-1">
-                  {formatPrice(totalInflowUsd + 41750, totalInflowRub + 3861875)}
+                  {formatPrice(totalInflowUsd, totalInflowRub)}
                 </div>
                 <div className="text-[11px] text-emerald-400 flex items-center gap-1 mt-2">
                   <TrendingUp className="w-3 h-3" />
-                  <span>+18.4% vs same period 2025</span>
+                  <span>Real-time confirmed turnover</span>
                 </div>
               </div>
 
@@ -1072,10 +993,10 @@ function AdminPageContent() {
                   <CheckCircle2 className="w-3.5 h-3.5 text-sky-400" />
                 </div>
                 <div className="text-2xl font-black font-mono text-white mt-1">
-                  {inquiries.filter(i => i.status === 'confirmed' || i.status === 'deposit_paid').reduce((acc, curr) => acc + (curr.people_count || 1), 0) + 142}
+                  {inquiries.filter(i => i.status === 'confirmed' || i.status === 'deposit_paid').reduce((acc, curr) => acc + (curr.people_count || 1), 0)}
                 </div>
                 <div className="text-[11px] text-slate-400 flex items-center gap-1 mt-2">
-                  <span>84% capacity on Elbrus South</span>
+                  <span>{inquiries.filter(i => i.status === 'confirmed' || i.status === 'deposit_paid').length} groups registered</span>
                 </div>
               </div>
 
@@ -1086,7 +1007,9 @@ function AdminPageContent() {
                   <ArrowUpRight className="w-3.5 h-3.5 text-indigo-400" />
                 </div>
                 <div className="text-2xl font-black font-mono text-white mt-1">
-                  34.8%
+                  {inquiries.length > 0
+                    ? `${((inquiries.filter(i => i.status === 'confirmed' || i.status === 'deposit_paid').length / inquiries.length) * 100).toFixed(1)}%`
+                    : '0.0%'}
                 </div>
                 <div className="text-[11px] text-indigo-400 flex items-center gap-1 mt-2">
                   <span>Direct WhatsApp conduit</span>
