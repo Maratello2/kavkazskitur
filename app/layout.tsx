@@ -54,9 +54,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link
           rel="preload"
           as="image"
+          href="/hero/summit_apex_5642_480.webp"
+          type="image/webp"
+          media="(max-width: 480px)"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
           href="/hero/summit_apex_5642_mobile.webp"
           type="image/webp"
-          media="(max-width: 768px)"
+          media="(min-width: 481px) and (max-width: 768px)"
           fetchPriority="high"
         />
         <link

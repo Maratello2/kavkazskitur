@@ -28,6 +28,7 @@ interface CaucasusRealm {
   shortFeature: string;
   imageSrc: string;
   imageMobileSrc: string;
+  image480Src?: string;
   altText: string;
 }
 
@@ -48,6 +49,7 @@ const CAUCASUS_REALMS: CaucasusRealm[] = [
     shortFeature: 'Seven Summits Apex',
     imageSrc: '/hero/summit_apex_5642.webp',
     imageMobileSrc: '/hero/summit_apex_5642_mobile.webp',
+    image480Src: '/hero/summit_apex_5642_480.webp',
     altText: 'Mount Elbrus Supreme Apex 5,642m panoramic summit vista',
   },
   {
@@ -144,6 +146,7 @@ function AltitudeCounter({ target }: { target: number }) {
 
 export default function CaucasusCinemaScroll() {
   const [activeRealmIdx, setActiveRealmIdx] = useState(0);
+  const [renderedRealms, setRenderedRealms] = useState<number[]>([0]);
 
   // Swipe gesture tracking for mobile touch
   const touchStartX = useRef<number | null>(null);
@@ -151,15 +154,32 @@ export default function CaucasusCinemaScroll() {
 
   const currentRealm = CAUCASUS_REALMS[activeRealmIdx];
 
+  // Lazily hydrate non-active realms only after initial render is idle
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setRenderedRealms([0, 1, 2, 3]);
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
   const prevRealm = useCallback(() => {
-    setActiveRealmIdx((prev) => (prev > 0 ? prev - 1 : CAUCASUS_REALMS.length - 1));
+    setActiveRealmIdx((prev) => {
+      const target = prev > 0 ? prev - 1 : CAUCASUS_REALMS.length - 1;
+      setRenderedRealms((r) => (r.includes(target) ? r : [...r, target]));
+      return target;
+    });
   }, []);
 
   const nextRealm = useCallback(() => {
-    setActiveRealmIdx((prev) => (prev < CAUCASUS_REALMS.length - 1 ? prev + 1 : 0));
+    setActiveRealmIdx((prev) => {
+      const target = prev < CAUCASUS_REALMS.length - 1 ? prev + 1 : 0;
+      setRenderedRealms((r) => (r.includes(target) ? r : [...r, target]));
+      return target;
+    });
   }, []);
 
   const handleSelectRealm = useCallback((index: number) => {
+    setRenderedRealms((r) => (r.includes(index) ? r : [...r, index]));
     setActiveRealmIdx(index);
   }, []);
 
@@ -223,6 +243,9 @@ export default function CaucasusCinemaScroll() {
         {/* 4 Active Mountain Realm Vistas (Pure CSS Hardware Compositor Scale & Crossfade) */}
         {CAUCASUS_REALMS.map((realm, idx) => {
           const isActive = idx === activeRealmIdx;
+          const shouldRender = renderedRealms.includes(idx);
+          if (!shouldRender) return null;
+
           return (
             <div
               key={realm.id}
@@ -236,7 +259,10 @@ export default function CaucasusCinemaScroll() {
               }}
             >
               <picture className="w-full h-full">
-                <source media="(max-width: 768px)" srcSet={realm.imageMobileSrc} width={960} height={1706} />
+                {realm.image480Src && (
+                  <source media="(max-width: 480px)" srcSet={realm.image480Src} width={480} height={854} />
+                )}
+                <source media="(max-width: 768px)" srcSet={realm.imageMobileSrc} width={640} height={1138} />
                 <img
                   src={realm.imageSrc}
                   alt={realm.altText}

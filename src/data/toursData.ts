@@ -64,18 +64,18 @@ export const TOURS_DATA: TourData[] = [
     priceUsd: 920,
     difficulty: 'Demanding',
     season: 'May — October 2026',
-    image: '/tours/elbrus_south_orig.jpg',
+    image: '/tours/elbrus_south.webp',
     coverImage: '/tours/elbrus-south.webp',
     gallery: [
-      '/tours/barrels_garabashi.jpg',
-      '/tours/real_IMG_1999-scaled.jpg',
-      '/tours/real_el009b.jpg',
+      '/tours/barrels_garabashi.webp',
+      '/tours/real_IMG_1999-scaled-360x240.webp',
+      '/tours/real_el009b-531x354.webp',
       '/tours/real_elbrusclimb-1.webp',
       '/tours/real_GH011480_Moment-531x354.webp',
       '/tours/real_IMG_7496-531x354.webp',
       '/tours/real_IMG_8639-531x354.webp',
       '/tours/real_IMG_9430-e1604387104961-531x354.webp',
-      '/tours/elbrus_summit_orig.jpg'
+      '/tours/real_070-531x354.webp'
     ],
     badge: 'Most Popular',
     description: 'The classic and most reliable route to the Western Summit of Mount Elbrus (5,642 m) via the southern slope. Ascend by modern gondola cableway from Azau Meadow to 3,850 m (Gara-Bashi) with accommodation at our private high-altitude Barrels Refuge. A balanced stepped acclimatization program with radial sorties to Pastukhov Rocks (4,800 m) and Refuge 11 (4,050 m).',
@@ -216,15 +216,15 @@ export const TOURS_DATA: TourData[] = [
     priceUsd: 920,
     difficulty: 'Extreme',
     season: 'June — September 2026',
-    image: '/tours/elbrus_north_orig.jpg',
+    image: '/tours/elbrus_north.webp',
     coverImage: '/tours/elbrus-north.webp',
     gallery: [
       '/tours/djily_su.webp',
       '/tours/climbing-elbrus-from-the-north-route-8-days-trip.webp',
       '/tours/two-day-trekking-in-north-elbrus-tract-djily-su-and-summit-camps-3800-m.webp',
-      '/tours/real_040-720x480.jpg',
-      '/tours/real_070-720x480.jpg',
-      '/tours/elbrus_north_orig.jpg'
+      '/tours/real_el009b-531x354.webp',
+      '/tours/real_070-531x354.webp',
+      '/tours/elbrus_north.webp'
     ],
     badge: 'Wild & Self-Sufficient',
     description: 'A fully self-sufficient, wild ascent along the historic 1829 first-ascent route (General Emmanuel\'s expedition). No cableways, hotels, or snowcats. Start from the scenic Dzhily-Su valley with warm mineral hot springs. All transitions are exclusively on foot through the Mushroom Rocks, Moon Meadow, and Lenz Rocks (4,600–4,800 m) to the East Summit of Elbrus (5,621 m).',
@@ -353,7 +353,7 @@ export const TOURS_DATA: TourData[] = [
     priceUsd: 920,
     difficulty: 'Extreme',
     season: 'April — June 2026',
-    image: '/tours/elbrus_skitour_orig.jpg',
+    image: '/tours/skitour_elbrus.webp',
     coverImage: '/tours/elbrus-skitour.webp',
     gallery: [
       '/tours/elbrus-ski-tour-8-days.webp',
@@ -361,7 +361,7 @@ export const TOURS_DATA: TourData[] = [
       '/tours/skitour_elbrus.webp',
       '/tours/real_2018-04-10_15-57-50-531x354.webp',
       '/tours/real_photo1653975634-6-531x354.webp',
-      '/tours/elbrus_skitour_orig.jpg'
+      '/tours/skitour_elbrus.webp'
     ],
     badge: 'Freeride & Ski Mountaineering',
     description: 'A unique ski-mountaineering program — skin up on skis to the summit of Elbrus and enjoy an unbroken, epic descent with over 3,300 vertical meters of drop all the way down to Azau Meadow. Perfect late-spring snow conditions on the Gara-Bashi and Maly Azau glaciers.',
@@ -482,12 +482,12 @@ export const TOURS_DATA: TourData[] = [
     priceUsd: 1030,
     difficulty: 'Demanding',
     season: 'June — September 2026',
-    image: '/tours/irikchat_orig.jpg',
+    image: '/tours/irikchat.webp',
     coverImage: '/tours/irikchat.webp',
     gallery: [
       '/tours/climbing-elbrus-irikchat-gorge-10-days.webp',
       '/tours/irikchat.webp',
-      '/tours/irikchat_orig.jpg',
+      '/tours/irikchat.webp',
       '/tours/real_156719641_183567866586496_7151072296102921295_n-531x354.webp',
       '/tours/real_photo5355277069799501831-531x354.webp'
     ],
@@ -624,12 +624,12 @@ export const TOURS_DATA: TourData[] = [
     priceUsd: 920,
     difficulty: 'Demanding',
     season: 'June — September 2026',
-    image: '/tours/terskol_orig.jpg',
-    coverImage: '/tours/terskol_orig.jpg',
+    image: '/tours/mountainous-kabardino-balkaria.webp',
+    coverImage: '/tours/mountainous-kabardino-balkaria.webp',
     gallery: [
-      '/tours/terskol_orig.jpg',
-      '/tours/real_046-720x480.jpg',
-      '/tours/real_070-720x480.jpg',
+      '/tours/mountainous-kabardino-balkaria.webp',
+      '/tours/real_070-531x354.webp',
+      '/tours/real_070-531x354.webp',
       '/tours/real_IMG_0407-531x354.webp',
       '/tours/real_IMG_20210601_113820-531x354.webp',
       '/tours/valley-adyr-su-climbing-camps-ullu-tau-and-djailyk.webp'
@@ -755,16 +755,16 @@ export const TOURS_DATA: TourData[] = [
     priceUsd: 1030,
     difficulty: 'Demanding',
     season: 'July — September 2026',
-    image: '/tours/kazbek_orig.jpg',
+    image: '/tours/kazbek.webp',
     coverImage: '/tours/kazbek.webp',
     gallery: [
       '/tours/mount-kazbek-climb-5033-m-south-route-9-days-trip.webp',
       '/tours/mount-kazbek-ski-tour-8-days.webp',
       '/tours/real_22-kazbek-fromglacier-gergeti-531x354.webp',
       '/tours/real_08-Kazbekfromchurchgergeti-360x240.webp',
-      '/tours/kazbek_church_orig.jpg',
+      '/tours/real_08-Kazbekfromchurchgergeti-360x240.webp',
       '/tours/kazbek_summit.webp',
-      '/tours/kazbek_orig.jpg'
+      '/tours/kazbek.webp'
     ],
     badge: 'Legendary Peak',
     description: 'Summit the legendary five-thousander Mount Kazbek (5,033 m) via the southern slope, past the ancient 14th-century Gergeti Trinity Church, across the Gergeti Glacier, and through the high-altitude Betlemi Hut meteorological station (3,650 m). Stunning views of the Georgian Military Highway and Caucasus peaks.',

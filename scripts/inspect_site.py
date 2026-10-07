@@ -1,7 +1,9 @@
 import urllib.request
 import re
 
-url_base = "https://kavkazskitur.com"
+import sys
+
+url_base = sys.argv[1] if len(sys.argv) > 1 else "http://5.c19596.nichost.ru"
 req = urllib.request.Request(url_base, headers={"User-Agent": "Mozilla/5.0", "Accept-Encoding": "gzip, deflate"})
 with urllib.request.urlopen(req) as resp:
     html = resp.read()

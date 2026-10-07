@@ -443,6 +443,22 @@ def run_build():
         f.write(HTACCESS_CONTENT)
     print("Generated out/.htaccess with full caching, security & admin rules")
 
+    # Optimize out/index.html head links for instant mobile LCP
+    index_html = os.path.join(OUT_DIR, "index.html")
+    if os.path.exists(index_html):
+        import re
+        with open(index_html, "r", encoding="utf-8") as f:
+            html = f.read()
+        
+        # Remove unwanted svg preloads that starve LCP bandwidth
+        html = re.sub(r'<link[^>]*rel="preload"[^>]*href="/brand/logo_kst\.svg"[^>]*>', '', html)
+        html = re.sub(r'<link[^>]*rel="preload"[^>]*href="/img/wp\.svg"[^>]*>', '', html)
+        html = re.sub(r'<link[^>]*rel="preload"[^>]*href="/img/geotag\.svg"[^>]*>', '', html)
+        
+        with open(index_html, "w", encoding="utf-8") as f:
+            f.write(html)
+        print("Optimized out/index.html head links for instant mobile LCP")
+
     step("5. Creating deployment archive")
     tar_path = os.path.join(ROOT_DIR, "prod_deploy.tar.gz")
     if os.path.exists(tar_path):

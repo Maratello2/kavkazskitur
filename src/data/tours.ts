@@ -30,7 +30,7 @@ export const EXPEDITIONS: Expedition[] = [
     priceRub: 85000,
     priceUsd: 920,
     season: 'May — October 2026',
-    image: '/tours/elbrus_south_orig.jpg',
+    image: '/tours/elbrus_south.webp',
     badge: 'Most Popular',
     highlights: [
       'Gondola cableway to 3,850 m (Azau — Krugozor — Mir — Garabashi)',
@@ -67,7 +67,7 @@ export const EXPEDITIONS: Expedition[] = [
     priceRub: 85000,
     priceUsd: 920,
     season: 'June — September 2026',
-    image: '/tours/elbrus_north_orig.jpg',
+    image: '/tours/elbrus_north.webp',
     badge: 'Wild & Untouched',
     highlights: [
       'Zero cableways or snowcats — 100% authentic foot ascent',
@@ -102,7 +102,7 @@ export const EXPEDITIONS: Expedition[] = [
     priceRub: 85000,
     priceUsd: 920,
     season: 'April — June 2026',
-    image: '/tours/elbrus_skitour_orig.jpg',
+    image: '/tours/skitour_elbrus.webp',
     badge: 'Powder & Steeps',
     highlights: [
       'Epic 3,300 vertical meter ski descent from the summit',
@@ -136,7 +136,7 @@ export const EXPEDITIONS: Expedition[] = [
     priceRub: 95000,
     priceUsd: 1030,
     season: 'June — September 2026',
-    image: '/tours/irikchat_orig.jpg',
+    image: '/tours/irikchat.webp',
     badge: 'Most Scenic',
     highlights: [
       'Trek through the untouched pine forests and cascades of Irik-Chat Gorge',
@@ -173,7 +173,7 @@ export const EXPEDITIONS: Expedition[] = [
     priceRub: 85000,
     priceUsd: 920,
     season: 'June — September 2026',
-    image: '/tours/terskol_orig.jpg',
+    image: '/tours/mountainous-kabardino-balkaria.webp',
     badge: 'Panoramic Route',
     highlights: [
       'Acclimatization trek past the cascading Maiden Hair waterfall',
@@ -210,7 +210,7 @@ export const EXPEDITIONS: Expedition[] = [
     priceRub: 95000,
     priceUsd: 1030,
     season: 'July — September 2026',
-    image: '/tours/kazbek_orig.jpg',
+    image: '/tours/kazbek.webp',
     badge: 'Sacred Peak',
     highlights: [
       'Ascent of the legendary Prometheus mountain (Mkinvartsveri)',
