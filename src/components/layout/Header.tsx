@@ -36,14 +36,17 @@ export default function Header() {
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    fetch('/api/settings')
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.settings) {
-          setSettings((prev: any) => ({ ...prev, ...data.settings }));
-        }
-      })
-      .catch(() => {});
+    // Only attempt dynamic settings query in development; static build uses siteSettings.json
+    if (process.env.NODE_ENV === 'development') {
+      fetch('/api/settings')
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.settings) {
+            setSettings((prev: any) => ({ ...prev, ...data.settings }));
+          }
+        })
+        .catch(() => {});
+    }
   }, []);
 
   // Close menus on path navigation

@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
     // components use patterns that the newer eslint-plugin-react-hooks flags as errors.
     ignoreDuringBuilds: true,
   },
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
+  },
   output: process.env.NEXT_EXPORT === 'true' ? 'export' : 'standalone',
   ...(process.env.NEXT_EXPORT === 'true' ? {} : {
     async headers() {

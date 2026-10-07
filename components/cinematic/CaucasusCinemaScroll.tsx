@@ -236,13 +236,16 @@ export default function CaucasusCinemaScroll() {
               }}
             >
               <picture className="w-full h-full">
-                <source media="(max-width: 768px)" srcSet={realm.imageMobileSrc} />
+                <source media="(max-width: 768px)" srcSet={realm.imageMobileSrc} width={960} height={1706} />
                 <img
                   src={realm.imageSrc}
                   alt={realm.altText}
+                  width={1920}
+                  height={1080}
                   className="w-full h-full object-cover object-[50%_35%] select-none pointer-events-none"
                   loading={idx === 0 ? 'eager' : 'lazy'}
-                  decoding="async"
+                  fetchPriority={idx === 0 ? 'high' : 'low'}
+                  decoding={idx === 0 ? 'sync' : 'async'}
                   draggable={false}
                 />
               </picture>
