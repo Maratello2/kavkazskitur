@@ -12,6 +12,10 @@ TEMP_API = os.path.join(tempfile.gettempdir(), "_temp_kavkaz_api_disabled")
 OUT_DIR = os.path.join(ROOT_DIR, "out")
 
 HTACCESS_CONTENT = r"""# KavKazSkiTur Production Apache Configuration
+<IfModule mod_dir.c>
+    DirectoryIndex index.html index.php
+</IfModule>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
@@ -404,6 +408,21 @@ def run_build():
     if os.path.exists(tours_html) and os.path.exists(tours_dir):
         shutil.copy2(tours_html, os.path.join(tours_dir, "index.html"))
         print("Copied tours.html -> tours/index.html")
+
+    # Ensure admin index.html files for clean URLs with or without trailing slash
+    admin_dir = os.path.join(OUT_DIR, "admin")
+    admin_html = os.path.join(OUT_DIR, "admin.html")
+    if os.path.exists(admin_html) and os.path.exists(admin_dir):
+        shutil.copy2(admin_html, os.path.join(admin_dir, "index.html"))
+        print("Copied admin.html -> admin/index.html")
+
+    for sub in ["login", "tours", "verify"]:
+        sub_html = os.path.join(admin_dir, f"{sub}.html")
+        sub_dir = os.path.join(admin_dir, sub)
+        if os.path.exists(sub_html):
+            os.makedirs(sub_dir, exist_ok=True)
+            shutil.copy2(sub_html, os.path.join(sub_dir, "index.html"))
+            print(f"Copied admin/{sub}.html -> admin/{sub}/index.html")
 
     # Copy siteSettings.json and adminUsers.json into out/data
     out_data = os.path.join(OUT_DIR, "data")
