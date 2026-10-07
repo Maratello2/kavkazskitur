@@ -144,43 +144,43 @@ export default function HomePage() {
             <div className="space-y-4">
               <Logo />
               <p className="text-xs text-slate-400 leading-relaxed font-sans">
-                Высокогорные восхождения, ски-альпинизм и треккинг по Главному Кавказскому хребту. Организуем экспедиции с 2006 года с собственным базовым лагерем на Гарабаши, Эльбрус (3 800 м).
+                High-altitude mountaineering ascents, ski touring, and wild expeditions across the Greater Caucasus. Guiding expeditions since 2006 with our private high camp at Gara-Bashi, Mt. Elbrus (3,800 m).
               </p>
               <div className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] font-semibold text-slate-300 bg-white/[0.03] border border-white/[0.07] px-3 py-1.5 rounded-full">
                 <Compass className="w-3.5 h-3.5 text-[#FF6A00]" strokeWidth={1.5} />
-                Стандарты ФАР &bull; Аттестованные гиды
+                RMGA &bull; UIAGM Certified Alpine Guides
               </div>
             </div>
 
             {/* Column 2: Quick Navigation */}
             <div>
               <div className="font-mono text-[10px] uppercase tracking-[0.22em] font-bold text-white mb-4">
-                Маршруты и Экспедиции
+                Expeditions &amp; Routes
               </div>
               <ul className="space-y-2 text-xs">
                 <li>
                   <a href="#expeditions" className="hover:text-[#FF6A00] transition-colors">
-                    Восхождение на Эльбрус с юга (8 дней)
+                    Mt. Elbrus South Classic Ascent (8 Days)
                   </a>
                 </li>
                 <li>
                   <a href="#expeditions" className="hover:text-[#FF6A00] transition-colors">
-                    Восхождение на Эльбрус с севера (8 дней)
+                    Mt. Elbrus North Wild Glacier (8 Days)
                   </a>
                 </li>
                 <li>
                   <a href="#expeditions" className="hover:text-[#FF6A00] transition-colors">
-                    Ски-тур на Эльбрусе и фрирайд (8 дней)
+                    Elbrus Alpine Ski Touring &amp; Freeride (8 Days)
                   </a>
                 </li>
                 <li>
                   <a href="#expeditions" className="hover:text-[#FF6A00] transition-colors">
-                    Эльбрус через ущелье Ирикчат (10 дней)
+                    Irikchat Valley Alpine Trek (10 Days)
                   </a>
                 </li>
                 <li>
                   <a href="#expeditions" className="hover:text-[#FF6A00] transition-colors">
-                    Восхождение на Казбек (9 дней)
+                    Mount Kazbek High Col Summit (9 Days)
                   </a>
                 </li>
               </ul>
@@ -189,25 +189,25 @@ export default function HomePage() {
             {/* Column 3: Operational Bases & Legal Requisites */}
             <div>
               <div className="font-mono text-[10px] uppercase tracking-[0.22em] font-bold text-white mb-4">
-                Базы и Реквизиты
+                Expedition Bases &amp; Legal Info
               </div>
               <ul className="space-y-3 text-xs">
                 <li className="flex items-start gap-2">
                   <img src="/img/geotag.svg" alt="Location" className="w-3.5 h-3.5 object-contain mt-0.5 shrink-0" />
                   <div>
-                    <span className="font-semibold text-white">Организатор:</span>
-                    <div className="text-slate-400">ООО «КавказСкиТур» &bull; КБР, г. Нальчик, ул. Горького, д. 74</div>
+                    <span className="font-semibold text-white">Operator:</span>
+                    <div className="text-slate-400">LLC &ldquo;KavKazSkiTur&rdquo; &bull; Gorkogo St. 74, Nalchik, KBR</div>
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
                   <Mountain className="w-3.5 h-3.5 text-[#FF6A00] mt-0.5 shrink-0" strokeWidth={1.5} />
                   <div>
-                    <span className="font-semibold text-white">Высотный приют:</span>
-                    <div className="text-slate-400">«Бочки» (Гарабаши, 3 800 м, Эльбрус)</div>
+                    <span className="font-semibold text-white">High Base Camp:</span>
+                    <div className="text-slate-400">Heated Barrels Refuge (Gara-Bashi, 3,800 m, Mt. Elbrus)</div>
                   </div>
                 </li>
                 <li className="text-[11px] text-slate-500 pt-1">
-                  Обязательная регистрация всех групп в ГУ МЧС России по КБР за 10 дней до выхода.
+                  Mandatory mountain rescue registration with EMERCOM and official border security clearance.
                 </li>
               </ul>
             </div>
@@ -215,7 +215,7 @@ export default function HomePage() {
             {/* Column 4: Communications */}
             <div>
               <div className="font-mono text-[10px] uppercase tracking-[0.22em] font-bold text-white mb-4">
-                Прямая Связь с Базой
+                Expedition Headquarters
               </div>
               <ul className="space-y-3 text-xs">
                 <li>
@@ -263,27 +263,27 @@ export default function HomePage() {
           {/* Sub-footer Copyright & Legal Links */}
           <div className="border-t border-white/[0.06] pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
             <div>
-              &copy; 2026 ООО «КавказСкиТур». Все права защищены. Безопасность сертифицирована.
+              &copy; 2026 KavKazSkiTur. All rights reserved. Alpine Safety Certified.
             </div>
             <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 sm:gap-4 text-center md:text-right">
               <Link href="/privacy" className="hover:text-[#FF6A00] underline transition-colors">
-                Политика конфиденциальности (152-ФЗ)
+                Privacy Policy
               </Link>
               <span className="text-white/20">&bull;</span>
               <Link href="/offer" className="hover:text-[#FF6A00] underline transition-colors">
-                Публичная оферта (ст. 437 ГК РФ)
+                Public Offer &amp; Terms
               </Link>
               <span className="text-white/20">&bull;</span>
               <Link href="/safety" className="hover:text-white transition-colors">
-                Безопасность и МЧС
+                Safety &amp; Rescue
               </Link>
               <span className="text-white/20">&bull;</span>
               <Link href="/about" className="hover:text-white transition-colors">
-                О компании
+                About Us
               </Link>
               <span className="text-white/20">&bull;</span>
               <Link href="/partners" className="hover:text-white transition-colors">
-                Партнерам
+                Partners
               </Link>
             </div>
           </div>

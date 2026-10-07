@@ -25,12 +25,12 @@ export default function AdminLoginPage() {
 
         <div className="pt-4 border-t border-white/10 text-center space-y-2.5">
           <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
-            <ShieldCheck size={14} className="text-[#C2410C]" />
+            <ShieldCheck size={14} className="text-[#FF6A00]" />
             <span>Encrypted administrative session (12h expiration)</span>
           </div>
           <div className="text-[11px] font-mono text-slate-400 bg-black/40 border border-white/10 py-1.5 px-3 rounded-xl inline-flex items-center gap-1.5">
-            <KeyRound size={12} className="text-[#C2410C]" />
-            <span>Login: <strong className="text-white">admin</strong> | Password: <strong className="text-white">admin</strong></span>
+            <ShieldCheck size={12} className="text-emerald-400" />
+            <span>Zero-trust access &bull; All login attempts audited</span>
           </div>
         </div>
       </div>

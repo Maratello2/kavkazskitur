@@ -59,10 +59,10 @@ export default function QuickOrderModal() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: name.trim() || 'Клиент сайта',
+          name: name.trim() || 'Online Guest',
           phone: phone.trim(),
-          comment: note.trim() || 'Быстрая заявка на консультацию',
-          tourName: note.trim() || 'Экспедиции по Кавказу 2026',
+          comment: note.trim() || 'Expedition consultation request',
+          tourName: note.trim() || 'Caucasus Expeditions 2026',
           website_hp: websiteHp,
           consent: acceptedPolicy,
         }),
@@ -132,17 +132,17 @@ export default function QuickOrderModal() {
               <CheckCircle2 size={32} strokeWidth={1.5} />
             </div>
             <h3 className="text-xl font-bold text-white mb-1">
-              Заявка принята!
+              Inquiry Received!
             </h3>
             <p className="text-xs text-slate-300 max-w-xs mb-6 leading-relaxed">
-              Старший координатор экспедиций свяжется с вами в течение 15 минут для консультации по маршруту.
+              Our lead expedition coordinator will contact you shortly with itinerary details and route briefings.
             </p>
             <button
               type="button"
               onClick={handleClose}
               className="px-6 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.1] text-xs font-semibold text-white transition-colors cursor-pointer"
             >
-              Закрыть окно
+              Close
             </button>
           </div>
         ) : (
@@ -157,10 +157,10 @@ export default function QuickOrderModal() {
               </div>
               <div>
                 <h2 id="quick-order-title" className="text-lg sm:text-xl font-bold text-white leading-tight">
-                  Быстрая связь с гидом
+                  Expedition Guide Concierge
                 </h2>
                 <span className="text-xs text-slate-400">
-                  Подбор маршрута и консультация по экипировке
+                  Direct inquiry, route selection, and gear consultation
                 </span>
               </div>
             </div>
@@ -191,12 +191,12 @@ export default function QuickOrderModal() {
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <label className="block text-xs font-mono text-slate-300">
-                      Ваше имя *
+                      Your Full Name *
                     </label>
                     {touched.name && isNameValid && (
                       <span className="flex items-center gap-1 text-[11px] text-emerald-400 font-mono">
                         <Check size={12} strokeWidth={2.5} />
-                        <span>Корректно</span>
+                        <span>Valid</span>
                       </span>
                     )}
                   </div>
@@ -206,7 +206,7 @@ export default function QuickOrderModal() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     onBlur={() => setTouched((p) => ({ ...p, name: true }))}
-                    placeholder="Например: Иван Смирнов"
+                    placeholder="e.g. Alex Morgan"
                     className={`w-full px-3.5 py-2.5 rounded-xl text-base md:text-sm bg-white/[0.04] border text-white placeholder-slate-500 focus:outline-none transition-colors ${
                       touched.name && !isNameValid
                         ? 'border-amber-400/50 focus:border-amber-400'
@@ -219,17 +219,17 @@ export default function QuickOrderModal() {
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <label className="block text-xs font-mono text-slate-300">
-                      Телефон / WhatsApp *
+                      Phone / WhatsApp *
                     </label>
                     {touched.phone && (
                       isPhoneValid ? (
                         <span className="flex items-center gap-1 text-[11px] text-emerald-400 font-mono">
                           <Check size={12} strokeWidth={2.5} />
-                          <span>Номер подтвержден</span>
+                          <span>Verified format</span>
                         </span>
                       ) : (
                         <span className="text-[11px] text-amber-400 font-mono">
-                          Минимум 10 цифр с кодом
+                          Min 10 digits with country code
                         </span>
                       )
                     )}
@@ -240,7 +240,7 @@ export default function QuickOrderModal() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     onBlur={() => setTouched((p) => ({ ...p, phone: true }))}
-                    placeholder="+7 (928) 000-00-00"
+                    placeholder="+1 (555) 000-0000"
                     className={`w-full px-3.5 py-2.5 rounded-xl text-base md:text-sm bg-white/[0.04] border text-white placeholder-slate-500 focus:outline-none transition-colors ${
                       touched.phone && !isPhoneValid
                         ? 'border-amber-400/60 focus:border-amber-400'
@@ -252,13 +252,13 @@ export default function QuickOrderModal() {
                 {/* Note Field */}
                 <div>
                   <label className="block text-xs font-mono text-slate-300 mb-1">
-                    Интересующий маршрут или даты (опционально)
+                    Expedition of Interest or Target Dates (Optional)
                   </label>
                   <input
                     type="text"
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
-                    placeholder="Например: Эльбрус с юга, июль 2026"
+                    placeholder="e.g. Mt. Elbrus South Classic, July 2026"
                     className="w-full px-3.5 py-2.5 rounded-xl text-base md:text-sm bg-white/[0.04] border border-white/[0.08] text-white placeholder-slate-500 focus:outline-none focus:border-[#FF6A00] transition-colors"
                   />
                 </div>
@@ -274,21 +274,21 @@ export default function QuickOrderModal() {
                       required
                     />
                     <span className="text-[11px] leading-snug text-slate-400">
-                      Согласен на{' '}
+                      I agree to the{' '}
                       <Link
                         href="/privacy"
                         target="_blank"
                         className="text-[#FF6A00] underline hover:text-orange-300 font-medium"
                       >
-                        обработку персональных данных (152-ФЗ)
+                        Privacy Policy
                       </Link>{' '}
-                      и с условиями{' '}
+                      and terms of{' '}
                       <Link
                         href="/offer"
                         target="_blank"
                         className="text-[#FF6A00] underline hover:text-orange-300 font-medium"
                       >
-                        публичной оферты
+                        Public Offer
                       </Link>
                       .
                     </span>
@@ -302,7 +302,7 @@ export default function QuickOrderModal() {
                     disabled={isSubmitting || !acceptedPolicy || !phone.trim()}
                     className="w-full sm:flex-1 py-3 px-4 rounded-xl bg-[#FF6A00] hover:bg-[#E05D00] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-xs uppercase tracking-[0.18em] shadow-lg shadow-orange-950/40 border border-orange-400/20 transition-all active:scale-95 cursor-pointer"
                   >
-                    {isSubmitting ? 'Отправка...' : 'Запросить консультацию'}
+                    {isSubmitting ? 'Submitting...' : 'Request Consultation'}
                   </button>
 
                   <button
@@ -310,7 +310,7 @@ export default function QuickOrderModal() {
                     onClick={handleClose}
                     className="w-full sm:w-auto py-3 px-4 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white text-xs font-semibold transition-colors cursor-pointer"
                   >
-                    Позже
+                    Cancel
                   </button>
                 </div>
               </form>

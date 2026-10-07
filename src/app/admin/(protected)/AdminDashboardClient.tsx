@@ -672,7 +672,7 @@ export default function AdminDashboardClient() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-xs font-extrabold uppercase tracking-wider text-white shadow-lg shadow-orange-950/40 border border-orange-400/30 transition-all cursor-pointer group"
           >
             <Globe size={14} className="text-white" />
-            <span>Перейти на сайт</span>
+            <span>View Live Site</span>
             <ExternalLink size={12} className="opacity-80 group-hover:opacity-100" />
           </Link>
 

@@ -83,8 +83,8 @@ export default function ExpeditionsClient({ tours }: Props) {
           <TourSearchWithHints
             value={searchQuery}
             onChange={setSearchQuery}
-            hints={['Эльбрус с юга', 'Траверс', 'Безенги', 'Казбек']}
-            placeholderPrefix="Поиск: "
+            hints={['Mt. Elbrus South', 'Traverse', 'Bezengi Wall', 'Kazbek']}
+            placeholderPrefix="Search: "
             showChips={true}
           />
         </div>

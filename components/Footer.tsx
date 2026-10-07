@@ -16,32 +16,32 @@ export default function Footer() {
               <Logo variant="full" />
             </div>
             <p className="text-xs leading-relaxed text-slate-400">
-              Высокогорные восхождения на Эльбрус, альпинизм в Безенги, ски-тур и высотная логистика по Кавказу с 2006 года. Собственный лагерь на Гарабаши (3 800 м).
+              High-altitude mountaineering ascents on Mt. Elbrus, ski touring, and alpine logistics across the Greater Caucasus since 2006. Private high camp at Barrels-Garabashi (3,800 m).
             </p>
             <p className="text-xs text-slate-300 flex items-center gap-2">
               <img src="/img/geotag.svg" alt="Location" className="w-3.5 h-3.5 object-contain inline-block" />
-              ООО «КавказСкиТур» &bull; КБР, г. Нальчик, ул. Горького, д. 74
+              LLC &ldquo;KavKazSkiTur&rdquo; &bull; Gorkogo St. 74, Nalchik, KBR
             </p>
           </div>
 
           <div className="footer-col space-y-3">
             <div className="text-sm font-bold uppercase tracking-wider text-white">
-              Навигация и Документы
+              Navigation &amp; Legal
             </div>
             <ul className="space-y-2 text-xs">
-              <li><Link href="/expeditions" className="hover:text-[#FF6A00] transition-colors">Экспедиции и Туры</Link></li>
-              <li><Link href="/schedule" className="hover:text-[#FF6A00] transition-colors">Расписание сезонов 2026</Link></li>
-              <li><Link href="/barrels" className="hover:text-[#FF6A00] transition-colors">Приют «Бочки» (3 800 м)</Link></li>
-              <li><Link href="/acclimatization" className="hover:text-[#FF6A00] transition-colors">Гид по акклиматизации</Link></li>
-              <li><Link href="/safety" className="hover:text-[#FF6A00] transition-colors flex items-center gap-1.5"><ShieldCheck size={14} className="text-[#FF6A00]" /> Безопасность и МЧС</Link></li>
-              <li><Link href="/privacy" className="hover:text-[#FF6A00] underline transition-colors">Политика конфиденциальности (152-ФЗ)</Link></li>
-              <li><Link href="/offer" className="hover:text-[#FF6A00] underline transition-colors">Публичная оферта (ст. 437 ГК РФ)</Link></li>
+              <li><Link href="/expeditions" className="hover:text-[#FF6A00] transition-colors">Expeditions &amp; Tours</Link></li>
+              <li><Link href="/schedule" className="hover:text-[#FF6A00] transition-colors">2026 Season Schedule</Link></li>
+              <li><Link href="/barrels" className="hover:text-[#FF6A00] transition-colors">Barrels Refuge (3,800 m)</Link></li>
+              <li><Link href="/acclimatization" className="hover:text-[#FF6A00] transition-colors">Acclimatization Protocol</Link></li>
+              <li><Link href="/safety" className="hover:text-[#FF6A00] transition-colors flex items-center gap-1.5"><ShieldCheck size={14} className="text-[#FF6A00]" /> Safety &amp; Rescue</Link></li>
+              <li><Link href="/privacy" className="hover:text-[#FF6A00] underline transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/offer" className="hover:text-[#FF6A00] underline transition-colors">Public Offer &amp; Terms</Link></li>
             </ul>
           </div>
 
           <div className="footer-col space-y-3">
             <div className="text-sm font-bold uppercase tracking-wider text-white">
-              Связь с Диспетчером
+              Expedition Concierge
             </div>
             <ul className="space-y-2.5 text-xs">
               <li>
@@ -56,12 +56,12 @@ export default function Footer() {
               </li>
               <li>
                 <a href="https://wa.me/79280828413" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-bold transition-colors">
-                  <MessageCircle size={14} /> WhatsApp чат с гидом
+                  <MessageCircle size={14} /> WhatsApp Concierge
                 </a>
               </li>
               <li>
                 <a href="https://t.me/kavkazskitur" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors">
-                  <Send size={14} /> Telegram канал
+                  <Send size={14} /> Telegram Channel
                 </a>
               </li>
               <li className="pt-1">
@@ -70,7 +70,7 @@ export default function Footer() {
                   onClick={() => toggleQuickOrder(true)}
                   className="px-3 py-1.5 rounded-lg bg-[#FF6A00]/20 hover:bg-[#FF6A00]/30 border border-[#FF6A00]/40 text-[#FF6A00] font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
                 >
-                  Заказать обратный звонок
+                  Request Fast Callback
                 </button>
               </li>
             </ul>
@@ -78,13 +78,13 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 pt-6 border-t border-white/[0.06] text-[11px] text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© 2026 ООО «КавказСкиТур». Все права защищены. Обязательная регистрация в ГУ МЧС по КБР.</p>
+          <p>© 2026 KavKazSkiTur. All rights reserved. Certified Mountain Rescue Protocol.</p>
           <div className="flex items-center gap-4">
-            <Link href="/privacy" className="hover:text-[#FF6A00] underline transition-colors">152-ФЗ</Link>
+            <Link href="/privacy" className="hover:text-[#FF6A00] underline transition-colors">Privacy</Link>
             <span>&bull;</span>
-            <Link href="/offer" className="hover:text-[#FF6A00] underline transition-colors">Оферта</Link>
+            <Link href="/offer" className="hover:text-[#FF6A00] underline transition-colors">Terms</Link>
             <span>&bull;</span>
-            <Link href="/admin" className="hover:text-white transition-colors flex items-center gap-1"><Lock size={12} /> Вход для гидов</Link>
+            <Link href="/admin/login" className="hover:text-white transition-colors flex items-center gap-1"><Lock size={12} /> Staff Portal</Link>
           </div>
         </div>
       </div>

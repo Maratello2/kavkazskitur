@@ -102,8 +102,8 @@ export default function TourFilters({
             <TourSearchWithHints
               value={values.search}
               onChange={(val) => updateField('search', val)}
-              hints={['Эльбрус с юга', 'Траверс', 'Безенги', 'Казбек', 'Джилы-Су']}
-              placeholderPrefix="Поиск маршрута: "
+              hints={['Mt. Elbrus South', 'Traverse', 'Bezengi Wall', 'Kazbek', 'Djily-Su']}
+              placeholderPrefix="Search route: "
               showChips={true}
               inputClassName="bg-slate-100 dark:bg-slate-800 border-transparent text-slate-900 dark:text-white placeholder-slate-400 focus:border-[#C85A32]"
             />

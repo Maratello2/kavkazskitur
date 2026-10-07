@@ -364,23 +364,23 @@ export default function BookingModalClient({
                         required
                       />
                       <span className="text-[11px] leading-snug text-slate-400">
-                        Согласен на{' '}
+                        I agree to the{' '}
                         <a
                           href="/privacy"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-[#FF6A00] underline hover:text-orange-300 font-medium"
                         >
-                          обработку персональных данных (152-ФЗ)
+                          Privacy Policy
                         </a>{' '}
-                        и с условиями{' '}
+                        and terms of{' '}
                         <a
                           href="/offer"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-[#FF6A00] underline hover:text-orange-300 font-medium"
                         >
-                          публичной оферты
+                          Public Offer
                         </a>
                         .
                       </span>

@@ -76,7 +76,7 @@ export default function TourSearchWithHints({
             type="button"
             onClick={() => onChange('')}
             className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-            aria-label="Очистить поиск"
+            aria-label="Clear search"
           >
             <X size={14} strokeWidth={2} />
           </button>

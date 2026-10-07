@@ -41,11 +41,11 @@ export async function POST(request: Request) {
         const defaultUsers = [
           {
             id: 1,
-            username: 'admin',
+            username: 'kavkaz_admin',
             name: 'Expedition Operations Lead',
             email: 'hq@kavkazskitur.com',
             role: 'superadmin',
-            password_hash: '$2a$10$QYT3l0VpdqLYPIZFeSiJ7ONY70427pq5qibZlUG.0ZX5aQos48QyC',
+            password_hash: '$2a$10$cEbUFB3YLp/Aw0cIcRfWjebUMM1WqEvvhcDHYd9yTGUoJ9lOLXkfW',
             is_active: true,
             created_at: new Date().toISOString(),
             last_login: null,

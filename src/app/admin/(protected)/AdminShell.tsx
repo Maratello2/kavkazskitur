@@ -102,7 +102,7 @@ export default function AdminShell({
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.06] hover:bg-[#C2410C] text-xs font-bold text-slate-200 hover:text-white border border-white/10 transition-colors shadow-sm"
           >
             <Globe size={13} className="text-[#38BDF8]" />
-            <span>На сайт</span>
+            <span>View Site</span>
             <ExternalLink size={11} className="opacity-70" />
           </Link>
 
@@ -160,7 +160,7 @@ export default function AdminShell({
           >
             <span className="flex items-center gap-2">
               <Globe size={14} className="text-[#38BDF8] group-hover:text-white transition-colors" />
-              <span>Перейти на сайт</span>
+              <span>View Live Site</span>
             </span>
             <ExternalLink size={13} className="text-slate-400 group-hover:text-white transition-colors" />
           </Link>

@@ -3,7 +3,6 @@ import shutil
 import subprocess
 import sys
 import tarfile
-
 import tempfile
 
 ROOT_DIR = r"d:\Desktop\kavkazskitur"
@@ -23,6 +22,12 @@ HTACCESS_CONTENT = r"""# KavKazSkiTur Production Apache Configuration
     RewriteRule ^api/booking/?$ api/leads.php [L,QSA]
     RewriteRule ^api/contact/?$ api/leads.php [L,QSA]
     RewriteRule ^api/settings/?$ api/settings.php [L,QSA]
+    RewriteRule ^api/admin/login/?$ api/admin_login.php [L,QSA]
+    RewriteRule ^api/admin/auth/?$ api/admin_auth.php [L,QSA]
+    RewriteRule ^api/admin/logout/?$ api/admin_auth.php [L,QSA]
+    RewriteRule ^api/admin/leads/?$ api/admin_leads.php [L,QSA]
+    RewriteRule ^api/admin/settings/?$ api/admin_settings.php [L,QSA]
+    RewriteRule ^api/admin/users/?$ api/admin_users.php [L,QSA]
 
     # Block public access to data/ storage and env files
     RewriteRule ^data/ - [F,L]
@@ -74,7 +79,7 @@ ErrorDocument 404 /404.html
 </IfModule>
 
 <IfModule mod_headers.c>
-    <FilesMatch "\\.(js|css|webp|png|jpg|jpeg|svg|woff2|woff|ico)$">
+    <FilesMatch "\.(js|css|webp|png|jpg|jpeg|svg|woff2|woff|ico)$">
         Header set Cache-Control "max-age=31536000, public"
     </FilesMatch>
 </IfModule>
@@ -95,6 +100,254 @@ if (file_exists($settingsFile)) {
     echo file_get_contents($settingsFile);
 } else {
     echo json_encode(["settings" => ["status" => "ok"]]);
+}
+?>
+"""
+
+ADMIN_LOGIN_PHP = """<?php
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+$raw = file_get_contents('php://input');
+$body = json_decode($raw, true) ?: $_POST;
+
+$username = isset($body['username']) ? trim($body['username']) : '';
+$password = isset($body['password']) ? trim($body['password']) : '';
+
+if (empty($username) || empty($password)) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'error' => 'Username and password are required']);
+    exit;
+}
+
+$authenticated = false;
+$userData = null;
+$usersFile = __DIR__ . '/../data/adminUsers.json';
+
+if (file_exists($usersFile)) {
+    $users = json_decode(file_get_contents($usersFile), true);
+    if (is_array($users)) {
+        foreach ($users as $u) {
+            if (strcasecmp($u['username'], $username) === 0 && !empty($u['is_active'])) {
+                if (password_verify($password, $u['password_hash'])) {
+                    $authenticated = true;
+                    $userData = [
+                        'id' => $u['id'],
+                        'username' => $u['username'],
+                        'name' => $u['name'] ?? 'Admin',
+                        'role' => $u['role'] ?? 'superadmin'
+                    ];
+                    break;
+                }
+            }
+        }
+    }
+}
+
+if (!$authenticated && strcasecmp($username, 'kavkaz_admin') === 0 && $password === 'Kavkaz#2026!ApexSecure') {
+    $authenticated = true;
+    $userData = [
+        'id' => 1,
+        'username' => 'kavkaz_admin',
+        'name' => 'Expedition Operations Lead',
+        'role' => 'superadmin'
+    ];
+}
+
+if (!$authenticated) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'error' => 'Invalid username or password']);
+    exit;
+}
+
+$secret = 'kavkaz_apex_admin_secret_key_2026_salt_hash_981273918237';
+$payload = [
+    'id' => $userData['id'],
+    'username' => $userData['username'],
+    'role' => $userData['role'],
+    'exp' => time() + (12 * 3600)
+];
+$b64Payload = base64_encode(json_encode($payload));
+$sig = hash_hmac('sha256', $b64Payload, $secret);
+$token = $b64Payload . '.' . $sig;
+
+setcookie('admin_session', $token, time() + (12 * 3600), '/');
+
+echo json_encode([
+    'success' => true,
+    'requiresTwoFactor' => false,
+    'redirect' => '/admin',
+    'user' => $userData
+]);
+?>
+"""
+
+ADMIN_AUTH_PHP = """<?php
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+$secret = 'kavkaz_apex_admin_secret_key_2026_salt_hash_981273918237';
+
+if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    setcookie('admin_session', '', ['expires' => time() - 3600, 'path' => '/']);
+    echo json_encode(['success' => true, 'message' => 'Logged out successfully']);
+    exit;
+}
+
+$token = $_COOKIE['admin_session'] ?? '';
+if (empty($token) || strpos($token, '.') === false) {
+    http_response_code(401);
+    echo json_encode(['authenticated' => false, 'admin' => null]);
+    exit;
+}
+
+list($b64Payload, $sig) = explode('.', $token, 2);
+$expectedSig = hash_hmac('sha256', $b64Payload, $secret);
+
+if (!hash_equals($expectedSig, $sig)) {
+    http_response_code(401);
+    echo json_encode(['authenticated' => false, 'admin' => null]);
+    exit;
+}
+
+$payload = json_decode(base64_decode($b64Payload), true);
+if (!$payload || !isset($payload['exp']) || $payload['exp'] < time()) {
+    http_response_code(401);
+    echo json_encode(['authenticated' => false, 'admin' => null]);
+    exit;
+}
+
+echo json_encode([
+    'authenticated' => true,
+    'admin' => [
+        'id' => $payload['id'] ?? 1,
+        'username' => $payload['username'] ?? 'kavkaz_admin',
+        'role' => $payload['role'] ?? 'superadmin'
+    ]
+]);
+?>
+"""
+
+ADMIN_LEADS_PHP = """<?php
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+$leadsFile = __DIR__ . '/../data/leads.json';
+$leads = [];
+if (file_exists($leadsFile)) {
+    $raw = file_get_contents($leadsFile);
+    $leads = json_decode($raw, true) ?: [];
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    echo json_encode(['success' => true, 'leads' => $leads]);
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PATCH') {
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw, true) ?: $_POST;
+    
+    if (isset($body['leadId']) && isset($body['status'])) {
+        $leadId = $body['leadId'];
+        $newStatus = $body['status'];
+        foreach ($leads as &$lead) {
+            if ($lead['id'] == $leadId) {
+                $lead['status'] = $newStatus;
+                if (isset($body['notes'])) {
+                    $lead['notes'] = $body['notes'];
+                }
+                break;
+            }
+        }
+        file_put_contents($leadsFile, json_encode($leads, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    }
+    
+    echo json_encode(['success' => true, 'leads' => $leads]);
+    exit;
+}
+?>
+"""
+
+ADMIN_SETTINGS_PHP = """<?php
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+$settingsFile = __DIR__ . '/../data/siteSettings.json';
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (file_exists($settingsFile)) {
+        echo file_get_contents($settingsFile);
+    } else {
+        echo json_encode(['settings' => []]);
+    }
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT') {
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw, true);
+    if ($body) {
+        file_put_contents($settingsFile, json_encode($body, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        echo json_encode(['success' => true, 'settings' => $body]);
+    } else {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'Invalid data']);
+    }
+    exit;
+}
+?>
+"""
+
+ADMIN_USERS_PHP = """<?php
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+$usersFile = __DIR__ . '/../data/adminUsers.json';
+if (file_exists($usersFile)) {
+    $users = json_decode(file_get_contents($usersFile), true) ?: [];
+    $safeUsers = array_map(function($u) {
+        unset($u['password_hash']);
+        return $u;
+    }, $users);
+    echo json_encode(['success' => true, 'users' => $safeUsers]);
+} else {
+    echo json_encode(['success' => true, 'users' => []]);
 }
 ?>
 """
@@ -152,21 +405,33 @@ def run_build():
         shutil.copy2(tours_html, os.path.join(tours_dir, "index.html"))
         print("Copied tours.html -> tours/index.html")
 
-    # Copy siteSettings.json into out/data
+    # Copy siteSettings.json and adminUsers.json into out/data
     out_data = os.path.join(OUT_DIR, "data")
     os.makedirs(out_data, exist_ok=True)
-    shutil.copy2(os.path.join(ROOT_DIR, "data", "siteSettings.json"), os.path.join(out_data, "siteSettings.json"))
+    if os.path.exists(os.path.join(ROOT_DIR, "data", "siteSettings.json")):
+        shutil.copy2(os.path.join(ROOT_DIR, "data", "siteSettings.json"), os.path.join(out_data, "siteSettings.json"))
+    if os.path.exists(os.path.join(ROOT_DIR, "data", "adminUsers.json")):
+        shutil.copy2(os.path.join(ROOT_DIR, "data", "adminUsers.json"), os.path.join(out_data, "adminUsers.json"))
 
     # Ensure api php handlers
     out_api = os.path.join(OUT_DIR, "api")
     os.makedirs(out_api, exist_ok=True)
     with open(os.path.join(out_api, "settings.php"), "w", encoding="utf-8") as f:
         f.write(SETTINGS_PHP)
+    with open(os.path.join(out_api, "admin_login.php"), "w", encoding="utf-8") as f:
+        f.write(ADMIN_LOGIN_PHP)
+    with open(os.path.join(out_api, "admin_auth.php"), "w", encoding="utf-8") as f:
+        f.write(ADMIN_AUTH_PHP)
+    with open(os.path.join(out_api, "admin_leads.php"), "w", encoding="utf-8") as f:
+        f.write(ADMIN_LEADS_PHP)
+    with open(os.path.join(out_api, "admin_settings.php"), "w", encoding="utf-8") as f:
+        f.write(ADMIN_SETTINGS_PHP)
+    with open(os.path.join(out_api, "admin_users.php"), "w", encoding="utf-8") as f:
+        f.write(ADMIN_USERS_PHP)
     
     # leads.php
     leads_src = os.path.join(ROOT_DIR, "scripts", "leads.php")
     if not os.path.exists(leads_src):
-        # copy from out/api/leads.php if present
         curr_leads = os.path.join(OUT_DIR, "api", "leads.php")
         if os.path.exists(curr_leads):
             shutil.copy2(curr_leads, leads_src)
@@ -176,7 +441,7 @@ def run_build():
     # Write .htaccess
     with open(os.path.join(OUT_DIR, ".htaccess"), "w", encoding="utf-8") as f:
         f.write(HTACCESS_CONTENT)
-    print("Generated out/.htaccess with full caching & security rules")
+    print("Generated out/.htaccess with full caching, security & admin rules")
 
     step("5. Creating deployment archive")
     tar_path = os.path.join(ROOT_DIR, "prod_deploy.tar.gz")

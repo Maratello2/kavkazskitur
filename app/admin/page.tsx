@@ -893,7 +893,7 @@ function AdminPageContent() {
           >
             <span className="flex items-center gap-2">
               <Globe className="w-3.5 h-3.5 text-orange-400" />
-              <span>Перейти на сайт</span>
+              <span>View Live Site</span>
             </span>
             <ExternalLink size={12} className="text-slate-500 group-hover:text-slate-300" />
           </Link>

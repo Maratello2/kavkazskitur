@@ -205,7 +205,7 @@ export default function ProjectCard3D({
                 : 'bg-gradient-to-r from-[#FF6A00] to-orange-600 hover:from-orange-500 hover:to-orange-600 shadow-orange-950/40'
             }`}
           >
-            <span>Открыть {domain}</span>
+            <span>Launch {domain}</span>
             <ExternalLink size={14} strokeWidth={2} />
           </a>
         ) : (
@@ -217,7 +217,7 @@ export default function ProjectCard3D({
                 : 'bg-gradient-to-r from-[#FF6A00] to-orange-600 hover:from-orange-500 hover:to-orange-600 shadow-orange-950/40'
             }`}
           >
-            <span>Исследовать {domain}</span>
+            <span>Explore {domain}</span>
             <ArrowRight size={14} strokeWidth={2} />
           </Link>
         )}
