@@ -1,6 +1,8 @@
 import type { MetadataRoute } from 'next';
 import { TOURS_DATA } from '@/data/toursData';
 
+export const dynamic = 'force-static';
+
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://kavkazskitur.com';
 
 export default function sitemap(): MetadataRoute.Sitemap {

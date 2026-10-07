@@ -10,7 +10,7 @@ export const metadata = {
 export default async function ToursPage(props: {
   searchParams?: Promise<{ category?: string; search?: string }>;
 }) {
-  const searchParams = props.searchParams ? await props.searchParams : {};
+  const searchParams = (process.env.NEXT_EXPORT !== 'true' && props.searchParams) ? await props.searchParams : {};
   const [tours, categories] = await Promise.all([
     getTours(),
     getCategories()
