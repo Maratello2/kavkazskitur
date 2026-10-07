@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useWonderStore } from '@/lib/store/useWonderStore';
 import { X, Phone, CheckCircle2, Check, ShieldCheck } from 'lucide-react';
 import Logo from './Logo';
@@ -15,7 +16,7 @@ export default function QuickOrderModal() {
   const [websiteHp, setWebsiteHp] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [acceptedPolicy, setAcceptedPolicy] = useState(true);
+  const [acceptedPolicy, setAcceptedPolicy] = useState(false);
   const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
 
   useEffect(() => {
@@ -273,7 +274,23 @@ export default function QuickOrderModal() {
                       required
                     />
                     <span className="text-[11px] leading-snug text-slate-400">
-                      Согласен на обработку персональных данных (152-ФЗ).
+                      Согласен на{' '}
+                      <Link
+                        href="/privacy"
+                        target="_blank"
+                        className="text-[#FF6A00] underline hover:text-orange-300 font-medium"
+                      >
+                        обработку персональных данных (152-ФЗ)
+                      </Link>{' '}
+                      и с условиями{' '}
+                      <Link
+                        href="/offer"
+                        target="_blank"
+                        className="text-[#FF6A00] underline hover:text-orange-300 font-medium"
+                      >
+                        публичной оферты
+                      </Link>
+                      .
                     </span>
                   </label>
                 </div>

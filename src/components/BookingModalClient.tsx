@@ -45,7 +45,7 @@ export default function BookingModalClient({
   const [preferredDate, setPreferredDate] = useState('');
   const [participants, setParticipants] = useState<number>(1);
   const [experienceLevel, setExperienceLevel] = useState<'Beginner' | 'Intermediate' | 'Advanced'>('Intermediate');
-  const [consent152, setConsent152] = useState(true);
+  const [consent152, setConsent152] = useState(false);
   const [websiteHp, setWebsiteHp] = useState('');
 
   // Confirmation State
@@ -364,7 +364,25 @@ export default function BookingModalClient({
                         required
                       />
                       <span className="text-[11px] leading-snug text-slate-400">
-                        I agree to personal data processing (152-FZ) and expedition safety regulations.
+                        Согласен на{' '}
+                        <a
+                          href="/privacy"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#FF6A00] underline hover:text-orange-300 font-medium"
+                        >
+                          обработку персональных данных (152-ФЗ)
+                        </a>{' '}
+                        и с условиями{' '}
+                        <a
+                          href="/offer"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#FF6A00] underline hover:text-orange-300 font-medium"
+                        >
+                          публичной оферты
+                        </a>
+                        .
                       </span>
                     </label>
                   </div>

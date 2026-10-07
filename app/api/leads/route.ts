@@ -116,6 +116,24 @@ export async function POST(request: Request) {
       // Database is optional/graceful fallback; data is safely preserved in leads.json
     }
 
+    // 4.1. DISPATCH TO TELEGRAM DISPATCHER CHAT IF CONFIGURED
+    const tgToken = process.env.TELEGRAM_BOT_TOKEN;
+    const tgChatId = process.env.TELEGRAM_CHAT_ID;
+    if (tgToken && tgChatId) {
+      try {
+        const tgMsg = `🏔 *Новая заявка на тур!*\n\n*Тур:* ${finalTour}\n*Даты:* ${finalDates}\n*Клиент:* ${finalName}\n*Телефон:* ${finalPhone}\n${finalComment ? `*Заметка:* ${finalComment}` : ''}`;
+        fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: tgChatId,
+            text: tgMsg,
+            parse_mode: 'Markdown',
+          }),
+        }).catch(() => {});
+      } catch {}
+    }
+
     // 5. GENERATE INSTANT WHATSAPP REDIRECT URL
     // https://wa.me/79280828413?text=Expedition%20Booking%20Request%0A%0ATour:%20{tourName}%0ADates:%20{dates}%0AName:%20{name}%0APhone:%20{phone}
     const waText = `Expedition Booking Request\n\nTour: ${finalTour}\nDates: ${finalDates}\nName: ${finalName}\nPhone: ${finalPhone}`;

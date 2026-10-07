@@ -34,9 +34,9 @@ export default function CookieBanner() {
       <div className="flex items-start gap-2.5">
         <Cookie className="w-4 h-4 text-[#FF6A00] shrink-0 mt-0.5" />
         <p className="text-[11px] text-slate-300 leading-snug">
-          We use cookies to analyze performance and provide booking features.{' '}
-          <Link href="/privacy" className="text-sky-400 underline hover:text-sky-300 font-semibold">
-            Privacy Policy
+          Мы используем файлы cookie для работы карт, 3D-модулей и аналитики.{' '}
+          <Link href="/privacy" className="text-[#FF6A00] underline hover:text-orange-300 font-semibold">
+            Политика конфиденциальности (152-ФЗ)
           </Link>.
         </p>
       </div>
@@ -45,7 +45,7 @@ export default function CookieBanner() {
           onClick={accept}
           className="min-h-[36px] px-4 py-1.5 bg-[#FF6A00] hover:bg-[#E05D00] text-white text-xs font-bold uppercase tracking-wider rounded-lg transition-all shrink-0 cursor-pointer shadow-md flex items-center justify-center active:scale-95"
         >
-          Accept
+          Принять
         </button>
       </div>
     </div>
