@@ -648,7 +648,9 @@ export default function AdminDashboardClient() {
       {/* ========================================================================= */}
       {/* TAB 1: ANALYTICS & METRICS                                               */}
       {/* ========================================================================= */}
-      {activeTab === 'analytics' && <AdminAnalytics />}
+      {activeTab === 'analytics' && (
+        <AdminAnalytics inquiries={bookings} tours={tours} usdRate={settings.usdExchangeRate} hideKpis={false} />
+      )}
 
       {/* ========================================================================= */}
       {/* TAB 2: INQUIRIES & CRM                                                   */}

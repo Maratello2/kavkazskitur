@@ -1018,7 +1018,7 @@ function AdminPageContent() {
             </div>
 
             {/* Real-time Telemetry & Charts from AdminAnalytics */}
-            <AdminAnalytics />
+            <AdminAnalytics inquiries={inquiries} tours={tours} usdRate={settings.usdExchangeRate} hideKpis={true} />
           </div>
         )}
 
