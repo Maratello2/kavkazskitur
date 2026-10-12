@@ -80,7 +80,17 @@ function waScheduleLink(slot: DepartureSlot) {
   return `https://wa.me/79286914405?text=${encodeURIComponent(text)}`;
 }
 
-export default function SchedulePreview() {
+interface SchedulePreviewProps {
+  title?: string;
+  badge?: string;
+  subtitle?: string;
+}
+
+export default function SchedulePreview({
+  title = '2026 Expedition Timetable',
+  badge = 'Guaranteed Departures',
+  subtitle = 'Early reservation is required for high-season permits, cableway allocations, and Barrels refuge slots. All dates are guaranteed with minimum 2 participants.'
+}: SchedulePreviewProps = {}) {
   return (
     <section id="schedule" className="py-24 sm:py-32 bg-[#060B12] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -89,14 +99,14 @@ export default function SchedulePreview() {
             <div>
               <div className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] font-semibold text-[#FF6A00] mb-2">
                 <Calendar className="w-3.5 h-3.5 text-[#FF6A00]" />
-                Guaranteed Departures
+                {badge}
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-                2026 Expedition Timetable
+                {title}
               </h2>
             </div>
             <p className="text-slate-400 text-xs sm:text-sm max-w-md leading-relaxed font-sans">
-              Early reservation is required for high-season permits, cableway allocations, and Barrels refuge slots. All dates are guaranteed with minimum 2 participants.
+              {subtitle}
             </p>
           </div>
         </ScrollReveal>

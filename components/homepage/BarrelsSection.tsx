@@ -38,7 +38,17 @@ const BARRELS_FEATURES = [
   }
 ];
 
-export default function BarrelsSection() {
+interface BarrelsSectionProps {
+  title?: string;
+  badge?: string;
+  subtitle?: string;
+}
+
+export default function BarrelsSection({
+  title = 'The Barrels-Garabashi Base Camp',
+  badge = 'Private High-Altitude Refuge • 3,800 M',
+  subtitle = 'Unlike operators who rely on crowded public huts, KavKazSkiTur operates its own private high-altitude refuge compound on the southern glacier slopes of Mount Elbrus. Rest deeply in warm bunks before the midnight summit push.'
+}: BarrelsSectionProps = {}) {
   return (
     <section id="barrels" className="py-24 sm:py-32 bg-[#060B12] relative overflow-hidden text-white">
       {/* Subtle ambient alpine glow */}
@@ -49,13 +59,13 @@ export default function BarrelsSection() {
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-16">
             <div className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] font-semibold text-[#FF6A00] mb-3">
               <MapPin className="w-3.5 h-3.5 text-[#FF6A00]" strokeWidth={1.5} />
-              Private High-Altitude Refuge • 3,800 M
+              {badge}
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4">
-              The Barrels-Garabashi Base Camp
+              {title}
             </h2>
             <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-sans max-w-2xl">
-              Unlike operators who rely on crowded public huts, KavKazSkiTur operates its own private high-altitude refuge compound on the southern glacier slopes of Mount Elbrus. Rest deeply in warm bunks before the midnight summit push.
+              {subtitle}
             </p>
           </div>
         </ScrollReveal>

@@ -26,7 +26,7 @@ interface ScheduleRow {
   duration: string;
   priceRub: number;
   dates: string;
-  status: 'available' | 'few_spots' | 'guaranteed';
+  status: 'available' | 'few_spots' | 'guaranteed' | 'sold_out';
   statusLabel: string;
   month: 'may' | 'june' | 'july' | 'august' | 'september' | 'other';
 }
@@ -58,7 +58,7 @@ export default function ScheduleClient2026({ tours }: Props) {
         priceRub: tour.priceRub,
         dates: slot.dates,
         status: slot.status,
-        statusLabel: slot.statusLabel,
+        statusLabel: slot.statusLabel || (slot.status === 'guaranteed' ? '100% Guaranteed' : slot.status === 'few_spots' ? '2-3 Spots Left' : slot.status === 'sold_out' ? 'Sold Out' : 'Registration Open'),
         month
       });
     });

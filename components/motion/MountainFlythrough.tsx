@@ -12,21 +12,21 @@ export function MountainFlythrough() {
     offset: ['start start', 'end end'],
   });
 
-  // 1. Слой передних скал (разлетаются влево-вправо и приближаются в камеру)
+  // 1. Front crag layer (parting left-right towards camera)
   const leftRockX = useTransform(scrollYProgress, [0, 0.6], ['0%', '-80%']);
   const rightRockX = useTransform(scrollYProgress, [0, 0.6], ['0%', '80%']);
   const frontRocksScale = useTransform(scrollYProgress, [0, 0.6], [1, 2.8]);
   const frontRocksOpacity = useTransform(scrollYProgress, [0.3, 0.55], [1, 0]);
 
-  // 2. Слой тумана и облаков (рассеивается при влёте)
+  // 2. Mist and cloud layer (dissipates upon dive)
   const mistScale = useTransform(scrollYProgress, [0, 0.7], [1, 3.5]);
   const mistOpacity = useTransform(scrollYProgress, [0.1, 0.5], [0.8, 0]);
 
-  // 3. Вершина Эльбруса (приближается из глубины)
+  // 3. Mt. Elbrus summit (approaches from depth)
   const summitScale = useTransform(scrollYProgress, [0.1, 0.85], [0.85, 1.25]);
   const summitY = useTransform(scrollYProgress, [0.1, 0.85], ['10%', '-5%']);
 
-  // 4. Текстовые данные экспедиции (появляются из глубины в конце пролета)
+  // 4. Expedition HUD telemetry (emerges at dive culmination)
   const hudOpacity = useTransform(scrollYProgress, [0.55, 0.85], [0, 1]);
   const hudScale = useTransform(scrollYProgress, [0.55, 0.85], [0.85, 1]);
   const hudY = useTransform(scrollYProgress, [0.55, 0.85], [40, 0]);
@@ -35,10 +35,10 @@ export function MountainFlythrough() {
     <section ref={containerRef} className="relative h-[250vh] bg-[#050A10]">
       <div className="sticky top-0 h-[100dvh] w-full overflow-hidden flex items-center justify-center">
         
-        {/* Фоновое звездное небо и глубокий градиент */}
+        {/* Starry sky and deep atmospheric gradient */}
         <div className="absolute inset-0 bg-radial from-slate-900/40 via-[#050A10] to-[#020508] pointer-events-none" />
 
-        {/* СЛОЙ 3: ДАЛЬНИЙ ПЛАН — ПИК ЭЛЬБРУСА */}
+        {/* LAYER 3: DISTANT HORIZON — MT. ELBRUS SUMMIT */}
         <motion.div
           style={{ scale: summitScale, y: summitY }}
           className="absolute inset-0 flex items-center justify-center pointer-events-none will-change-transform"
@@ -53,20 +53,20 @@ export function MountainFlythrough() {
                 (e.target as HTMLImageElement).src = '/hero/stage_05_summit.webp';
               }}
             />
-            {/* Амбиентное свечение над вершиной */}
+            {/* Ambient summit glow */}
             <div className="absolute -top-10 w-96 h-96 bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
           </div>
         </motion.div>
 
-        {/* СЛОЙ 2: АТМОСФЕРНЫЙ ТУМАН */}
+        {/* LAYER 2: ATMOSPHERIC MIST */}
         <motion.div
           style={{ scale: mistScale, opacity: mistOpacity }}
           className="absolute inset-0 pointer-events-none bg-radial from-orange-500/10 via-transparent to-transparent blur-3xl will-change-transform"
         />
 
-        {/* СЛОЙ 1: ПЕРЕДНИЕ СКАЛЫ УЩЕЛЬЯ (РАЗЛЕТАЮТСЯ В СТОРОНЫ) */}
+        {/* LAYER 1: CANYON CRAGS (PARTING SIDES) */}
         <div className="absolute inset-0 pointer-events-none z-20 flex justify-between">
-          {/* Левая скала */}
+          {/* Left crag */}
           <motion.div
             style={{ x: leftRockX, scale: frontRocksScale, opacity: frontRocksOpacity }}
             className="w-1/2 h-full bg-gradient-to-r from-black via-[#060D18]/90 to-transparent flex items-center will-change-transform"
@@ -74,7 +74,7 @@ export function MountainFlythrough() {
             <div className="w-full h-full border-r border-white/[0.04] backdrop-blur-[2px]" />
           </motion.div>
 
-          {/* Правая скала */}
+          {/* Right crag */}
           <motion.div
             style={{ x: rightRockX, scale: frontRocksScale, opacity: frontRocksOpacity }}
             className="w-1/2 h-full bg-gradient-to-l from-black via-[#060D18]/90 to-transparent flex items-center will-change-transform"
@@ -83,7 +83,7 @@ export function MountainFlythrough() {
           </motion.div>
         </div>
 
-        {/* HUD ЭКРАН: ТЕЛЕМЕТРИЯ И ДАННЫЕ ВЕРШИНЫ (ВЫЛЕТАЮТ ПОСЛЕ ПРОХОЖДЕНИЯ СКАЛ) */}
+        {/* HUD TELEMETRY SCREEN */}
         <motion.div
           style={{ opacity: hudOpacity, scale: hudScale, y: hudY }}
           className="relative z-30 flex flex-col items-center text-center px-4 max-w-2xl pointer-events-auto"
@@ -120,7 +120,7 @@ export function MountainFlythrough() {
           </div>
         </motion.div>
 
-        {/* ИНДИКАТОР ПРОЛЁТА ВНИЗУ */}
+        {/* DIVE INDICATOR */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 pointer-events-none opacity-60">
           <span className="text-[10px] font-mono tracking-widest uppercase text-slate-400">Scroll to Dive</span>
           <div className="w-4 h-7 rounded-full border border-white/20 flex items-start justify-center p-1">

@@ -83,7 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               '@context': 'https://schema.org',
               '@type': 'TravelAgency',
               name: 'KavKazSkiTur',
-              alternateName: 'КавказСкиТур',
+              alternateName: 'KavKazSkiTur Alpine Expeditions',
               url: 'https://kavkazskitur.com',
               logo: 'https://kavkazskitur.com/brand/logo_kst.svg',
               image: 'https://kavkazskitur.com/hero/summit_apex_5642.webp',
@@ -104,7 +104,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 latitude: 43.4853,
                 longitude: 43.6071,
               },
-              priceRange: '₽₽₽',
+              priceRange: '$$$',
             }),
           }}
         />

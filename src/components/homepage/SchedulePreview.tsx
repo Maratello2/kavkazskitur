@@ -80,48 +80,58 @@ function waScheduleLink(slot: DepartureSlot) {
   return `https://wa.me/79286914405?text=${encodeURIComponent(text)}`;
 }
 
-export default function SchedulePreview() {
+interface SchedulePreviewProps {
+  title?: string;
+  badge?: string;
+  subtitle?: string;
+}
+
+export default function SchedulePreview({
+  title = '2026 Expedition Timetable',
+  badge = 'Guaranteed Departures',
+  subtitle = 'Early reservation is required for high-season permits, cableway allocations, and Barrels refuge slots. All dates are guaranteed with minimum 2 participants.'
+}: SchedulePreviewProps = {}) {
   return (
-    <section id="schedule" className="py-20 sm:py-28 border-t border-white/[0.08] bg-[#091422]">
+    <section id="schedule" className="py-24 sm:py-32 bg-[#060B12] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <ScrollReveal>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] font-bold text-[#FF6A00] mb-2">
+              <div className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] font-semibold text-[#FF6A00] mb-2">
                 <Calendar className="w-3.5 h-3.5 text-[#FF6A00]" />
-                Guaranteed Departures
+                {badge}
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-                2026 Expedition Timetable
+                {title}
               </h2>
             </div>
-            <p className="text-slate-300 text-xs sm:text-sm max-w-md leading-relaxed">
-              Early reservation is required for high-season permits, cableway allocations, and Barrels refuge slots. All dates are guaranteed with minimum 2 participants.
+            <p className="text-slate-400 text-xs sm:text-sm max-w-md leading-relaxed font-sans">
+              {subtitle}
             </p>
           </div>
         </ScrollReveal>
 
-        {/* Timetable */}
+        {/* Timetable directly on canvas */}
         <ScrollReveal delay={50}>
-          <div className="bg-[#0E1F33] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
-            {/* Table Header */}
-            <div className="p-4 sm:p-5 bg-white/[0.02] border-b border-white/10 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-400">
+          <div className="w-full">
+            {/* Table Header Row */}
+            <div className="pb-3 border-b border-white/[0.08] flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-400 font-sans">
               <span className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-sky-400" />
+                <Clock className="w-4 h-4 text-[#FF6A00]" />
                 Upcoming Windows
               </span>
               <span className="hidden sm:inline text-slate-400 font-mono">May — Oct 2026</span>
             </div>
 
-            <div className="divide-y divide-white/[0.06]">
+            <div className="divide-y divide-white/[0.06] border-b border-white/[0.08]">
               {SCHEDULE_2026.map((slot) => (
                 <div
                   key={slot.dates + slot.route}
-                  className="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-white/[0.02] transition-colors"
+                  className="py-5 sm:py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-white/[0.02] -mx-4 px-4 sm:mx-0 sm:px-2 rounded-xl transition-colors"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                    <div className="w-48 shrink-0 font-mono text-xs sm:text-sm font-bold text-white flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-[#FF6A00]" />
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
+                    <div className="w-full sm:w-52 shrink-0 font-mono text-xs sm:text-sm font-bold text-white flex items-center gap-2.5">
+                      <Calendar className="w-4 h-4 text-[#FF6A00] shrink-0" />
                       {slot.dates}
                     </div>
 
@@ -129,7 +139,7 @@ export default function SchedulePreview() {
                       <div className="text-sm sm:text-base font-bold text-white tracking-tight">
                         {slot.route}
                       </div>
-                      <div className="text-xs text-slate-400 mt-0.5 flex items-center gap-3">
+                      <div className="text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-2 sm:gap-3">
                         <span>Duration: {slot.duration}</span>
                         <span>&bull;</span>
                         <span className="font-semibold text-[#FF6A00]">
@@ -139,9 +149,9 @@ export default function SchedulePreview() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 self-start md:self-auto">
+                  <div className="flex items-center justify-between sm:justify-start gap-3 w-full md:w-auto pt-2 sm:pt-0 border-t border-white/[0.04] sm:border-t-0">
                     <span
-                      className={`inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold border ${statusColor(
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold border shrink-0 ${statusColor(
                         slot.status
                       )}`}
                     >
@@ -152,7 +162,7 @@ export default function SchedulePreview() {
                       href={waScheduleLink(slot)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#FF6A00] hover:bg-[#E05D00] text-white text-xs font-bold border border-orange-400/20 transition-all shadow-md shadow-orange-950/30 group"
+                      className="min-h-[44px] inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#FF6A00] hover:bg-[#E05D00] text-white text-xs font-bold border border-orange-400/20 transition-all shadow-md shadow-orange-950/30 group active:scale-95 shrink-0"
                     >
                       <span>Reserve</span>
                       <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -163,7 +173,7 @@ export default function SchedulePreview() {
             </div>
 
             {/* Custom group note */}
-            <div className="p-5 bg-white/[0.01] border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-300">
+            <div className="pt-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#FF6A00]" />
                 <span>Need custom dates or private guide for your team?</span>
@@ -172,7 +182,7 @@ export default function SchedulePreview() {
                 href="https://wa.me/79286914405?text=Hello!%20I%20would%20like%20to%20request%20custom%20dates%20for%20a%20private%20Elbrus/Kazbek%20expedition."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-bold text-[#FF6A00] hover:text-[#FF8800] transition-colors"
+                className="min-h-[44px] inline-flex items-center font-bold text-[#FF6A00] hover:text-[#FF8800] transition-colors"
               >
                 Inquire for Private Expedition &rarr;
               </a>

@@ -16,15 +16,17 @@ import {
   ExternalLink,
   Compass,
   Globe,
+  Layers,
 } from 'lucide-react';
 import Logo from '@/components/Logo';
 
 const NAV_TABS = [
-  { id: 'analytics', href: '/admin?tab=analytics', label: 'Analytics & Metrics', icon: BarChart3 },
-  { id: 'crm', href: '/admin?tab=crm', label: 'Inquiries & CRM', icon: ClipboardList },
-  { id: 'tours', href: '/admin?tab=tours', label: 'Expedition Catalog', icon: Mountain },
-  { id: 'settings', href: '/admin?tab=settings', label: 'Global Settings', icon: Settings },
-  { id: 'users', href: '/admin?tab=users', label: 'Team & Access', icon: Users },
+  { id: 'settings', href: '/admin?tab=settings', label: '✏️ Site Content & Contacts', icon: Settings },
+  { id: 'tours', href: '/admin?tab=tours', label: '🏔️ Routes & Pricing (88)', icon: Mountain },
+  { id: 'categories', href: '/admin?tab=categories', label: '🏷️ Categories & Mega Menu', icon: Layers },
+  { id: 'crm', href: '/admin?tab=crm', label: '📋 Inquiries & CRM Leads', icon: ClipboardList },
+  { id: 'analytics', href: '/admin?tab=analytics', label: '📊 Operations & Analytics', icon: BarChart3 },
+  { id: 'users', href: '/admin?tab=users', label: '👥 Team & Access Control', icon: Users },
 ];
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {

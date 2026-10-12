@@ -26,7 +26,7 @@ interface ScheduleRow {
   duration: string;
   priceRub: number;
   dates: string;
-  status: 'available' | 'few_spots' | 'guaranteed';
+  status: 'available' | 'few_spots' | 'guaranteed' | 'sold_out';
   statusLabel: string;
   month: 'may' | 'june' | 'july' | 'august' | 'september' | 'other';
 }
@@ -58,7 +58,7 @@ export default function ScheduleClient2026({ tours }: Props) {
         priceRub: tour.priceRub,
         dates: slot.dates,
         status: slot.status,
-        statusLabel: slot.statusLabel,
+        statusLabel: slot.statusLabel || (slot.status === 'guaranteed' ? '100% Guaranteed' : slot.status === 'few_spots' ? '2-3 Spots Left' : slot.status === 'sold_out' ? 'Sold Out' : 'Registration Open'),
         month
       });
     });
@@ -102,7 +102,7 @@ export default function ScheduleClient2026({ tours }: Props) {
   return (
     <div className="space-y-8">
       {/* MONTH TABS */}
-      <div className="flex flex-wrap items-center gap-2 bg-[#0E1F33]/80 p-3 rounded-2xl border border-white/10 shadow-lg">
+      <div className="flex flex-wrap items-center gap-2 bg-white/[0.02] p-2.5 rounded-2xl border border-white/[0.08]">
         {[
           { key: 'all', label: 'All Months' },
           { key: 'may', label: 'May' },
@@ -117,8 +117,8 @@ export default function ScheduleClient2026({ tours }: Props) {
             onClick={() => setSelectedMonth(tab.key)}
             className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider transition-all cursor-pointer ${
               selectedMonth === tab.key
-                ? 'bg-[#C2410C] text-white shadow-md'
-                : 'bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/[0.08]'
+                ? 'bg-[#FF6A00] text-white shadow-md'
+                : 'bg-white/[0.03] text-slate-300 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
             {tab.label}
@@ -127,11 +127,11 @@ export default function ScheduleClient2026({ tours }: Props) {
       </div>
 
       {/* TIMETABLE */}
-      <div className="bg-[#0E1F33] rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+      <div className="bg-white/[0.015] rounded-2xl border border-white/[0.08] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/10 bg-[#08101A]/60 text-[11px] font-bold uppercase tracking-widest text-slate-400">
+              <tr className="border-b border-white/[0.08] bg-white/[0.02] text-[11px] font-bold uppercase tracking-widest text-slate-400">
                 <th className="p-4 sm:p-5">Departure Dates 2026</th>
                 <th className="p-4 sm:p-5">Expedition Route</th>
                 <th className="p-4 sm:p-5 hidden md:table-cell">Altitude / Duration</th>
@@ -140,7 +140,7 @@ export default function ScheduleClient2026({ tours }: Props) {
                 <th className="p-4 sm:p-5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5 text-sm">
+            <tbody className="divide-y divide-white/[0.06] text-sm">
               {filteredRows.map((row) => {
                 let badgeStyle = 'bg-blue-950/60 text-blue-300 border-blue-800/40';
                 if (row.status === 'guaranteed') {
@@ -154,7 +154,7 @@ export default function ScheduleClient2026({ tours }: Props) {
                     {/* DATES */}
                     <td className="p-4 sm:p-5 font-bold text-white whitespace-nowrap">
                       <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-[#C2410C] shrink-0" />
+                        <Calendar className="w-4 h-4 text-[#FF6A00] shrink-0" />
                         <span>{row.dates}</span>
                       </div>
                     </td>
@@ -163,10 +163,10 @@ export default function ScheduleClient2026({ tours }: Props) {
                     <td className="p-4 sm:p-5 font-semibold">
                       <Link
                         href={`/tours/${row.tourSlug}`}
-                        className="text-white hover:text-[#C2410C] transition-colors flex items-center gap-1.5 group"
+                        className="text-white hover:text-[#FF6A00] transition-colors flex items-center gap-1.5 group"
                       >
                         <span>{row.tourTitle}</span>
-                        <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-[#C2410C] shrink-0 transition-transform group-hover:translate-x-0.5" />
+                        <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-[#FF6A00] shrink-0 transition-transform group-hover:translate-x-0.5" />
                       </Link>
                       <div className="text-[11px] text-slate-400 mt-0.5">
                         {row.categoryLabel}
@@ -176,7 +176,7 @@ export default function ScheduleClient2026({ tours }: Props) {
                     {/* ALTITUDE & DURATION */}
                     <td className="p-4 sm:p-5 hidden md:table-cell text-xs text-slate-300 whitespace-nowrap">
                       <div className="flex items-center gap-2">
-                        <Mountain className="w-3.5 h-3.5 text-[#C2410C]" />
+                        <Mountain className="w-3.5 h-3.5 text-[#FF6A00]" />
                         <span>{row.altitude}</span>
                         <span>•</span>
                         <span>{row.duration}</span>
@@ -205,7 +205,7 @@ export default function ScheduleClient2026({ tours }: Props) {
                           setBookingModal(row);
                           setSubmitted(false);
                         }}
-                        className="inline-flex items-center gap-1.5 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs uppercase tracking-wider px-3.5 sm:px-4 py-2 rounded-xl shadow-md transition-all active:scale-95 cursor-pointer"
+                        className="inline-flex items-center gap-1.5 bg-[#FF6A00] hover:bg-[#E05D00] text-white font-bold text-xs uppercase tracking-wider px-3.5 sm:px-4 py-2 rounded-xl shadow-md transition-all active:scale-95 cursor-pointer"
                       >
                         <span>Reserve</span>
                       </button>
@@ -221,7 +221,7 @@ export default function ScheduleClient2026({ tours }: Props) {
       {/* QUICK BOOKING MODAL WITH 152-FZ */}
       {bookingModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-[#0E1F33] rounded-3xl border border-white/10 p-6 sm:p-8 max-w-md w-full relative shadow-2xl space-y-6">
+          <div className="bg-[#0A1019] rounded-2xl border border-white/[0.1] p-6 sm:p-8 max-w-md w-full relative shadow-2xl space-y-6">
             <button
               type="button"
               onClick={() => setBookingModal(null)}
@@ -231,14 +231,14 @@ export default function ScheduleClient2026({ tours }: Props) {
             </button>
 
             <div className="space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#C2410C]">
+              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#FF6A00]">
                 Spot Reservation • Season 2026
               </span>
               <h3 className="text-xl font-black text-white">
                 {bookingModal.tourTitle}
               </h3>
               <p className="text-xs text-slate-300 flex items-center gap-2 pt-1">
-                <Calendar className="w-3.5 h-3.5 text-[#C2410C]" />
+                <Calendar className="w-3.5 h-3.5 text-[#FF6A00]" />
                 <span>{bookingModal.dates}</span>
                 <span>•</span>
                 <span className="font-bold text-white">{bookingModal.priceRub.toLocaleString('ru-RU')} ₽</span>
@@ -255,7 +255,7 @@ export default function ScheduleClient2026({ tours }: Props) {
                 <button
                   type="button"
                   onClick={() => setBookingModal(null)}
-                  className="mt-2 text-xs font-bold text-[#C2410C] underline"
+                  className="mt-2 text-xs font-bold text-[#FF6A00] underline"
                 >
                   Close Window
                 </button>
@@ -272,7 +272,7 @@ export default function ScheduleClient2026({ tours }: Props) {
                     placeholder="John Doe"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-[#08101A] border border-white/15 focus:border-[#C2410C] rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#C2410C]"
+                    className="w-full bg-white/[0.03] border border-white/10 focus:border-[#FF6A00] rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#FF6A00]/50 transition-colors"
                   />
                 </div>
 
@@ -286,7 +286,7 @@ export default function ScheduleClient2026({ tours }: Props) {
                     placeholder="+1 (555) 000-0000"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full bg-[#08101A] border border-white/15 focus:border-[#C2410C] rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#C2410C]"
+                    className="w-full bg-white/[0.03] border border-white/10 focus:border-[#FF6A00] rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#FF6A00]/50 transition-colors"
                   />
                 </div>
 
@@ -298,11 +298,11 @@ export default function ScheduleClient2026({ tours }: Props) {
                       required
                       checked={formData.consent}
                       onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
-                      className="mt-0.5 rounded border-white/20 bg-[#08101A] text-[#C2410C] focus:ring-[#C2410C] accent-[#C2410C] w-4 h-4 shrink-0"
+                      className="mt-0.5 rounded border-white/20 bg-white/[0.03] text-[#FF6A00] focus:ring-[#FF6A00] accent-[#FF6A00] w-4 h-4 shrink-0"
                     />
                     <span className="leading-tight">
                       I agree to the processing of personal data in accordance with the{' '}
-                      <Link href="/privacy" className="text-[#C2410C] underline hover:text-orange-400" target="_blank">
+                      <Link href="/privacy" className="text-[#FF6A00] underline hover:text-orange-400" target="_blank">
                         Privacy Policy (152-FZ)
                       </Link>
                     </span>
@@ -311,7 +311,7 @@ export default function ScheduleClient2026({ tours }: Props) {
 
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl shadow-lg transition-all"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-[#FF6A00] hover:bg-[#E05D00] text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl shadow-lg transition-all"
                 >
                   <Send className="w-4 h-4" />
                   <span>Confirm Reservation</span>

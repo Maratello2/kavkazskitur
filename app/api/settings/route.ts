@@ -10,18 +10,8 @@ export async function GET() {
       const content = fs.readFileSync(SETTINGS_FILE, 'utf-8');
       const all = JSON.parse(content);
       
-      // Only expose safe public banner & display settings
-      const publicSettings = {
-        announcementText: all.announcementText || '',
-        announcementActive: all.announcementActive !== false,
-        seasonStatus: all.seasonStatus || '',
-        promoBadgeText: all.promoBadgeText || '',
-        showReviews: all.showReviews !== false,
-        showGearRental: all.showGearRental !== false,
-        showAcclimatization: all.showAcclimatization !== false,
-      };
-
-      return NextResponse.json({ success: true, settings: publicSettings });
+      // Expose all public homepage and site settings
+      return NextResponse.json({ success: true, settings: all, ...all });
     }
   } catch (err) {
     console.warn('[Public Settings API] Read error:', err);

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   ChevronDown, 
@@ -18,18 +18,50 @@ interface Props {
   tour: TourData;
 }
 
-export default function TourDetailClient({ tour }: Props) {
+export default function TourDetailClient({ tour: initialTour }: Props) {
+  const [tour, setTour] = useState<TourData>(initialTour);
   const [openDays, setOpenDays] = useState<number[]>([1]);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    selectedDate: tour.schedule2026[0]?.dates || '',
+    selectedDate: initialTour.schedule2026?.[0]?.dates || '',
     comment: '',
     website_hp: '',
     consent: false
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (!initialTour.slug) return;
+    fetch(`/api/tours.php?slug=${encodeURIComponent(initialTour.slug)}`)
+      .then((res) => {
+        if (!res.ok) throw new Error('API unavailable');
+        return res.json();
+      })
+      .then((data) => {
+        if (data && data.success && data.tour) {
+          const t = data.tour;
+          setTour((prev) => ({
+            ...prev,
+            title: t.title || t.name || prev.title,
+            description: t.description || prev.description,
+            priceRub: t.priceRub !== undefined ? Number(t.priceRub) : t.price !== undefined ? Number(t.price) : prev.priceRub,
+            priceUsd: t.priceUsd !== undefined ? Number(t.priceUsd) : prev.priceUsd,
+            difficulty: t.difficulty || prev.difficulty,
+            altitude: t.altitude || prev.altitude,
+            duration: t.duration || prev.duration,
+            coverImage: t.cover_image || t.coverImage || prev.coverImage,
+            gallery: Array.isArray(t.gallery) && t.gallery.length > 0 ? t.gallery : prev.gallery,
+            schedule2026: Array.isArray(t.schedule2026) && t.schedule2026.length > 0 ? t.schedule2026 : prev.schedule2026,
+            itinerary: Array.isArray(t.itinerary) && t.itinerary.length > 0 ? t.itinerary : prev.itinerary,
+            included: Array.isArray(t.included) && t.included.length > 0 ? t.included : prev.included,
+            excluded: Array.isArray(t.excluded) && t.excluded.length > 0 ? t.excluded : prev.excluded,
+          }));
+        }
+      })
+      .catch(() => {});
+  }, [initialTour.slug]);
 
   const toggleDay = (dayNum: number) => {
     setOpenDays((prev) =>
@@ -38,7 +70,7 @@ export default function TourDetailClient({ tour }: Props) {
   };
 
   const expandAll = () => {
-    setOpenDays(tour.itinerary.map((item) => item.day));
+    setOpenDays((tour.itinerary || []).map((item) => item.day));
   };
 
   const collapseAll = () => {
@@ -160,7 +192,7 @@ export default function TourDetailClient({ tour }: Props) {
           </div>
 
           <div className="space-y-3">
-            {tour.itinerary.map((item: ItineraryDay) => {
+            {(tour.itinerary || []).map((item: ItineraryDay) => {
               const isOpen = openDays.includes(item.day);
               return (
                 <div

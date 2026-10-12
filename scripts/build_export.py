@@ -26,12 +26,17 @@ HTACCESS_CONTENT = r"""# KavKazSkiTur Production Apache Configuration
     RewriteRule ^api/booking/?$ api/leads.php [L,QSA]
     RewriteRule ^api/contact/?$ api/leads.php [L,QSA]
     RewriteRule ^api/settings/?$ api/settings.php [L,QSA]
+    RewriteRule ^api/tours/?$ api/tours.php [L,QSA]
+    RewriteRule ^api/categories/?$ api/categories.php [L,QSA]
     RewriteRule ^api/admin/login/?$ api/admin_login.php [L,QSA]
     RewriteRule ^api/admin/auth/?$ api/admin_auth.php [L,QSA]
     RewriteRule ^api/admin/logout/?$ api/admin_auth.php [L,QSA]
     RewriteRule ^api/admin/leads/?$ api/admin_leads.php [L,QSA]
     RewriteRule ^api/admin/settings/?$ api/admin_settings.php [L,QSA]
     RewriteRule ^api/admin/users/?$ api/admin_users.php [L,QSA]
+    RewriteRule ^api/admin/tours/?$ api/admin_tours.php [L,QSA]
+    RewriteRule ^api/admin/categories/?$ api/admin_categories.php [L,QSA]
+    RewriteRule ^api/admin/upload/?$ api/admin_upload.php [L,QSA]
 
     # Block public access to data/ storage and env files
     RewriteRule ^data/ - [F,L]
@@ -98,11 +103,14 @@ ErrorDocument 404 /404.html
 SETTINGS_PHP = """<?php
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
-header('Cache-Control: public, max-age=3600');
+header('Cache-Control: no-cache, no-store, must-revalidate');
 
 $settingsFile = __DIR__ . '/../data/siteSettings.json';
 if (file_exists($settingsFile)) {
-    echo file_get_contents($settingsFile);
+    $raw = file_get_contents($settingsFile);
+    $data = json_decode($raw, true) ?: [];
+    $resp = array_merge($data, ['settings' => $data]);
+    echo json_encode($resp, JSON_UNESCAPED_UNICODE);
 } else {
     echo json_encode(["settings" => ["status" => "ok"]]);
 }
@@ -187,6 +195,7 @@ setcookie('admin_session', $token, time() + (12 * 3600), '/');
 
 echo json_encode([
     'success' => true,
+    'token' => $token,
     'requiresTwoFactor' => false,
     'redirect' => '/admin',
     'user' => $userData
@@ -213,7 +222,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     exit;
 }
 
-$token = $_COOKIE['admin_session'] ?? '';
+$token = $_COOKIE['admin_session'] ?? $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? '';
+if (empty($token) && !empty($_SERVER['HTTP_AUTHORIZATION'])) {
+    if (preg_match('/Bearer\s+(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $m)) {
+        $token = $m[1];
+    }
+}
 if (empty($token) || strpos($token, '.') === false) {
     http_response_code(401);
     echo json_encode(['authenticated' => false, 'admin' => null]);
@@ -303,6 +317,7 @@ header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
+header('Cache-Control: no-cache, no-store, must-revalidate');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -313,7 +328,10 @@ $settingsFile = __DIR__ . '/../data/siteSettings.json';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (file_exists($settingsFile)) {
-        echo file_get_contents($settingsFile);
+        $raw = file_get_contents($settingsFile);
+        $data = json_decode($raw, true) ?: [];
+        $resp = array_merge($data, ['settings' => $data]);
+        echo json_encode($resp, JSON_UNESCAPED_UNICODE);
     } else {
         echo json_encode(['settings' => []]);
     }
@@ -324,8 +342,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
     $raw = file_get_contents('php://input');
     $body = json_decode($raw, true);
     if ($body) {
-        file_put_contents($settingsFile, json_encode($body, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-        echo json_encode(['success' => true, 'settings' => $body]);
+        $toSave = (isset($body['settings']) && is_array($body['settings'])) ? $body['settings'] : $body;
+        file_put_contents($settingsFile, json_encode($toSave, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        echo json_encode(['success' => true, 'settings' => $toSave]);
     } else {
         http_response_code(400);
         echo json_encode(['success' => false, 'error' => 'Invalid data']);
@@ -437,6 +456,10 @@ def run_build():
         shutil.copy2(os.path.join(ROOT_DIR, "data", "adminUsers.json"), os.path.join(out_data, "adminUsers.json"))
     if os.path.exists(os.path.join(ROOT_DIR, "data", "leads.json")):
         shutil.copy2(os.path.join(ROOT_DIR, "data", "leads.json"), os.path.join(out_data, "leads.json"))
+    if os.path.exists(os.path.join(ROOT_DIR, "data", "tours.json")):
+        shutil.copy2(os.path.join(ROOT_DIR, "data", "tours.json"), os.path.join(out_data, "tours.json"))
+    if os.path.exists(os.path.join(ROOT_DIR, "data", "categories.json")):
+        shutil.copy2(os.path.join(ROOT_DIR, "data", "categories.json"), os.path.join(out_data, "categories.json"))
 
     # Ensure api php handlers
     out_api = os.path.join(OUT_DIR, "api")
@@ -453,6 +476,13 @@ def run_build():
         f.write(ADMIN_SETTINGS_PHP)
     with open(os.path.join(out_api, "admin_users.php"), "w", encoding="utf-8") as f:
         f.write(ADMIN_USERS_PHP)
+
+    # Copy any additional PHP handlers from public/api/ (admin_tours, admin_categories, admin_upload, tours, categories)
+    pub_api = os.path.join(ROOT_DIR, "public", "api")
+    if os.path.exists(pub_api):
+        for f_name in os.listdir(pub_api):
+            if f_name.endswith(".php"):
+                shutil.copy2(os.path.join(pub_api, f_name), os.path.join(out_api, f_name))
     
     # leads.php
     leads_src = os.path.join(ROOT_DIR, "scripts", "leads.php")

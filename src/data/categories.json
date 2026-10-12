@@ -1,0 +1,79 @@
+[
+  {
+    "id": "climbing",
+    "name": "Climbing & Summits",
+    "slug": "climbing",
+    "headerGroup": "ELBRUS 5642M",
+    "description": "High-altitude ascents of Mount Elbrus and Kazbek",
+    "badge": "5,642m",
+    "icon": "Mountain",
+    "showInHeader": true,
+    "order": 1
+  },
+  {
+    "id": "skitour",
+    "name": "Ski-Tour & Freeride",
+    "slug": "skitour",
+    "headerGroup": "ELBRUS 5642M",
+    "description": "Spring backcountry and off-piste ski mountaineering",
+    "badge": "Freeride",
+    "icon": "Compass",
+    "showInHeader": true,
+    "order": 2
+  },
+  {
+    "id": "trekking",
+    "name": "Alpine Trekking & Hikes",
+    "slug": "trekking",
+    "headerGroup": "PEAKS & TREKKING",
+    "description": "Multi-day mountain passes, glaciers, and alpine lake traverses",
+    "badge": "High Trails",
+    "icon": "Compass",
+    "showInHeader": true,
+    "order": 3
+  },
+  {
+    "id": "jeep-tours",
+    "name": "Off-Road 4x4 Jeep Tours",
+    "slug": "jeep-tours",
+    "headerGroup": "ACTIVITIES",
+    "description": "Wild highland plateau safaris to Bermamyt, Kanzhol & Digoria",
+    "badge": "4x4 Fleet",
+    "icon": "Compass",
+    "showInHeader": true,
+    "order": 4
+  },
+  {
+    "id": "excursions",
+    "name": "Excursions & Canyons",
+    "slug": "excursions",
+    "headerGroup": "ACTIVITIES",
+    "description": "Sulak Canyon, Grozny, Blue Lakes, and ancient towers",
+    "badge": "Cultural",
+    "icon": "Sparkles",
+    "showInHeader": true,
+    "order": 5
+  },
+  {
+    "id": "snowshoeing",
+    "name": "Winter Snowshoeing Treks",
+    "slug": "snowshoeing",
+    "headerGroup": "ACTIVITIES",
+    "description": "Winter expeditions in Elbrus, Adyl-Su and Adyr-Su valleys",
+    "badge": "Winter",
+    "icon": "Mountain",
+    "showInHeader": true,
+    "order": 6
+  },
+  {
+    "id": "georgia",
+    "name": "Georgia & Transcaucasia",
+    "slug": "georgia",
+    "headerGroup": "EXPEDITIONS & REGIONS",
+    "description": "Mount Kazbek summits, Stepantsminda, Tbilisi & Kakheti",
+    "badge": "5,033m",
+    "icon": "Globe",
+    "showInHeader": true,
+    "order": 7
+  }
+]

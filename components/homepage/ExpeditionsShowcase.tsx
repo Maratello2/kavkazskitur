@@ -35,7 +35,17 @@ function difficultyClass(difficulty: Expedition['difficulty']) {
   }
 }
 
-export default function ExpeditionsShowcase() {
+interface ExpeditionsShowcaseProps {
+  title?: string;
+  badge?: string;
+  subtitle?: string;
+}
+
+export default function ExpeditionsShowcase({
+  title = 'Featured 2026 Expeditions',
+  badge = 'Caucasus Climbing & Ski Touring • 2026 Season',
+  subtitle = 'All expeditions include private high-camp accommodation at our Barrels refuge (3,800 m), certified UIAGM/RMGA lead guides, cook service, and mandatory FSB border clearance.'
+}: ExpeditionsShowcaseProps = {}) {
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [expandedItinerary, setExpandedItinerary] = useState<string | null>(null);
 
@@ -55,14 +65,14 @@ export default function ExpeditionsShowcase() {
           <div>
             <div className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] font-semibold text-[#FF6A00] mb-3">
               <Mountain className="w-3.5 h-3.5 text-[#FF6A00]" strokeWidth={1.5} />
-              Caucasus Climbing &amp; Ski Touring • 2026 Season
+              {badge}
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
-              Featured 2026 Expeditions
+              {title}
             </h2>
           </div>
           <p className="text-slate-400 text-xs sm:text-sm max-w-md leading-relaxed font-sans">
-            All expeditions include private high-camp accommodation at our Barrels refuge (3,800 m), certified UIAGM/RMGA lead guides, cook service, and mandatory FSB border clearance.
+            {subtitle}
           </p>
         </div>
       </ScrollReveal>

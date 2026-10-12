@@ -84,7 +84,7 @@ export default function QuickOrderModal() {
       }, 3200);
     } catch {
       const fallbackWa = `https://wa.me/79280828413?text=${encodeURIComponent(
-        `Заявка на звонок гида\n\nМаршрут: ${note || 'Общая консультация'}\nИмя: ${name}\nТелефон: ${phone}`
+        `Expedition Consultation Request\n\nRoute: ${note || 'General inquiry'}\nName: ${name}\nPhone: ${phone}`
       )}`;
       window.open(fallbackWa, '_blank');
       setIsSuccess(true);
@@ -121,7 +121,7 @@ export default function QuickOrderModal() {
           type="button"
           onClick={handleClose}
           className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-colors cursor-pointer"
-          aria-label="Закрыть окно"
+          aria-label="Close dialog"
         >
           <X size={18} strokeWidth={1.75} />
         </button>

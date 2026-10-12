@@ -27,42 +27,54 @@ export default function HomePage() {
   const [settings, setSettings] = useState(defaultSettings);
 
   useEffect(() => {
-    // Only attempt dynamic settings query in development; static build uses siteSettings.json
-    if (process.env.NODE_ENV === 'development') {
-      fetch('/api/settings')
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.settings) {
-            setSettings((prev: any) => ({ ...prev, ...data.settings }));
-          }
-        })
-        .catch(() => {});
-    }
+    fetch('/api/settings')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data) {
+          const s = data.settings || data;
+          setSettings((prev: any) => ({ ...prev, ...s }));
+        }
+      })
+      .catch(() => {});
   }, []);
+
+  const sec = (settings as any).homepageSections || {};
 
   return (
     <main className="w-full max-w-full min-h-[100dvh] overflow-x-hidden bg-[#060B12] text-slate-100 selection:bg-[#FF6A00]/30 selection:text-white font-sans antialiased">
       {/* =========================================================================
           1. CINEMATIC HERO SECTION (Zero-Lag, Full-Bleed Authentic Mountain Stages)
       ========================================================================= */}
-      <CaucasusCinemaScroll />
+      <CaucasusCinemaScroll settings={settings} />
 
       {/* =========================================================================
           2. EXPEDITIONS SHOWCASE (TOUR CATALOG DIRECTLY UNDER HERO)
       ========================================================================= */}
-      <div id="expeditions" className="scroll-mt-20">
-        <ExpeditionsShowcase />
-      </div>
+      {sec.expeditions?.enabled !== false && (
+        <div id="expeditions" className="scroll-mt-20">
+          <ExpeditionsShowcase 
+            title={sec.expeditions?.title}
+            badge={sec.expeditions?.badge}
+            subtitle={sec.expeditions?.subtitle}
+          />
+        </div>
+      )}
 
       {/* =========================================================================
           3. INTERNATIONAL TRUST SIGNALS & GUARANTEES BENTO SECTION
       ========================================================================= */}
-      <InternationalTrustBento />
+      {sec.trustBento?.enabled !== false && (
+        <InternationalTrustBento 
+          title={sec.trustBento?.title}
+          badge={sec.trustBento?.badge}
+          subtitle={sec.trustBento?.subtitle}
+        />
+      )}
 
       {/* =========================================================================
           4. ELEVATION ACCLIMATIZATION PROFILE
       ========================================================================= */}
-      {settings.showAcclimatization !== false && (
+      {settings.showAcclimatization !== false && sec.acclimatization?.enabled !== false && (
         <section id="acclimatization" className="py-24 sm:py-32 bg-[#060B12] relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <ScrollReveal>
@@ -70,14 +82,14 @@ export default function HomePage() {
                 <div>
                   <div className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] font-semibold text-[#FF6A00] mb-2">
                     <Mountain className="w-3.5 h-3.5 text-[#FF6A00]" strokeWidth={1.5} />
-                    Atmospheric Physiology &amp; Route Profile
+                    {sec.acclimatization?.badge || 'Atmospheric Physiology & Route Profile'}
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
-                    High-Altitude Acclimatization
+                    {sec.acclimatization?.title || 'High-Altitude Acclimatization'}
                   </h2>
                 </div>
                 <p className="text-slate-400 text-xs sm:text-sm max-w-md leading-relaxed font-sans">
-                  Reaching 5,642 meters safely requires gradual exposure to thinning atmosphere. Our rotation strategy guarantees proper hemoglobin adaptation.
+                  {sec.acclimatization?.subtitle || 'Reaching 5,642 meters safely requires gradual exposure to thinning atmosphere. Our rotation strategy guarantees proper hemoglobin adaptation.'}
                 </p>
               </div>
             </ScrollReveal>
@@ -92,12 +104,18 @@ export default function HomePage() {
       {/* =========================================================================
           5. BARRELS-GARABASHI 3,800 M REFUGE SHOWCASE
       ========================================================================= */}
-      <BarrelsSection />
+      {sec.barrels?.enabled !== false && (
+        <BarrelsSection 
+          title={sec.barrels?.title}
+          badge={sec.barrels?.badge}
+          subtitle={sec.barrels?.subtitle}
+        />
+      )}
 
       {/* =========================================================================
           6. GEAR CHECKLIST
       ========================================================================= */}
-      {settings.showGearRental !== false && (
+      {settings.showGearRental !== false && sec.gear?.enabled !== false && (
         <section id="gear" className="py-24 sm:py-32 bg-[#060B12] relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <ScrollReveal>
@@ -105,14 +123,14 @@ export default function HomePage() {
                 <div>
                   <div className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] font-semibold text-emerald-400 mb-2">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" strokeWidth={1.5} />
-                    Mountaineering Readiness
+                    {sec.gear?.badge || 'Mountaineering Readiness'}
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
-                    Alpine Gear &amp; Legal Checklist
+                    {sec.gear?.title || 'Alpine Gear & Legal Checklist'}
                   </h2>
                 </div>
                 <p className="text-slate-400 text-xs sm:text-sm max-w-md leading-relaxed font-sans">
-                  Track your gear preparations online. Missing equipment can be rented upon arrival at our Terskol alpine warehouse.
+                  {sec.gear?.subtitle || 'Track your gear preparations online. Missing equipment can be rented upon arrival at our Terskol alpine warehouse.'}
                 </p>
               </div>
             </ScrollReveal>
@@ -127,12 +145,24 @@ export default function HomePage() {
       {/* =========================================================================
           7. SCHEDULE 2026 TIMETABLE
       ========================================================================= */}
-      <SchedulePreview />
+      {sec.schedule?.enabled !== false && (
+        <SchedulePreview 
+          title={sec.schedule?.title}
+          badge={sec.schedule?.badge}
+          subtitle={sec.schedule?.subtitle}
+        />
+      )}
 
       {/* =========================================================================
           8. EXPEDITION LOGISTICS & SAFETY
       ========================================================================= */}
-      <LogisticsSection />
+      {sec.logistics?.enabled !== false && (
+        <LogisticsSection 
+          title={sec.logistics?.title}
+          badge={sec.logistics?.badge}
+          subtitle={sec.logistics?.subtitle}
+        />
+      )}
 
       {/* =========================================================================
           9. FOOTER

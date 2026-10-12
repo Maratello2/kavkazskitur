@@ -121,7 +121,7 @@ export async function POST(request: Request) {
     const tgChatId = process.env.TELEGRAM_CHAT_ID;
     if (tgToken && tgChatId) {
       try {
-        const tgMsg = `🏔 *Новая заявка на тур!*\n\n*Тур:* ${finalTour}\n*Даты:* ${finalDates}\n*Клиент:* ${finalName}\n*Телефон:* ${finalPhone}\n${finalComment ? `*Заметка:* ${finalComment}` : ''}`;
+        const tgMsg = `🏔 *New Expedition Inquiry!*\n\n*Tour:* ${finalTour}\n*Dates:* ${finalDates}\n*Climber:* ${finalName}\n*Phone:* ${finalPhone}\n${finalComment ? `*Notes:* ${finalComment}` : ''}`;
         fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

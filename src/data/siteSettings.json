@@ -1,14 +1,137 @@
 {
-  "heroTitle": "Raw Caucasus. Untamed Peaks.",
-  "heroSubtitle": "Backcountry ski touring, high-altitude summits, and wild expeditions led by certified local mountaineering masters. Base camp at Mt. Elbrus, 3,800 m.",
-  "promoBadgeText": "CENTRAL CAUCASUS • 20 YEARS OF EXPEDITIONS",
-  "seasonStatus": "Active — Booking Summer & Autumn 2026 Expeditions",
-  "announcementText": "Live Season 2026: Early bookings receive complimentary summit briefing.",
+  "heroTitle": "WELCOME TO THE CAUCASUS",
+  "heroSubtitle": "Premier alpine expeditions, ski tours, and guided Elbrus ascents led by certified mountain guides. Private high-altitude refuge at Garabashi Barrels, 3,800 m.",
+  "promoBadgeText": "THE GREATER CAUCASUS • 2026 EXPEDITIONS",
+  "heroPrimaryCtaText": "EXPLORE EXPEDITIONS",
+  "heroPrimaryCtaLink": "#expeditions",
+  "heroSecondaryCtaText": "WHATSAPP CONCIERGE",
+  "heroSecondaryCtaLink": "",
+  "seasonStatus": "Active Season — 2026 Expeditions Booking Open",
+  "announcementText": "Season 2026: 10% Early Bird Privilege on Greater Caucasus Expeditions!",
   "announcementActive": true,
+  "heroRealms": [
+    {
+      "id": "realm-elbrus",
+      "realmNum": "01",
+      "shortName": "Mt. Elbrus",
+      "title": "Mount Elbrus Supreme Apex",
+      "badge": "ROOF OF EUROPE • 5,642 M",
+      "tagline": "The Supreme Summit of the European Continent & Seven Summits Crown",
+      "altitudeMeters": 5642,
+      "altitudeStr": "5,642 M",
+      "po2": "pO2 50%",
+      "tempRating": "-15°C",
+      "coordinates": "43°21'18\" N, 42°26'21\" E",
+      "keyFeature": "Seven Summits • Permanent Glaciers • 360° Continental Horizon",
+      "shortFeature": "Seven Summits Apex",
+      "imageSrc": "/hero/summit_apex_5642.webp",
+      "imageMobileSrc": "/hero/summit_apex_5642_mobile.webp",
+      "image480Src": "/hero/summit_apex_5642_480.webp",
+      "altText": "Mount Elbrus Supreme Apex 5,642m panoramic summit vista"
+    },
+    {
+      "id": "realm-garabashi",
+      "realmNum": "02",
+      "shortName": "Gara-Bashi",
+      "title": "Gara-Bashi Snowfields",
+      "badge": "GLACIER KINGDOM • 3,800 M",
+      "tagline": "Boundless High Glacier Snowfields Positioned Above Cloud Inversions",
+      "altitudeMeters": 3800,
+      "altitudeStr": "3,800 M",
+      "po2": "pO2 64%",
+      "tempRating": "-5°C",
+      "coordinates": "43°18'40\" N, 42°27'32\" E",
+      "keyFeature": "Heated Barrels Base • Acclimatization • Starlight Nights",
+      "shortFeature": "Heated Glacier Base",
+      "imageSrc": "/hero/stage_2026_plateau.webp",
+      "imageMobileSrc": "/hero/stage_2026_plateau_mobile.webp",
+      "altText": "Gara-Bashi high glacier station at 3,800m above cloud inversions"
+    },
+    {
+      "id": "realm-dombai",
+      "realmNum": "03",
+      "shortName": "Dombai Horn",
+      "title": "Dombai Alpine Gorges",
+      "badge": "ANCIENT BASALT CRAGS • 3,040 M",
+      "tagline": "Towering Granite Horns, Alpine Meadows & Roaring Glacial Rivers",
+      "altitudeMeters": 3040,
+      "altitudeStr": "3,040 M",
+      "po2": "pO2 72%",
+      "tempRating": "+6°C",
+      "coordinates": "43°17'24\" N, 41°37'48\" E",
+      "keyFeature": "Wild Wilderness • Pure Glacial Water • Pristine Pine Forests",
+      "shortFeature": "Wild Granite Gorges",
+      "imageSrc": "/layers/dombai_alpine.webp",
+      "imageMobileSrc": "/layers/dombai_alpine_mobile.webp",
+      "altText": "Dombai alpine peaks rising majestically above mountain meadows"
+    },
+    {
+      "id": "realm-saddle",
+      "realmNum": "04",
+      "shortName": "High Saddle",
+      "title": "The High Saddle Glacier",
+      "badge": "SUMMIT ASSAULT COL • 5,300 M",
+      "tagline": "Serene Glacial Amphitheater Nestled Between Twin Volcanic Domes",
+      "altitudeMeters": 5300,
+      "altitudeStr": "5,300 M",
+      "po2": "pO2 53%",
+      "tempRating": "-12°C",
+      "coordinates": "43°20'55\" N, 42°26'45\" E",
+      "keyFeature": "Summit Headwall • Sub-Zero Windbreak • Fixed Safety Lines",
+      "shortFeature": "Summit Assault Col",
+      "imageSrc": "/hero/stage_2026_saddle.webp",
+      "imageMobileSrc": "/hero/stage_2026_saddle_mobile.webp",
+      "altText": "The High Saddle Glacier at 5,300m between twin Elbrus volcanic peaks"
+    }
+  ],
+  "homepageSections": {
+    "expeditions": {
+      "enabled": true,
+      "badge": "Caucasus Climbing & Ski Touring • 2026 Season",
+      "title": "Featured 2026 Expeditions",
+      "subtitle": "All expeditions include private high-camp accommodation at our Barrels refuge (3,800 m), certified UIAGM/RMGA lead guides, cook service, and mandatory FSB border clearance."
+    },
+    "trustBento": {
+      "enabled": true,
+      "badge": "International Alpinist Assurances • 2026 Protocol",
+      "title": "Global Standards & Bureaucracy-Free Access",
+      "subtitle": "Climbing in the Caucasus as a foreign citizen requires specialized government clearances, border permits, and certified high-altitude emergency safety. We manage 100% of the administrative workflow directly from Nalchik."
+    },
+    "acclimatization": {
+      "enabled": true,
+      "badge": "Atmospheric Physiology & Route Profile",
+      "title": "High-Altitude Acclimatization",
+      "subtitle": "Reaching 5,642 meters safely requires gradual exposure to thinning atmosphere. Our rotation strategy guarantees proper hemoglobin adaptation."
+    },
+    "barrels": {
+      "enabled": true,
+      "badge": "Private High-Altitude Refuge • 3,800 M",
+      "title": "The Barrels-Garabashi Base Camp",
+      "subtitle": "Unlike operators who rely on crowded public huts, KavKazSkiTur operates its own private high-altitude refuge compound on the southern glacier slopes of Mount Elbrus. Rest deeply in warm bunks before the midnight summit push."
+    },
+    "gear": {
+      "enabled": true,
+      "badge": "Mountaineering Readiness",
+      "title": "Alpine Gear & Legal Checklist",
+      "subtitle": "Track your gear preparations online. Missing equipment can be rented upon arrival at our Terskol alpine warehouse."
+    },
+    "schedule": {
+      "enabled": true,
+      "badge": "Calendar 2026",
+      "title": "Guaranteed Expedition Schedule",
+      "subtitle": "Fixed departure dates with live availability and slot reservation"
+    },
+    "logistics": {
+      "enabled": true,
+      "badge": "Safety Protocols & Legal Staging",
+      "title": "Comprehensive Alpine Logistics & Safety",
+      "subtitle": "High-altitude mountaineering demands rigorous operational safety. Before you step on the glacial ice, every legal permit, emergency frequency, and transport route is locked down by our operational headquarters in Nalchik."
+    }
+  },
   "usdExchangeRate": 92.5,
   "prepaymentPercent": 30,
   "freeCancellationDays": 14,
-  "paymentDetailsNote": "Direct official tour operator contract, bank transfer or online card settlement with instant receipt.",
+  "paymentDetailsNote": "Official tour operator contract, international wire transfers, or credit card checkout with instant booking confirmation.",
   "showReviews": true,
   "showGearRental": true,
   "showMap": true,
@@ -19,12 +142,12 @@
   "whatsappLink": "https://wa.me/79280828413",
   "telegramChannel": "https://t.me/kavkazskitur",
   "email": "info@kavkazskitur.com",
-  "address": "Gorkogo St. 74, Nalchik, Kabardino-Balkaria",
+  "address": "74 Gorky St, Nalchik, Kabardino-Balkaria",
   "workingHours": "08:00 — 21:00 MSK Daily",
   "rescuePhone": "+7 (928) 082-84-13",
-  "emergencyContact": "Elbrus Alpine Rescue Post (EMERCOM): +7 (866) 387-14-89",
+  "emergencyContact": "Elbrus High-Altitude Rescue Service (EMERCOM): +7 (866) 387-14-89",
   "yandexMetrikaId": "98451230",
   "googleAnalyticsId": "G-KVZSKT2026",
-  "metaTitle": "KavKazSkiTur | Mountain Expeditions & Ski Touring in the Caucasus",
-  "metaDescription": "Official tour operator for Mount Elbrus summits, ski touring, and high-altitude adventures in Kabardino-Balkaria."
+  "metaTitle": "KavKazSkiTur | Greater Caucasus Expeditions, Ski Touring & Elbrus Climbs",
+  "metaDescription": "Official expedition operator for Mount Elbrus ascents, backcountry ski touring, and high-altitude mountain adventures."
 }

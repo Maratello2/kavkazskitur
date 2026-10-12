@@ -30,7 +30,17 @@ const SAFETY_PILLARS = [
   }
 ];
 
-export default function LogisticsSection() {
+interface LogisticsSectionProps {
+  title?: string;
+  badge?: string;
+  subtitle?: string;
+}
+
+export default function LogisticsSection({
+  title = 'Comprehensive Alpine Logistics & Safety',
+  badge = 'Safety Protocols & Legal Staging',
+  subtitle = 'High-altitude mountaineering demands rigorous operational safety. Before you step on the glacial ice, every legal permit, emergency frequency, and transport route is locked down by our operational headquarters in Nalchik.'
+}: LogisticsSectionProps = {}) {
   return (
     <section id="safety" className="py-24 sm:py-32 bg-[#060B12] relative text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -38,13 +48,13 @@ export default function LogisticsSection() {
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-16">
             <div className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] font-semibold text-[#FF6A00] mb-3">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" strokeWidth={1.5} />
-              Safety Protocols &amp; Legal Staging
+              {badge}
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4">
-              Comprehensive Alpine Logistics &amp; Safety
+              {title}
             </h2>
             <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-sans max-w-2xl">
-              High-altitude mountaineering demands rigorous operational safety. Before you step on the glacial ice, every legal permit, emergency frequency, and transport route is locked down by our operational headquarters in Nalchik.
+              {subtitle}
             </p>
           </div>
         </ScrollReveal>

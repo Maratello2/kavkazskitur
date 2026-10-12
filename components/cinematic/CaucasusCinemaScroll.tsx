@@ -144,7 +144,18 @@ function AltitudeCounter({ target }: { target: number }) {
   );
 }
 
-export default function CaucasusCinemaScroll() {
+interface CaucasusCinemaScrollProps {
+  settings?: {
+    heroTitle?: string;
+    heroSubtitle?: string;
+    promoBadgeText?: string;
+    whatsapp?: string;
+    whatsappLink?: string;
+    [key: string]: any;
+  };
+}
+
+export default function CaucasusCinemaScroll({ settings }: CaucasusCinemaScrollProps = {}) {
   const [activeRealmIdx, setActiveRealmIdx] = useState(0);
   const [renderedRealms, setRenderedRealms] = useState<number[]>([0]);
 
@@ -152,31 +163,63 @@ export default function CaucasusCinemaScroll() {
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
 
-  const currentRealm = CAUCASUS_REALMS[activeRealmIdx];
+  const realms: CaucasusRealm[] = (settings?.heroRealms && Array.isArray(settings.heroRealms) && settings.heroRealms.length > 0)
+    ? settings.heroRealms
+    : CAUCASUS_REALMS;
+
+  const currentRealm = realms[activeRealmIdx] || realms[0] || CAUCASUS_REALMS[0];
+
+  const customTitle = settings?.heroTitle?.trim();
+  let titleLine1 = 'WELCOME TO';
+  let titleLine2 = 'THE CAUCASUS';
+
+  if (customTitle) {
+    if (customTitle.includes('\n')) {
+      const parts = customTitle.split('\n').map(p => p.trim()).filter(Boolean);
+      titleLine1 = parts[0] || '';
+      titleLine2 = parts.slice(1).join(' ') || '';
+    } else if (customTitle.toUpperCase().includes('WELCOME TO')) {
+      titleLine1 = 'WELCOME TO';
+      titleLine2 = customTitle.replace(/welcome\s+to\s*/i, '').trim() || 'THE CAUCASUS';
+    } else {
+      const words = customTitle.split(' ');
+      if (words.length > 2) {
+        const mid = Math.ceil(words.length / 2);
+        titleLine1 = words.slice(0, mid).join(' ');
+        titleLine2 = words.slice(mid).join(' ');
+      } else if (words.length === 2) {
+        titleLine1 = words[0];
+        titleLine2 = words[1];
+      } else {
+        titleLine1 = customTitle;
+        titleLine2 = '';
+      }
+    }
+  }
 
   // Lazily hydrate non-active realms only after initial render is idle
   useEffect(() => {
     const timer = setTimeout(() => {
-      setRenderedRealms([0, 1, 2, 3]);
+      setRenderedRealms(realms.map((_, i) => i));
     }, 2500);
     return () => clearTimeout(timer);
-  }, []);
+  }, [realms.length]);
 
   const prevRealm = useCallback(() => {
     setActiveRealmIdx((prev) => {
-      const target = prev > 0 ? prev - 1 : CAUCASUS_REALMS.length - 1;
+      const target = prev > 0 ? prev - 1 : realms.length - 1;
       setRenderedRealms((r) => (r.includes(target) ? r : [...r, target]));
       return target;
     });
-  }, []);
+  }, [realms.length]);
 
   const nextRealm = useCallback(() => {
     setActiveRealmIdx((prev) => {
-      const target = prev < CAUCASUS_REALMS.length - 1 ? prev + 1 : 0;
+      const target = prev < realms.length - 1 ? prev + 1 : 0;
       setRenderedRealms((r) => (r.includes(target) ? r : [...r, target]));
       return target;
     });
-  }, []);
+  }, [realms.length]);
 
   const handleSelectRealm = useCallback((index: number) => {
     setRenderedRealms((r) => (r.includes(index) ? r : [...r, index]));
@@ -222,7 +265,8 @@ export default function CaucasusCinemaScroll() {
   };
 
   // WhatsApp concierge prefilled link
-  const whatsAppUrl = `https://wa.me/79280828413?text=${encodeURIComponent(
+  const customPhone = (settings?.whatsapp || '+7 (928) 082-84-13').replace(/\D/g, '');
+  const whatsAppUrl = settings?.whatsappLink || `https://wa.me/${customPhone}?text=${encodeURIComponent(
     `Hello KavKazSkiTur! I would like to inquire about joining a 2026 Greater Caucasus Expedition, specifically regarding ${currentRealm.title} (${currentRealm.altitudeStr}). Please share available itinerary dates, guide credentials, and booking details.`
   )}`;
 
@@ -240,8 +284,8 @@ export default function CaucasusCinemaScroll() {
         {/* Deep Horizon Sky Base */}
         <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-[#060E1A] via-[#091526] to-[#060B12]" />
 
-        {/* 4 Active Mountain Realm Vistas (Pure CSS Hardware Compositor Scale & Crossfade) */}
-        {CAUCASUS_REALMS.map((realm, idx) => {
+        {/* Active Mountain Realm Vistas (Pure CSS Hardware Compositor Scale & Crossfade) */}
+        {realms.map((realm, idx) => {
           const isActive = idx === activeRealmIdx;
           const shouldRender = renderedRealms.includes(idx);
           if (!shouldRender) return null;
@@ -280,7 +324,8 @@ export default function CaucasusCinemaScroll() {
         })}
 
         {/* Cinematic Vignettes: Natural High-Dynamic-Range Contrast (Zero GPU Overdraw) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#060B12] via-[#060B12]/50 to-transparent pointer-events-none z-[14]" />
+        <div className="absolute inset-0 bg-black/40 pointer-events-none z-[13]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#060B12] via-[#060B12]/60 to-[#060B12]/30 pointer-events-none z-[14]" />
         <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-[#060B12]/90 via-[#060B12]/40 to-transparent pointer-events-none z-[14]" />
       </div>
 
@@ -322,7 +367,7 @@ export default function CaucasusCinemaScroll() {
 
             {/* Quick Realm Indicator Dots */}
             <div className="flex items-center gap-0.5 pl-1">
-              {CAUCASUS_REALMS.map((realm, idx) => (
+              {realms.map((realm, idx) => (
                 <button
                   key={realm.id}
                   type="button"
@@ -349,50 +394,69 @@ export default function CaucasusCinemaScroll() {
       {/* =========================================================================
           CENTER HERO: WELCOME TO THE CAUCASUS (MONUMENTAL ALPINE EDITORIAL)
       ========================================================================= */}
-      <div className="relative z-20 flex flex-col items-center justify-center text-center px-4 my-auto py-4 sm:py-6 max-w-4xl mx-auto w-full pointer-events-auto">
+      <div className="relative z-20 flex flex-col items-center justify-center text-center px-4 my-auto py-4 max-w-5xl mx-auto w-full pointer-events-auto">
         
         {/* Top Luxury Horizon Label (Unboxed, Sleek Tracking) */}
-        <div className="inline-flex items-center gap-2 font-mono text-[10px] sm:text-xs tracking-[0.22em] text-[#FF6A00] font-semibold uppercase mb-3">
+        <div className="inline-flex items-center gap-2 font-mono text-[10px] sm:text-xs tracking-[0.25em] text-[#FF6A00] font-bold uppercase mb-3 sm:mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#FF6A00] animate-pulse shrink-0" />
-          <span>The Greater Caucasus • 2026 Expeditions</span>
+          <span>{settings?.promoBadgeText || 'The Greater Caucasus • 2026 Expeditions'}</span>
         </div>
 
-        {/* Monumental Editorial Headline (Razor-Sharp, Clean & High-Contrast) */}
-        <h1 className="font-serif tracking-[0.05em] sm:tracking-[0.08em] text-white text-3xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-[5.25rem] uppercase leading-[1.04] font-black select-none text-center drop-shadow-[0_2px_18px_rgba(0,0,0,0.85)]">
-          WELCOME TO <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-white via-slate-100 to-sky-200 bg-clip-text text-transparent">
-            THE CAUCASUS
+        {/* Monumental Editorial Headline (Pure Luxury Typography, Solid White & High-Contrast Razor-Sharp Shadows) */}
+        <h1 
+          className="font-serif tracking-[0.05em] sm:tracking-[0.07em] text-white text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] uppercase leading-[1.03] font-black select-none text-center"
+          style={{
+            textShadow: '0 4px 28px rgba(0,0,0,0.95), 0 2px 10px rgba(0,0,0,0.85)',
+          }}
+        >
+          <span className="block text-white">
+            {titleLine1}
           </span>
+          {titleLine2 && (
+            <span 
+              className="block mt-1 sm:mt-1.5 text-white sm:text-slate-100"
+              style={{
+                textShadow: '0 6px 32px rgba(0,0,0,0.98), 0 2px 12px rgba(0,0,0,0.9)',
+              }}
+            >
+              {titleLine2}
+            </span>
+          )}
         </h1>
 
         {/* Dynamic Realm Highlight Subtitle */}
-        <div className="mt-3 sm:mt-4 max-w-2xl mx-auto text-center px-2">
-          <p className="text-xs sm:text-sm md:text-base text-slate-200 font-light leading-relaxed drop-shadow-md max-w-xl mx-auto">
-            <span className="font-mono text-[11px] sm:text-xs text-sky-300 font-semibold uppercase tracking-wider mr-1.5">
+        <div className="mt-4 sm:mt-5 max-w-2xl mx-auto text-center px-2">
+          <p 
+            className="text-xs sm:text-sm md:text-base text-slate-200 font-normal leading-relaxed max-w-xl mx-auto"
+            style={{
+              textShadow: '0 2px 14px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,0.8)',
+            }}
+          >
+            <span className="font-mono text-[11px] sm:text-xs text-sky-300 font-bold uppercase tracking-wider mr-1.5">
               {currentRealm.badge} &bull;
             </span>
-            {currentRealm.tagline}. Europe&apos;s wildest glaciated frontier, guided by certified mountaineers.
+            {settings?.heroSubtitle || `${currentRealm.tagline}. Europe's wildest glaciated frontier, guided by certified mountaineers.`}
           </p>
         </div>
 
         {/* Luxury Action CTA Group */}
-        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-5 sm:mt-6">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8">
           <a
-            href="#expeditions"
-            className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 rounded-xl bg-[#FF6A00] hover:bg-[#E05D00] active:scale-95 text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-all shadow-xl shadow-orange-950/50 border border-orange-400/40 cursor-pointer min-h-[48px]"
+            href={settings?.heroPrimaryCtaLink || '#expeditions'}
+            className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 rounded-xl bg-[#FF6A00] hover:bg-[#E05D00] active:scale-95 text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-all shadow-2xl shadow-black/80 border border-orange-400/40 cursor-pointer min-h-[48px]"
           >
-            <span>EXPLORE EXPEDITIONS</span>
+            <span>{settings?.heroPrimaryCtaText || 'EXPLORE EXPEDITIONS'}</span>
             <ArrowRight className="w-4 h-4" />
           </a>
 
           <a
-            href={whatsAppUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] active:scale-95 text-white font-semibold text-xs sm:text-sm uppercase tracking-wider transition-all shadow-xl border border-white/15 hover:border-sky-400/40 cursor-pointer min-h-[48px]"
+            href={settings?.heroSecondaryCtaLink || whatsAppUrl}
+            target={(settings?.heroSecondaryCtaLink || whatsAppUrl).startsWith('http') ? '_blank' : undefined}
+            rel={(settings?.heroSecondaryCtaLink || whatsAppUrl).startsWith('http') ? 'noopener noreferrer' : undefined}
+            className="inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 rounded-xl bg-black/40 hover:bg-black/60 active:scale-95 text-white font-semibold text-xs sm:text-sm uppercase tracking-wider transition-all shadow-2xl shadow-black/80 border border-white/20 hover:border-sky-400/50 backdrop-blur-sm cursor-pointer min-h-[48px]"
           >
             <MessageCircle className="w-4 h-4 text-emerald-400" />
-            <span>WHATSAPP CONCIERGE</span>
+            <span>{settings?.heroSecondaryCtaText || 'WHATSAPP CONCIERGE'}</span>
           </a>
         </div>
       </div>
@@ -408,9 +472,14 @@ export default function CaucasusCinemaScroll() {
       >
         <div className="w-full bg-[#070F1C]/94 border border-white/[0.12] rounded-2xl p-2 sm:p-3 shadow-[0_20px_50px_rgba(0,0,0,0.92)]">
           
-          {/* Desktop & Tablet Realm Selector Tabs (4 Clean Columns) */}
-          <div className="hidden sm:grid grid-cols-4 gap-2 mb-2">
-            {CAUCASUS_REALMS.map((realm, idx) => {
+          {/* Desktop & Tablet Realm Selector Tabs */}
+          <div 
+            className="hidden sm:grid gap-2 mb-2"
+            style={{
+              gridTemplateColumns: `repeat(${realms.length}, minmax(0, 1fr))`
+            }}
+          >
+            {realms.map((realm, idx) => {
               const isActive = idx === activeRealmIdx;
               return (
                 <button
@@ -440,8 +509,13 @@ export default function CaucasusCinemaScroll() {
           </div>
 
           {/* Mobile Ergonomic Segmented Control (Single Row, 44px min tap target) */}
-          <div className="grid sm:hidden grid-cols-4 gap-1.5 mb-2">
-            {CAUCASUS_REALMS.map((realm, idx) => {
+          <div 
+            className="grid sm:hidden gap-1.5 mb-2"
+            style={{
+              gridTemplateColumns: `repeat(${Math.min(realms.length, 4)}, minmax(0, 1fr))`
+            }}
+          >
+            {realms.map((realm, idx) => {
               const isActive = idx === activeRealmIdx;
               return (
                 <button

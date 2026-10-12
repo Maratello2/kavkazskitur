@@ -1,13 +1,15 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useWonderStore } from '@/lib/store/useWonderStore';
-import { X, Phone, CheckCircle2, Send } from 'lucide-react';
+import { X, Phone, CheckCircle2, Check, ShieldCheck } from 'lucide-react';
 import Logo from './Logo';
 
 export default function QuickOrderModal() {
   const { isQuickOrderOpen, toggleQuickOrder } = useWonderStore();
   const [mounted, setMounted] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [note, setNote] = useState('');
@@ -15,10 +17,19 @@ export default function QuickOrderModal() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [acceptedPolicy, setAcceptedPolicy] = useState(false);
+  const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (isQuickOrderOpen) {
+      setIsInitializing(true);
+      const timer = setTimeout(() => setIsInitializing(false), 280);
+      return () => clearTimeout(timer);
+    }
+  }, [isQuickOrderOpen]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -32,9 +43,15 @@ export default function QuickOrderModal() {
 
   if (!mounted || !isQuickOrderOpen) return null;
 
+  const isNameValid = name.trim().length >= 2;
+  const isPhoneValid = phone.replace(/\D/g, '').length >= 10;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phone.trim()) return;
+    if (!isPhoneValid) {
+      setTouched((p) => ({ ...p, phone: true }));
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -42,10 +59,10 @@ export default function QuickOrderModal() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: name.trim() || 'Anonymous Client',
+          name: name.trim() || 'Online Guest',
           phone: phone.trim(),
-          comment: note.trim() || 'Callback request from website header modal',
-          tourName: note.trim() || 'General Caucasus Expedition Inquiry',
+          comment: note.trim() || 'Expedition consultation request',
+          tourName: note.trim() || 'Caucasus Expeditions 2026',
           website_hp: websiteHp,
           consent: acceptedPolicy,
         }),
@@ -64,10 +81,10 @@ export default function QuickOrderModal() {
         setNote('');
         setWebsiteHp('');
         toggleQuickOrder(false);
-      }, 3500);
+      }, 3200);
     } catch {
       const fallbackWa = `https://wa.me/79280828413?text=${encodeURIComponent(
-        `Expedition Booking Request\n\nTour: General Inquiry\nName: ${name}\nPhone: ${phone}`
+        `Expedition Consultation Request\n\nRoute: ${note || 'General inquiry'}\nName: ${name}\nPhone: ${phone}`
       )}`;
       window.open(fallbackWa, '_blank');
       setIsSuccess(true);
@@ -83,164 +100,221 @@ export default function QuickOrderModal() {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300"
+      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-300"
       onClick={handleClose}
       aria-modal="true"
       role="dialog"
+      aria-labelledby="quick-order-title"
     >
       <div
-        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative text-slate-900 dark:text-white transition-all transform animate-in fade-in zoom-in-95 duration-200"
+        className="bg-[#091422] border-t sm:border border-white/[0.08] rounded-t-[28px] sm:rounded-3xl p-5 sm:p-7 max-w-md w-full shadow-2xl relative text-white transition-all transform animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200 flex flex-col max-h-[92vh] sm:max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
+        style={{
+          paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))',
+        }}
       >
-        {/* Close Button */}
+        {/* Native Bottom Sheet Drag Pill for screens < 768px */}
+        <div className="w-12 h-1.5 rounded-full bg-white/20 mx-auto my-1.5 sm:hidden" />
+
+        {/* Close Button - strictly neutral colors (Zero red) */}
         <button
           type="button"
           onClick={handleClose}
-          className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-          aria-label="Close"
+          className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-colors cursor-pointer"
+          aria-label="Close dialog"
         >
-          <X size={20} />
+          <X size={18} strokeWidth={1.75} />
         </button>
 
         {isSuccess ? (
           <div className="py-8 text-center flex flex-col items-center">
-            <div className="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-4">
-              <CheckCircle2 size={36} />
+            <div className="w-14 h-14 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-3 border border-emerald-500/30">
+              <CheckCircle2 size={32} strokeWidth={1.5} />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
-              Request Received!
+            <h3 className="text-xl font-bold text-white mb-1">
+              Inquiry Received!
             </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xs mb-6">
-              Our expedition coordinator will contact you within 15 minutes.
+            <p className="text-xs text-slate-300 max-w-xs mb-6 leading-relaxed">
+              Our lead expedition coordinator will contact you shortly with itinerary details and route briefings.
             </p>
             <button
               type="button"
               onClick={handleClose}
-              className="px-6 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-semibold transition-colors cursor-pointer"
+              className="px-6 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.1] text-xs font-semibold text-white transition-colors cursor-pointer"
             >
-              Close Window
+              Close
             </button>
           </div>
         ) : (
           <div>
-            <div className="mb-4">
+            <div className="mb-3">
               <Logo variant="full" />
             </div>
 
-            <div className="flex items-center gap-3 mb-3">
-              <div className="p-2.5 rounded-2xl bg-[#FF6A00]/15 text-[#FF6A00]">
-                <Phone size={22} />
+            <div className="flex items-center gap-3 mb-2.5">
+              <div className="p-2.5 rounded-xl bg-[#FF6A00]/15 text-[#FF6A00] border border-orange-500/20">
+                <Phone size={20} strokeWidth={1.75} />
               </div>
               <div>
-                <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
-                  Request a Callback
+                <h2 id="quick-order-title" className="text-lg sm:text-xl font-bold text-white leading-tight">
+                  Expedition Guide Concierge
                 </h2>
-                <span className="text-xs text-slate-500 dark:text-slate-400">
-                  Fast expedition guidance & consultation
+                <span className="text-xs text-slate-400">
+                  Direct inquiry, route selection, and gear consultation
                 </span>
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
-              Leave your phone number and our senior guide will help tailor the ideal route to your dates and mountaineering background.
-            </p>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
-                  Your Name *
-                </label>
+            {/* SKELETON STATE (Dark Alpine Luxury Skeletons) */}
+            {isInitializing ? (
+              <div className="space-y-3.5 py-3 animate-pulse" aria-busy="true">
+                <div className="h-3 w-40 bg-white/[0.06] rounded" />
+                <div className="h-11 w-full bg-white/[0.04] rounded-xl border border-white/[0.06]" />
+                <div className="h-3 w-32 bg-white/[0.06] rounded" />
+                <div className="h-11 w-full bg-white/[0.04] rounded-xl border border-white/[0.06]" />
+                <div className="h-12 w-full bg-white/[0.06] rounded-xl mt-4" />
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-3.5 mt-3">
+                {/* Honeypot field */}
                 <input
                   type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. John Doe"
-                  className="w-full px-4 py-3 rounded-xl text-base sm:text-sm bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF6A00] transition-all"
+                  name="website_hp"
+                  value={websiteHp}
+                  onChange={(e) => setWebsiteHp(e.target.value)}
+                  className="hidden"
+                  tabIndex={-1}
+                  autoComplete="off"
                 />
-              </div>
 
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
-                  Phone Number *
-                </label>
-                <input
-                  type="tel"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+1 (555) 000-0000"
-                  className="w-full px-4 py-3 rounded-xl text-base sm:text-sm bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF6A00] transition-all"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
-                  Preferred Route or Dates (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  placeholder="e.g. Elbrus South 8 Days, July 2026"
-                  className="w-full px-4 py-3 rounded-xl text-base sm:text-sm bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF6A00] transition-all"
-                />
-              </div>
-
-              {/* HIDDEN HONEYPOT ANTI-SPAM FIELD */}
-              <input
-                type="text"
-                name="website_hp"
-                value={websiteHp}
-                onChange={(e) => setWebsiteHp(e.target.value)}
-                className="hidden"
-                tabIndex={-1}
-                autoComplete="off"
-              />
-
-              <div className="mt-4 mb-2">
-                <label className="flex items-start gap-3 cursor-pointer group select-none">
+                {/* Name Field with Inline Validation */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-mono text-slate-300">
+                      Your Full Name *
+                    </label>
+                    {touched.name && isNameValid && (
+                      <span className="flex items-center gap-1 text-[11px] text-emerald-400 font-mono">
+                        <Check size={12} strokeWidth={2.5} />
+                        <span>Valid</span>
+                      </span>
+                    )}
+                  </div>
                   <input
-                    type="checkbox"
-                    checked={acceptedPolicy}
-                    onChange={(e) => setAcceptedPolicy(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded border-slate-700 bg-slate-900 text-[#FF6A00] focus:ring-[#FF6A00] focus:ring-offset-0 transition cursor-pointer"
+                    type="text"
                     required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    onBlur={() => setTouched((p) => ({ ...p, name: true }))}
+                    placeholder="e.g. Alex Morgan"
+                    className={`w-full px-3.5 py-2.5 rounded-xl text-base md:text-sm bg-white/[0.04] border text-white placeholder-slate-500 focus:outline-none transition-colors ${
+                      touched.name && !isNameValid
+                        ? 'border-amber-400/50 focus:border-amber-400'
+                        : 'border-white/[0.08] focus:border-[#FF6A00]'
+                    }`}
                   />
-                  <span className="text-[11px] leading-snug text-slate-400 group-hover:text-slate-300">
-                    I agree with the{' '}
-                    <a href="/offer" target="_blank" className="text-[#FF6A00] underline hover:text-orange-400">
-                      Terms of Expedition Service
-                    </a>{' '}
-                    and{' '}
-                    <a href="/privacy" target="_blank" className="text-[#FF6A00] underline hover:text-orange-400">
-                      Privacy Policy
-                    </a>.
-                  </span>
-                </label>
-              </div>
+                </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting || !acceptedPolicy}
-                className="w-full bg-[#FF6A00] hover:bg-[#E05D00] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition shadow-lg shadow-orange-950/40 flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <span>{isSubmitting ? 'Sending...' : 'Request Callback'}</span>
-              </button>
-            </form>
+                {/* Phone Field with Inline Validation */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-mono text-slate-300">
+                      Phone / WhatsApp *
+                    </label>
+                    {touched.phone && (
+                      isPhoneValid ? (
+                        <span className="flex items-center gap-1 text-[11px] text-emerald-400 font-mono">
+                          <Check size={12} strokeWidth={2.5} />
+                          <span>Verified format</span>
+                        </span>
+                      ) : (
+                        <span className="text-[11px] text-amber-400 font-mono">
+                          Min 10 digits with country code
+                        </span>
+                      )
+                    )}
+                  </div>
+                  <input
+                    type="tel"
+                    required
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    onBlur={() => setTouched((p) => ({ ...p, phone: true }))}
+                    placeholder="+1 (555) 000-0000"
+                    className={`w-full px-3.5 py-2.5 rounded-xl text-base md:text-sm bg-white/[0.04] border text-white placeholder-slate-500 focus:outline-none transition-colors ${
+                      touched.phone && !isPhoneValid
+                        ? 'border-amber-400/60 focus:border-amber-400'
+                        : 'border-white/[0.08] focus:border-[#FF6A00]'
+                    }`}
+                  />
+                </div>
 
-            {/* Direct WhatsApp */}
-            <div className="mt-5 pt-4 border-t border-slate-100 dark:border-white/10 text-center">
-              <a
-                href="https://wa.me/79286914405?text=Hello!%20I%20would%20like%20a%20consultation%20regarding%20Elbrus%20expeditions."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
-              >
-                <Send size={13} />
-                <span>Or message us directly on WhatsApp</span>
-              </a>
-            </div>
+                {/* Note Field */}
+                <div>
+                  <label className="block text-xs font-mono text-slate-300 mb-1">
+                    Expedition of Interest or Target Dates (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    placeholder="e.g. Mt. Elbrus South Classic, July 2026"
+                    className="w-full px-3.5 py-2.5 rounded-xl text-base md:text-sm bg-white/[0.04] border border-white/[0.08] text-white placeholder-slate-500 focus:outline-none focus:border-[#FF6A00] transition-colors"
+                  />
+                </div>
+
+                {/* Consent */}
+                <div className="pt-1">
+                  <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={acceptedPolicy}
+                      onChange={(e) => setAcceptedPolicy(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 rounded border-slate-700 bg-slate-900 text-[#FF6A00] focus:ring-[#FF6A00] focus:ring-offset-0 transition cursor-pointer"
+                      required
+                    />
+                    <span className="text-[11px] leading-snug text-slate-400">
+                      I agree to the{' '}
+                      <Link
+                        href="/privacy"
+                        target="_blank"
+                        className="text-[#FF6A00] underline hover:text-orange-300 font-medium"
+                      >
+                        Privacy Policy
+                      </Link>{' '}
+                      and terms of{' '}
+                      <Link
+                        href="/offer"
+                        target="_blank"
+                        className="text-[#FF6A00] underline hover:text-orange-300 font-medium"
+                      >
+                        Public Offer
+                      </Link>
+                      .
+                    </span>
+                  </label>
+                </div>
+
+                {/* Buttons: Primary Orange + Neutral Ghost (Zero Red) */}
+                <div className="flex flex-col sm:flex-row items-center gap-2 pt-2">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting || !acceptedPolicy || !phone.trim()}
+                    className="w-full sm:flex-1 py-3 px-4 rounded-xl bg-[#FF6A00] hover:bg-[#E05D00] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-xs uppercase tracking-[0.18em] shadow-lg shadow-orange-950/40 border border-orange-400/20 transition-all active:scale-95 cursor-pointer"
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Request Consultation'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleClose}
+                    className="w-full sm:w-auto py-3 px-4 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         )}
       </div>

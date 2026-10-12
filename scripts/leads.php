@@ -41,10 +41,10 @@ if (!$hasConsent) {
     exit;
 }
 
-$name = isset($body['name']) ? trim($body['name']) : 'Гость';
+$name = isset($body['name']) ? trim($body['name']) : 'Guest';
 $phone = isset($body['phone']) ? trim($body['phone']) : '';
-$tour = isset($body['tourName']) ? $body['tourName'] : (isset($body['tour_name']) ? $body['tour_name'] : 'Экспедиция на Эльбрус');
-$dates = isset($body['dates']) ? $body['dates'] : (isset($body['date']) ? $body['date'] : 'Сезон 2026');
+$tour = isset($body['tourName']) ? $body['tourName'] : (isset($body['tour_name']) ? $body['tour_name'] : 'Mount Elbrus Expedition');
+$dates = isset($body['dates']) ? $body['dates'] : (isset($body['date']) ? $body['date'] : 'Season 2026');
 $comment = isset($body['comment']) ? $body['comment'] : (isset($body['message']) ? $body['message'] : '');
 
 if (empty($phone)) {
@@ -100,9 +100,9 @@ if ((!$tgToken || !$tgChatId) && file_exists($envFile)) {
 }
 
 if ($tgToken && $tgChatId) {
-    $tgMsg = "🏔 *Новая заявка на тур!*\n\n*Тур:* " . $tour . "\n*Даты:* " . $dates . "\n*Клиент:* " . $name . "\n*Телефон:* " . $phone;
+    $tgMsg = "🏔 *New Expedition Inquiry!*\n\n*Tour:* " . $tour . "\n*Dates:* " . $dates . "\n*Climber:* " . $name . "\n*Phone:* " . $phone;
     if ($comment) {
-        $tgMsg .= "\n*Заметка:* " . $comment;
+        $tgMsg .= "\n*Notes:* " . $comment;
     }
     $ch = curl_init('https://api.telegram.org/bot' . $tgToken . '/sendMessage');
     curl_setopt($ch, CURLOPT_POST, true);

@@ -44,6 +44,16 @@ export interface SiteSettingsData {
   googleAnalyticsId: string;
   metaTitle: string;
   metaDescription: string;
+
+  // Hero Carousel & Homepage Blocks
+  heroRealms?: any[];
+  homepageSections?: Record<string, any>;
+  heroPrimaryCtaText?: string;
+  heroPrimaryCtaLink?: string;
+  heroSecondaryCtaText?: string;
+  heroSecondaryCtaLink?: string;
+
+  [key: string]: any;
 }
 
 const DEFAULT_SETTINGS: SiteSettingsData = {

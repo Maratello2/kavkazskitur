@@ -9,25 +9,35 @@ GOTOELBRUS = """server {
     root /var/www/gotoelbrus.ru;
     index index.html index.php;
 
+    client_max_body_size 64M;
+
     location / {
         try_files $uri $uri.html $uri/ =404;
     }
 
-    location ~ ^/api/(leads|lead|booking|contact) {
-        try_files /api/leads.php =404;
+    location ~ ^/api/(leads|lead|booking|contact|settings|tours|categories) {
+        rewrite ^/api/leads/?$ /api/leads.php break;
+        rewrite ^/api/lead/?$ /api/leads.php break;
+        rewrite ^/api/booking/?$ /api/leads.php break;
+        rewrite ^/api/contact/?$ /api/leads.php break;
+        rewrite ^/api/settings/?$ /api/settings.php break;
+        rewrite ^/api/tours/?$ /api/tours.php break;
+        rewrite ^/api/categories/?$ /api/categories.php break;
         fastcgi_pass unix:/run/php/php8.3-fpm.sock;
-        fastcgi_index index.php;
         include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root/api/leads.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     }
 
-    location ~ ^/api/admin/(login|auth|logout|leads|settings|users) {
+    location ~ ^/api/admin/(login|auth|logout|leads|settings|users|tours|categories|upload) {
         rewrite ^/api/admin/login/?$ /api/admin_login.php break;
         rewrite ^/api/admin/auth/?$ /api/admin_auth.php break;
         rewrite ^/api/admin/logout/?$ /api/admin_auth.php break;
         rewrite ^/api/admin/leads/?$ /api/admin_leads.php break;
         rewrite ^/api/admin/settings/?$ /api/admin_settings.php break;
         rewrite ^/api/admin/users/?$ /api/admin_users.php break;
+        rewrite ^/api/admin/tours/?$ /api/admin_tours.php break;
+        rewrite ^/api/admin/categories/?$ /api/admin_categories.php break;
+        rewrite ^/api/admin/upload/?$ /api/admin_upload.php break;
         fastcgi_pass unix:/run/php/php8.3-fpm.sock;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;

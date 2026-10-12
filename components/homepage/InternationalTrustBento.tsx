@@ -51,7 +51,17 @@ const BENCHMARKS: PriceBenchmark[] = [
   },
 ];
 
-export default function InternationalTrustBento() {
+interface InternationalTrustBentoProps {
+  title?: string;
+  badge?: string;
+  subtitle?: string;
+}
+
+export default function InternationalTrustBento({
+  title = 'Global Standards & Bureaucracy-Free Access',
+  badge = 'International Alpinist Assurances • 2026 Protocol',
+  subtitle = 'Climbing in the Caucasus as a foreign citizen requires specialized government clearances, border permits, and certified high-altitude emergency safety. We manage 100% of the administrative workflow directly from Nalchik.'
+}: InternationalTrustBentoProps = {}) {
   const [currency, setCurrency] = useState<Currency>('EUR');
 
   const formatPrice = (benchmark: PriceBenchmark) => {
@@ -80,14 +90,14 @@ export default function InternationalTrustBento() {
             <div>
               <div className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] font-semibold text-[#FF6A00] mb-3">
                 <Globe2 className="w-3.5 h-3.5 text-[#FF6A00]" strokeWidth={1.5} />
-                International Alpinist Assurances • 2026 Protocol
+                {badge}
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">
-                Global Standards &amp; Bureaucracy-Free Access
+                {title}
               </h2>
             </div>
             <p className="text-slate-400 text-xs sm:text-sm max-w-md leading-relaxed font-sans">
-              Climbing in the Caucasus as a foreign citizen requires specialized government clearances, border permits, and certified high-altitude emergency safety. We manage 100% of the administrative workflow directly from Nalchik.
+              {subtitle}
             </p>
           </div>
         </ScrollReveal>

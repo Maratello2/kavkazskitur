@@ -226,3 +226,69 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
 }
+
+export async function PUT(request: Request) {
+  const admin = await requireAdmin();
+  if (!admin) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+
+  try {
+    const updateData = await request.json();
+    const { id, slug } = updateData;
+    if (!id && !slug) return NextResponse.json({ success: false, error: 'Tour ID or Slug is required' }, { status: 400 });
+
+    const tours = getToursFromFile();
+    let found = false;
+    const updatedTours = tours.map((t) => {
+      if ((id && String(t.id) === String(id)) || (slug && t.slug === slug)) {
+        found = true;
+        const newPrice = updateData.priceRub !== undefined ? Number(updateData.priceRub) : updateData.price !== undefined ? Number(updateData.price) : t.price;
+        return {
+          ...t,
+          ...updateData,
+          price: newPrice,
+          priceRub: newPrice,
+          priceUsd: updateData.priceUsd || Math.round(newPrice / 92.5),
+          cover_image: updateData.cover_image || updateData.coverImage || t.cover_image,
+          coverImage: updateData.cover_image || updateData.coverImage || t.coverImage,
+          gallery: updateData.gallery || t.gallery || [],
+        };
+      }
+      return t;
+    });
+
+    if (found) {
+      saveToursToFile(updatedTours);
+    }
+
+    return NextResponse.json({ success: true, tours: updatedTours });
+  } catch (err) {
+    console.error('[Admin Tours] PUT error:', err);
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  const admin = await requireAdmin();
+  if (!admin) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+
+  try {
+    const url = new URL(request.url);
+    const id = url.searchParams.get('id');
+    const slug = url.searchParams.get('slug');
+    if (!id && !slug) return NextResponse.json({ success: false, error: 'ID or slug required' }, { status: 400 });
+
+    const tours = getToursFromFile();
+    const filtered = tours.filter((t) => {
+      if (id && String(t.id) === String(id)) return false;
+      if (slug && t.slug === slug) return false;
+      return true;
+    });
+
+    saveToursToFile(filtered);
+    return NextResponse.json({ success: true, tours: filtered });
+  } catch (err) {
+    console.error('[Admin Tours] DELETE error:', err);
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+  }
+}
+

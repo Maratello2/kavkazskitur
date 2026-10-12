@@ -15,7 +15,7 @@ import {
   Calendar,
   Sparkles,
 } from 'lucide-react';
-import { NAVIGATION_DATA, NavCategory } from '@/src/data/navigation';
+import { NAVIGATION_DATA, NavCategory, buildNavigationWithCategories } from '@/data/navigation';
 import MorphingMenuIcon from '@/components/motion/MorphingMenuIcon';
 import TourSearchWithHints from '@/components/interactive/TourSearchWithHints';
 import BookingModalClient from '@/components/BookingModalClient';
@@ -27,6 +27,7 @@ export default function Header() {
   const router = useRouter();
 
   const [settings, setSettings] = useState(defaultSettings);
+  const [navData, setNavData] = useState<NavCategory[]>(NAVIGATION_DATA);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expandedMobileCategory, setExpandedMobileCategory] = useState<string | null>('elbrus');
@@ -36,17 +37,24 @@ export default function Header() {
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Only attempt dynamic settings query in development; static build uses siteSettings.json
-    if (process.env.NODE_ENV === 'development') {
-      fetch('/api/settings')
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.settings) {
-            setSettings((prev: any) => ({ ...prev, ...data.settings }));
-          }
-        })
-        .catch(() => {});
-    }
+    fetch('/api/settings')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.settings) {
+          setSettings((prev: any) => ({ ...prev, ...data.settings }));
+        }
+      })
+      .catch(() => {});
+
+    fetch('/api/categories')
+      .then((r) => r.json())
+      .then((data) => {
+        const cats = Array.isArray(data.categories) ? data.categories : (Array.isArray(data) ? data : []);
+        if (cats.length > 0) {
+          setNavData(buildNavigationWithCategories(cats));
+        }
+      })
+      .catch(() => {});
   }, []);
 
   // Close menus on path navigation
@@ -127,7 +135,7 @@ export default function Header() {
     return null;
   }
 
-  const activeCategoryData = NAVIGATION_DATA.find((c) => c.id === activeCategory);
+  const activeCategoryData = navData.find((c) => c.id === activeCategory);
 
   return (
     <>
@@ -149,7 +157,7 @@ export default function Header() {
 
             {/* 2. DESKTOP NAVIGATION (>= 1024px) - Adventure Peaks Mega Menu */}
             <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-              {NAVIGATION_DATA.map((cat) => {
+              {navData.map((cat) => {
                 const isActive = activeCategory === cat.id;
                 return (
                   <div
@@ -349,7 +357,7 @@ export default function Header() {
             Expedition Programs &amp; Regions
           </div>
 
-          {NAVIGATION_DATA.map((cat) => {
+          {navData.map((cat) => {
             const isExpanded = expandedMobileCategory === cat.id;
             return (
               <div
