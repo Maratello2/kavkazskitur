@@ -197,11 +197,16 @@ export default function CaucasusCinemaScroll({ settings }: CaucasusCinemaScrollP
     }
   }
 
-  // Lazily hydrate non-active realms only after initial render is idle
+  // Non-active realms are loaded on-demand when user interacts (swipes/clicks)
+  // or after an idle window (15 seconds) so initial network bandwidth is 100% dedicated to LCP
   useEffect(() => {
     const timer = setTimeout(() => {
-      setRenderedRealms(realms.map((_, i) => i));
-    }, 2500);
+      if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(() => {
+          setRenderedRealms((current) => (current.length === realms.length ? current : realms.map((_, i) => i)));
+        }, { timeout: 15000 });
+      }
+    }, 15000);
     return () => clearTimeout(timer);
   }, [realms.length]);
 
@@ -315,7 +320,7 @@ export default function CaucasusCinemaScroll({ settings }: CaucasusCinemaScrollP
                   className="w-full h-full object-cover object-[50%_35%] select-none pointer-events-none"
                   loading={idx === 0 ? 'eager' : 'lazy'}
                   fetchPriority={idx === 0 ? 'high' : 'low'}
-                  decoding={idx === 0 ? 'sync' : 'async'}
+                  decoding="async"
                   draggable={false}
                 />
               </picture>

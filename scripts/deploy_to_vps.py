@@ -14,11 +14,63 @@ LOCAL_ARCHIVE = r"d:\Desktop\kavkazskitur\prod_deploy.tar.gz"
 NGINX_GOTOELBRUS = """server {
     listen 80;
     listen [::]:80;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name gotoelbrus.ru www.gotoelbrus.ru 161.104.35.24;
     root /var/www/gotoelbrus.ru;
     index index.html index.php;
 
     client_max_body_size 64M;
+
+    # SSL Configuration (Let's Encrypt Certificate)
+    ssl_certificate /etc/letsencrypt/live/gotoelbrus.ru/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/gotoelbrus.ru/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:MozSSL:10m;
+    ssl_session_tickets off;
+
+    # High-Performance Compression & Static Gzip
+    gzip on;
+    gzip_static on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_min_length 256;
+    gzip_types
+        text/plain
+        text/css
+        text/xml
+        text/javascript
+        application/json
+        application/javascript
+        application/x-javascript
+        application/xml
+        application/xml+rss
+        image/svg+xml
+        image/x-icon
+        application/vnd.ms-fontobject
+        font/eot
+        font/opentype
+        font/otf
+        application/x-font-ttf
+        application/font-woff
+        application/font-woff2
+        font/woff
+        font/woff2;
+
+    # Security & Modern Best Practices Headers
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+
+    # ACME Challenge for Let's Encrypt renewal
+    location /.well-known/acme-challenge/ {
+        root /var/www/gotoelbrus.ru;
+    }
 
     location / {
         try_files $uri $uri.html $uri/ =404;
@@ -64,9 +116,23 @@ NGINX_GOTOELBRUS = """server {
         deny all;
     }
 
-    location ~* \.(js|css|webp|png|jpg|jpeg|svg|woff2|woff|ico)$ {
+    # Static CSS & JS with gzip_static and immutable cache
+    location ~* \.(js|css)$ {
+        gzip_static on;
         expires 1y;
-        add_header Cache-Control "public, no-transform";
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Access-Control-Allow-Origin "*";
+        try_files $uri =404;
+    }
+
+    # Static Media & Fonts with immutable cache
+    location ~* \.(webp|png|jpg|jpeg|svg|woff2|woff|ico|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Access-Control-Allow-Origin "*";
+        try_files $uri =404;
     }
 }
 """
@@ -100,6 +166,10 @@ def main():
         f.write(NGINX_GOTOELBRUS)
     print("Updated /etc/nginx/sites-available/gotoelbrus.ru")
 
+    run_remote(ssh, "sed -i 's/# gzip_types/gzip_types/' /etc/nginx/nginx.conf")
+    run_remote(ssh, "sed -i 's/# gzip_vary on;/gzip_vary on;/' /etc/nginx/nginx.conf")
+    run_remote(ssh, "sed -i 's/# gzip_proxied any;/gzip_proxied any;/' /etc/nginx/nginx.conf")
+    run_remote(ssh, "sed -i 's/# gzip_comp_level 6;/gzip_comp_level 6;/' /etc/nginx/nginx.conf")
     run_remote(ssh, "nginx -t && systemctl reload nginx")
 
     # 2. Upload prod_deploy.tar.gz

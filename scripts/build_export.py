@@ -497,22 +497,53 @@ def run_build():
     with open(os.path.join(OUT_DIR, ".htaccess"), "w", encoding="utf-8") as f:
         f.write(HTACCESS_CONTENT)
     print("Generated out/.htaccess with full caching, security & admin rules")
-
     # Optimize out/index.html head links for instant mobile LCP
     index_html = os.path.join(OUT_DIR, "index.html")
     if os.path.exists(index_html):
         import re
         with open(index_html, "r", encoding="utf-8") as f:
             html = f.read()
-        
+
         # Remove unwanted svg preloads that starve LCP bandwidth
         html = re.sub(r'<link[^>]*rel="preload"[^>]*href="/brand/logo_kst\.svg"[^>]*>', '', html)
         html = re.sub(r'<link[^>]*rel="preload"[^>]*href="/img/wp\.svg"[^>]*>', '', html)
         html = re.sub(r'<link[^>]*rel="preload"[^>]*href="/img/geotag\.svg"[^>]*>', '', html)
-        
+
+        # Ensure LCP image preload is at the very top of <head> before scripts for instant mobile LCP
+        preload_block = (
+            '<link rel="preload" as="image" href="/hero/summit_apex_5642_480.webp" type="image/webp" media="(max-width: 480px)" fetchPriority="high"/>'
+            '<link rel="preload" as="image" href="/hero/summit_apex_5642_mobile.webp" type="image/webp" media="(min-width: 481px) and (max-width: 768px)" fetchPriority="high"/>'
+            '<link rel="preload" as="image" href="/hero/summit_apex_5642.webp" type="image/webp" media="(min-width: 769px)" fetchPriority="high"/>'
+        )
+        html = re.sub(r'<link[^>]*rel="preload"[^>]*href="/hero/summit_apex_5642[^>]*>', '', html)
+        viewport_tag = '<meta name="viewport" content="width=device-width, initial-scale=1"/>'
+        if viewport_tag in html:
+            html = html.replace(viewport_tag, viewport_tag + preload_block, 1)
+
         with open(index_html, "w", encoding="utf-8") as f:
             f.write(html)
         print("Optimized out/index.html head links for instant mobile LCP")
+
+    # 4b. Pre-compress text assets with maximum gzip compression (level 9) for Nginx gzip_static
+    import gzip
+    gz_extensions = ('.html', '.css', '.js', '.json', '.svg', '.xml', '.txt')
+    gz_count = 0
+    saved_bytes = 0
+    for root, _, files in os.walk(OUT_DIR):
+        for f in files:
+            if f.endswith(gz_extensions) and not f.endswith('.gz'):
+                file_path = os.path.join(root, f)
+                gz_path = file_path + ".gz"
+                with open(file_path, "rb") as f_in:
+                    raw_data = f_in.read()
+                if len(raw_data) > 128:
+                    compressed_data = gzip.compress(raw_data, compresslevel=9)
+                    if len(compressed_data) < len(raw_data):
+                        with open(gz_path, "wb") as f_out:
+                            f_out.write(compressed_data)
+                        gz_count += 1
+                        saved_bytes += (len(raw_data) - len(compressed_data))
+    print(f"Pre-compressed {gz_count} static assets to .gz with level 9 (saved {round(saved_bytes / 1024, 1)} KB)")
 
     step("5. Creating deployment archive")
     tar_path = os.path.join(ROOT_DIR, "prod_deploy.tar.gz")
