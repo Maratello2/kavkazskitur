@@ -12,7 +12,7 @@ export default function LoginPage() {
     <main className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#0B0F17] dark:text-slate-100 pt-24 pb-20 flex items-center justify-center px-4">
       <div className="max-w-md w-full mx-auto my-8 sm:my-16 p-8 bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl space-y-6">
         <div className="text-center space-y-3 flex flex-col items-center">
-          <Logo variant="full" />
+          <Logo variant="full" size="lg" />
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
             Climber Portal
           </h1>

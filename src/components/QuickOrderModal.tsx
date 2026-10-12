@@ -148,7 +148,7 @@ export default function QuickOrderModal() {
         ) : (
           <div>
             <div className="mb-3">
-              <Logo variant="full" />
+              <Logo variant="full" size="lg" />
             </div>
 
             <div className="flex items-center gap-3 mb-2.5">

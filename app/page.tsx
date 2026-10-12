@@ -172,7 +172,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
             {/* Column 1: Company Profile with Logo */}
             <div className="space-y-4">
-              <Logo />
+              <Logo size="lg" />
               <p className="text-xs text-slate-400 leading-relaxed font-sans">
                 High-altitude mountaineering ascents, ski touring, and wild expeditions across the Greater Caucasus. Guiding expeditions since 2006 with our private high camp at Gara-Bashi, Mt. Elbrus (3,800 m).
               </p>

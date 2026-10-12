@@ -797,7 +797,7 @@ function AdminPageContent() {
           MOBILE TOP NAVBAR
       ========================================================================= */}
       <div className="md:hidden flex items-center justify-between px-4 py-3 bg-[#0B101D] border-b border-white/[0.06] sticky top-0 z-40">
-        <Logo variant="emblem" className="shrink-0" />
+        <Logo variant="emblem" size={46} className="shrink-0" />
         <div className="flex items-center gap-2">
           <Link
             href="/"
@@ -902,10 +902,10 @@ function AdminPageContent() {
       <aside className="w-full md:w-64 bg-[#0B101D] border-r border-white/[0.06] p-5 hidden md:flex flex-col justify-between shrink-0">
         <div>
           {/* Official Vector Logo replacing orange K badge */}
-          <div className="flex items-center gap-3 mb-8">
-            <Logo variant="emblem" className="shrink-0" />
+          <div className="flex items-center gap-3.5 mb-8">
+            <Logo variant="emblem" size={54} className="shrink-0" />
             <div>
-              <div className="font-serif font-black text-sm tracking-wider text-white">
+              <div className="font-serif font-black text-base tracking-wider text-white">
                 KAVKAZ<span className="text-[#FF6A00]">SKITUR</span>
               </div>
               <div className="text-[10px] text-slate-400 font-mono uppercase tracking-wider flex items-center gap-1.5 mt-0.5">

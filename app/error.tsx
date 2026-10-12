@@ -23,7 +23,7 @@ export default function GlobalError({ error, reset }: ErrorProps) {
       <div className="max-w-xl mx-auto text-center relative z-10 space-y-6">
         {/* LOGO */}
         <div className="flex justify-center mb-2">
-          <Logo variant="full" />
+          <Logo variant="full" size="lg" />
         </div>
 
         {/* ROCKFALL WARNING ICON */}

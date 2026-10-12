@@ -149,11 +149,11 @@ export default function Header() {
         )}
 
         {/* Main Navigation Bar */}
-        <div className="w-full h-20 bg-[#091422]/98 border-b border-white/[0.08] shadow-2xl">
+        <div className="w-full h-20 sm:h-[86px] bg-[#091422]/98 border-b border-white/[0.08] shadow-2xl transition-all">
           <div className="max-w-7xl h-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 relative">
             
             {/* 1. BRAND LOGO - Official Company Emblem & Identity */}
-            <Logo variant="full" className="shrink-0" />
+            <Logo variant="full" size="header" className="shrink-0" />
 
             {/* 2. DESKTOP NAVIGATION (>= 1024px) - Adventure Peaks Mega Menu */}
             <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
@@ -321,6 +321,7 @@ export default function Header() {
         <div className="px-5 sm:px-8 pb-3.5 border-b border-white/[0.08] flex items-center justify-between">
           <Logo
             variant="full"
+            size="header"
             className="shrink-0"
             onClick={() => setMobileMenuOpen(false)}
           />

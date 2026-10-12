@@ -17,7 +17,7 @@ export default function NotFound() {
       <div className="max-w-xl mx-auto text-center relative z-10 space-y-6">
         {/* BRAND LOGO */}
         <div className="flex justify-center mb-4">
-          <Logo variant="full" />
+          <Logo variant="full" size="lg" />
         </div>
 
         {/* MOUNTAIN COMPASS ICON */}

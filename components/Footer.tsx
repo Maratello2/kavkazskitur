@@ -13,7 +13,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="footer-brand space-y-3">
             <div className="mb-3">
-              <Logo variant="full" />
+              <Logo variant="full" size="lg" />
             </div>
             <p className="text-xs leading-relaxed text-slate-400">
               High-altitude mountaineering ascents on Mt. Elbrus, ski touring, and alpine logistics across the Greater Caucasus since 2006. Private high camp at Barrels-Garabashi (3,800 m).
