@@ -121,10 +121,33 @@ ADMIN_LOGIN_PHP = """<?php
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, X-Forwarded-For');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
+    exit;
+}
+
+// Anti-Brute-Force Rate Limiting (Strix Vector 3)
+$rawIp = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+$ip = trim(explode(',', $rawIp)[0]);
+$rateDir = __DIR__ . '/../data/rate_limit';
+if (!is_dir($rateDir)) {
+    @mkdir($rateDir, 0755, true);
+}
+$rateFile = $rateDir . '/' . md5($ip) . '.json';
+$now = time();
+$rateData = ['count' => 0, 'first_attempt' => $now];
+if (file_exists($rateFile)) {
+    $rateData = json_decode(@file_get_contents($rateFile), true) ?: $rateData;
+    if ($now - $rateData['first_attempt'] > 300) {
+        $rateData = ['count' => 0, 'first_attempt' => $now];
+    }
+}
+
+if ($rateData['count'] >= 5) {
+    http_response_code(429);
+    echo json_encode(['success' => false, 'error' => 'Too many login attempts. Please wait 5 minutes before trying again.']);
     exit;
 }
 
@@ -175,9 +198,15 @@ if (!$authenticated && strcasecmp($username, 'kavkaz_admin') === 0 && $password 
 }
 
 if (!$authenticated) {
+    $rateData['count']++;
+    @file_put_contents($rateFile, json_encode($rateData));
     http_response_code(401);
     echo json_encode(['success' => false, 'error' => 'Invalid username or password']);
     exit;
+}
+
+if (file_exists($rateFile)) {
+    @unlink($rateFile);
 }
 
 $secret = 'kavkaz_apex_admin_secret_key_2026_salt_hash_981273918237';
@@ -207,7 +236,7 @@ ADMIN_AUTH_PHP = """<?php
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Admin-Token');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -224,7 +253,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
 $token = $_COOKIE['admin_session'] ?? $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? '';
 if (empty($token) && !empty($_SERVER['HTTP_AUTHORIZATION'])) {
-    if (preg_match('/Bearer\s+(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $m)) {
+    if (preg_match('/Bearer\\s+(\\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $m)) {
         $token = $m[1];
     }
 }
@@ -265,13 +294,42 @@ ADMIN_LEADS_PHP = """<?php
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Admin-Token');
 header('Cache-Control: no-cache, no-store, must-revalidate');
 header('Pragma: no-cache');
 header('Expires: 0');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
+    exit;
+}
+
+function checkAdminAuth() {
+    $secret = 'kavkaz_apex_admin_secret_key_2026_salt_hash_981273918237';
+    $token = $_COOKIE['admin_session'] ?? $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? '';
+    if (empty($token) && !empty($_SERVER['HTTP_AUTHORIZATION'])) {
+        if (preg_match('/Bearer\\s+(\\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $m)) {
+            $token = $m[1];
+        }
+    }
+    if (empty($token) || strpos($token, '.') === false) {
+        return false;
+    }
+    list($b64Payload, $sig) = explode('.', $token, 2);
+    $expectedSig = hash_hmac('sha256', $b64Payload, $secret);
+    if (!hash_equals($expectedSig, $sig)) {
+        return false;
+    }
+    $payload = json_decode(base64_decode($b64Payload), true);
+    if (!$payload || !isset($payload['exp']) || $payload['exp'] < time()) {
+        return false;
+    }
+    return $payload;
+}
+
+if (!checkAdminAuth()) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
     exit;
 }
 
@@ -316,11 +374,40 @@ ADMIN_SETTINGS_PHP = """<?php
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Admin-Token');
 header('Cache-Control: no-cache, no-store, must-revalidate');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
+    exit;
+}
+
+function checkAdminAuth() {
+    $secret = 'kavkaz_apex_admin_secret_key_2026_salt_hash_981273918237';
+    $token = $_COOKIE['admin_session'] ?? $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? '';
+    if (empty($token) && !empty($_SERVER['HTTP_AUTHORIZATION'])) {
+        if (preg_match('/Bearer\\s+(\\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $m)) {
+            $token = $m[1];
+        }
+    }
+    if (empty($token) || strpos($token, '.') === false) {
+        return false;
+    }
+    list($b64Payload, $sig) = explode('.', $token, 2);
+    $expectedSig = hash_hmac('sha256', $b64Payload, $secret);
+    if (!hash_equals($expectedSig, $sig)) {
+        return false;
+    }
+    $payload = json_decode(base64_decode($b64Payload), true);
+    if (!$payload || !isset($payload['exp']) || $payload['exp'] < time()) {
+        return false;
+    }
+    return $payload;
+}
+
+if (!checkAdminAuth()) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
     exit;
 }
 
@@ -358,10 +445,39 @@ ADMIN_USERS_PHP = """<?php
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Admin-Token');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
+    exit;
+}
+
+function checkAdminAuth() {
+    $secret = 'kavkaz_apex_admin_secret_key_2026_salt_hash_981273918237';
+    $token = $_COOKIE['admin_session'] ?? $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? '';
+    if (empty($token) && !empty($_SERVER['HTTP_AUTHORIZATION'])) {
+        if (preg_match('/Bearer\\s+(\\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $m)) {
+            $token = $m[1];
+        }
+    }
+    if (empty($token) || strpos($token, '.') === false) {
+        return false;
+    }
+    list($b64Payload, $sig) = explode('.', $token, 2);
+    $expectedSig = hash_hmac('sha256', $b64Payload, $secret);
+    if (!hash_equals($expectedSig, $sig)) {
+        return false;
+    }
+    $payload = json_decode(base64_decode($b64Payload), true);
+    if (!$payload || !isset($payload['exp']) || $payload['exp'] < time()) {
+        return false;
+    }
+    return $payload;
+}
+
+if (!checkAdminAuth()) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
     exit;
 }
 

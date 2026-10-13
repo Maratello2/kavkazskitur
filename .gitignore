@@ -19,6 +19,8 @@
 *.pem
 *.tar.gz
 *.zip
+__pycache__/
+*.pyc
 
 # debug
 npm-debug.log*

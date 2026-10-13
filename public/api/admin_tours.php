@@ -2,10 +2,39 @@
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Admin-Token');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
+    exit;
+}
+
+function checkAdminAuth() {
+    $secret = 'kavkaz_apex_admin_secret_key_2026_salt_hash_981273918237';
+    $token = $_COOKIE['admin_session'] ?? $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? '';
+    if (empty($token) && !empty($_SERVER['HTTP_AUTHORIZATION'])) {
+        if (preg_match('/Bearer\s+(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $m)) {
+            $token = $m[1];
+        }
+    }
+    if (empty($token) || strpos($token, '.') === false) {
+        return false;
+    }
+    list($b64Payload, $sig) = explode('.', $token, 2);
+    $expectedSig = hash_hmac('sha256', $b64Payload, $secret);
+    if (!hash_equals($expectedSig, $sig)) {
+        return false;
+    }
+    $payload = json_decode(base64_decode($b64Payload), true);
+    if (!$payload || !isset($payload['exp']) || $payload['exp'] < time()) {
+        return false;
+    }
+    return $payload;
+}
+
+if (!checkAdminAuth()) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
     exit;
 }
 
@@ -37,78 +66,55 @@ if ($method === 'GET') {
     exit;
 }
 
-function checkAdminAuth() {
-    $secret = 'kavkaz_apex_admin_secret_key_2026_salt_hash_981273918237';
-    $token = $_COOKIE['admin_session'] ?? $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? '';
-    if (empty($token) && !empty($_SERVER['HTTP_AUTHORIZATION'])) {
-        if (preg_match('/Bearer\s+(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $m)) {
-            $token = $m[1];
-        }
-    }
-    if (!empty($token) && strpos($token, '.') !== false) {
-        list($b64Payload, $sig) = explode('.', $token, 2);
-        $expectedSig = hash_hmac('sha256', $b64Payload, $secret);
-        if (hash_equals($expectedSig, $sig)) {
-            $payload = json_decode(base64_decode($b64Payload), true);
-            if ($payload && isset($payload['exp']) && $payload['exp'] >= time()) {
-                return true;
-            }
-        }
-    }
-    $sessionFile = __DIR__ . '/../data/.admin_session';
-    if (file_exists($sessionFile) && !empty($token)) {
-        if (trim(file_get_contents($sessionFile)) === $token) return true;
-    }
-    return false;
-}
-
-if (!checkAdminAuth()) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
-    exit;
-}
-
-$input = json_decode(file_get_contents('php://input'), true) ?: [];
-$tours = loadTours($dataFile);
+$input = json_decode(file_get_contents('php://input'), true);
 
 if ($method === 'POST') {
-    if (empty($input['name']) && empty($input['title'])) {
+    if (!$input || !isset($input['title']) || !isset($input['slug'])) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'Tour name is required']);
+        echo json_encode(['success' => false, 'error' => 'Missing title or slug']);
         exit;
     }
+
+    $tours = loadTours($dataFile);
+    $slug = trim($input['slug']);
     
-    $newId = time();
-    $input['id'] = $newId;
-    if (empty($input['slug'])) {
-        $input['slug'] = 'tour-' . $newId;
+    // Check slug uniqueness
+    foreach ($tours as $t) {
+        if ($t['slug'] === $slug) {
+            http_response_code(409);
+            echo json_encode(['success' => false, 'error' => 'Tour with this slug already exists']);
+            exit;
+        }
     }
-    if (empty($input['title'])) {
-        $input['title'] = $input['name'];
+
+    $input['id'] = $slug;
+    $input['createdAt'] = date('c');
+    $input['updatedAt'] = date('c');
+    $tours[] = $input;
+
+    if (saveTours($dataFile, $tours)) {
+        echo json_encode(['success' => true, 'tour' => $input]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Failed to save tour']);
     }
-    if (empty($input['name'])) {
-        $input['name'] = $input['title'];
-    }
-    
-    array_unshift($tours, $input);
-    saveTours($dataFile, $tours);
-    echo json_encode(['success' => true, 'tour' => $input, 'tours' => $tours], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
 if ($method === 'PUT') {
-    $id = $input['id'] ?? null;
-    $slug = $input['slug'] ?? null;
-    
-    if (!$id && !$slug) {
+    if (!$input || !isset($input['slug'])) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'ID or Slug required for update']);
+        echo json_encode(['success' => false, 'error' => 'Missing slug']);
         exit;
     }
 
+    $tours = loadTours($dataFile);
+    $slug = trim($input['slug']);
     $found = false;
+
     foreach ($tours as $k => $t) {
-        if (($id && (string)$t['id'] === (string)$id) || ($slug && $t['slug'] === $slug)) {
+        if ($t['slug'] === $slug) {
+            $input['updatedAt'] = date('c');
             $tours[$k] = array_merge($t, $input);
             $found = true;
             break;
@@ -121,31 +127,50 @@ if ($method === 'PUT') {
         exit;
     }
 
-    saveTours($dataFile, $tours);
-    echo json_encode(['success' => true, 'tours' => $tours], JSON_UNESCAPED_UNICODE);
+    if (saveTours($dataFile, $tours)) {
+        echo json_encode(['success' => true, 'tour' => $tours[$k]]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Failed to update tour']);
+    }
     exit;
 }
 
 if ($method === 'DELETE') {
-    $id = $_GET['id'] ?? $input['id'] ?? null;
-    $slug = $_GET['slug'] ?? $input['slug'] ?? null;
-
-    if (!$id && !$slug) {
+    $slug = isset($_GET['slug']) ? trim($_GET['slug']) : ($input['slug'] ?? null);
+    if (!$slug) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'ID or Slug required for deletion']);
+        echo json_encode(['success' => false, 'error' => 'Missing slug']);
         exit;
     }
 
-    $tours = array_values(array_filter($tours, function($t) use ($id, $slug) {
-        if ($id && (string)$t['id'] === (string)$id) return false;
-        if ($slug && $t['slug'] === $slug) return false;
-        return true;
-    }));
+    $tours = loadTours($dataFile);
+    $newTours = [];
+    $found = false;
 
-    saveTours($dataFile, $tours);
-    echo json_encode(['success' => true, 'tours' => $tours], JSON_UNESCAPED_UNICODE);
+    foreach ($tours as $t) {
+        if ($t['slug'] === $slug) {
+            $found = true;
+        } else {
+            $newTours[] = $t;
+        }
+    }
+
+    if (!$found) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'error' => 'Tour not found']);
+        exit;
+    }
+
+    if (saveTours($dataFile, $newTours)) {
+        echo json_encode(['success' => true, 'message' => 'Tour deleted']);
+    } else {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Failed to delete tour']);
+    }
     exit;
 }
 
 http_response_code(405);
-echo json_encode(['error' => 'Method Not Allowed']);
+echo json_encode(['success' => false, 'error' => 'Method not allowed']);
+?>

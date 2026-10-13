@@ -2,11 +2,40 @@
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Admin-Token');
 header('Cache-Control: no-cache, no-store, must-revalidate');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
+    exit;
+}
+
+function checkAdminAuth() {
+    $secret = 'kavkaz_apex_admin_secret_key_2026_salt_hash_981273918237';
+    $token = $_COOKIE['admin_session'] ?? $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? '';
+    if (empty($token) && !empty($_SERVER['HTTP_AUTHORIZATION'])) {
+        if (preg_match('/Bearer\s+(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $m)) {
+            $token = $m[1];
+        }
+    }
+    if (empty($token) || strpos($token, '.') === false) {
+        return false;
+    }
+    list($b64Payload, $sig) = explode('.', $token, 2);
+    $expectedSig = hash_hmac('sha256', $b64Payload, $secret);
+    if (!hash_equals($expectedSig, $sig)) {
+        return false;
+    }
+    $payload = json_decode(base64_decode($b64Payload), true);
+    if (!$payload || !isset($payload['exp']) || $payload['exp'] < time()) {
+        return false;
+    }
+    return $payload;
+}
+
+if (!checkAdminAuth()) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
     exit;
 }
 

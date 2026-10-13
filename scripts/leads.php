@@ -28,12 +28,18 @@ if (!$body) {
 // 1. Honeypot check
 $website_hp = isset($body['website_hp']) ? trim($body['website_hp']) : '';
 if (!empty($website_hp)) {
-    echo json_encode(['success' => true, 'redirectUrl' => '']);
+    echo json_encode([
+        'success' => true,
+        'bookingId' => 'hp_filtered',
+        'leadId' => 'hp_filtered',
+        'redirectUrl' => '',
+        'whatsappUrl' => ''
+    ]);
     exit;
 }
 
 // 2. Consent check (152-FZ)
-$consent = isset($body['consent']) ? $body['consent'] : (isset($body['consent_152fz']) ? $body['consent_152fz'] : false);
+$consent = isset($body['consent']) ? $body['consent'] : (isset($body['consent_152fz']) ? $body['consent_152fz'] : (isset($body['consent152']) ? $body['consent152'] : false));
 $hasConsent = ($consent === true || $consent === 'true' || $consent === 1 || $consent === '1');
 if (!$hasConsent) {
     http_response_code(400);
@@ -41,15 +47,33 @@ if (!$hasConsent) {
     exit;
 }
 
-$name = isset($body['name']) ? trim($body['name']) : 'Guest';
-$phone = isset($body['phone']) ? trim($body['phone']) : '';
-$tour = isset($body['tourName']) ? $body['tourName'] : (isset($body['tour_name']) ? $body['tour_name'] : 'Mount Elbrus Expedition');
-$dates = isset($body['dates']) ? $body['dates'] : (isset($body['date']) ? $body['date'] : 'Season 2026');
+// 3. Input extraction & validation
+$name = isset($body['clientName']) ? trim($body['clientName']) : (isset($body['name']) ? trim($body['name']) : '');
+$phone = isset($body['clientPhone']) ? trim($body['clientPhone']) : (isset($body['phone']) ? trim($body['phone']) : '');
+$email = isset($body['clientEmail']) ? trim($body['clientEmail']) : (isset($body['email']) ? trim($body['email']) : '');
+$tour = isset($body['tourTitle']) ? $body['tourTitle'] : (isset($body['tourName']) ? $body['tourName'] : (isset($body['tour_name']) ? $body['tour_name'] : 'Mount Elbrus Expedition'));
+$dates = isset($body['preferredDate']) ? $body['preferredDate'] : (isset($body['dates']) ? $body['dates'] : (isset($body['date']) ? $body['date'] : 'Season 2026'));
 $comment = isset($body['comment']) ? $body['comment'] : (isset($body['message']) ? $body['message'] : '');
 
-if (empty($phone)) {
+$errors = [];
+if (strlen($name) < 2) {
+    $errors['clientName'] = 'Name must be at least 2 characters long';
+}
+if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errors['clientEmail'] = 'Invalid email address format';
+}
+$digitsOnly = preg_replace('/[^0-9]/', '', $phone);
+if (empty($phone) || strlen($digitsOnly) < 6) {
+    $errors['clientPhone'] = 'Valid phone number is required';
+}
+
+if (!empty($errors)) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'Phone number is required.']);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Validation error',
+        'details' => $errors
+    ]);
     exit;
 }
 
@@ -60,6 +84,7 @@ $lead = [
     'id' => $leadId,
     'name' => $name,
     'phone' => $phone,
+    'email' => $email,
     'tourName' => $tour,
     'dates' => $dates,
     'comment' => $comment,
@@ -67,7 +92,7 @@ $lead = [
     'status' => 'new'
 ];
 
-// 3. Save to data/leads.json
+// 4. Save to data/leads.json
 $leadsDir = __DIR__ . '/../data';
 if (!is_dir($leadsDir)) {
     @mkdir($leadsDir, 0755, true);
@@ -81,7 +106,7 @@ if (file_exists($leadsFile)) {
 array_unshift($leads, $lead);
 @file_put_contents($leadsFile, json_encode($leads, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
-// 4. Load environment variables
+// 5. Load environment variables
 $envFile = __DIR__ . '/../.env';
 $tgToken = getenv('TELEGRAM_BOT_TOKEN') ?: '';
 $tgChatId = getenv('TELEGRAM_CHAT_ID') ?: '';
@@ -111,9 +136,12 @@ if (file_exists($envFile)) {
     }
 }
 
-// 4.1 Dispatch Telegram if configured
+// 5.1 Dispatch Telegram if configured
 if ($tgToken && $tgChatId) {
     $tgMsg = "🏔 *New Expedition Inquiry!*\n\n*Tour:* " . $tour . "\n*Dates:* " . $dates . "\n*Climber:* " . $name . "\n*Phone:* " . $phone;
+    if ($email) {
+        $tgMsg .= "\n*Email:* " . $email;
+    }
     if ($comment) {
         $tgMsg .= "\n*Notes:* " . $comment;
     }
@@ -131,7 +159,7 @@ if ($tgToken && $tgChatId) {
     @curl_close($ch);
 }
 
-// 4.2 Dispatch Email Notification
+// 5.2 Dispatch Email Notification
 $emailRecipients = [];
 if (!empty($adminEmail)) {
     foreach (explode(',', $adminEmail) as $em) {
@@ -160,6 +188,7 @@ $emailBodyHtml = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' . ht
 '<tr><td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: #94a3b8; font-size: 13px; width: 140px;">Тур / Программа:</td><td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: #ffffff; font-size: 14px; font-weight: bold;">' . htmlspecialchars($tour, ENT_QUOTES, 'UTF-8') . '</td></tr>' .
 '<tr><td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: #94a3b8; font-size: 13px;">Имя участника:</td><td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: #ffffff; font-size: 14px; font-weight: bold;">' . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . '</td></tr>' .
 '<tr><td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: #94a3b8; font-size: 13px;">Телефон:</td><td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: #38bdf8; font-size: 15px; font-weight: bold; font-family: monospace;">' . htmlspecialchars($phone, ENT_QUOTES, 'UTF-8') . '</td></tr>' .
+(!empty($email) ? '<tr><td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: #94a3b8; font-size: 13px;">Email:</td><td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: #ffffff; font-size: 14px;">' . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . '</td></tr>' : '') .
 '<tr><td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: #94a3b8; font-size: 13px;">Даты восхождения:</td><td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: #ffffff; font-size: 14px;">' . htmlspecialchars($dates, ENT_QUOTES, 'UTF-8') . '</td></tr>' .
 (!empty($comment) ? '<tr><td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: #94a3b8; font-size: 13px; vertical-align: top;">Комментарий / Детали:</td><td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); color: #e2e8f0; font-size: 13px; line-height: 1.5;">' . nl2br(htmlspecialchars($comment, ENT_QUOTES, 'UTF-8')) . '</td></tr>' : '') .
 '<tr><td style="padding: 10px 0; color: #94a3b8; font-size: 12px;">Время отправки:</td><td style="padding: 10px 0; color: #64748b; font-size: 12px; font-family: monospace;">' . htmlspecialchars($createdAt, ENT_QUOTES, 'UTF-8') . ' (ID: ' . $leadId . ')</td></tr>' .
@@ -259,13 +288,15 @@ foreach ($emailRecipients as $toEmail) {
     }
 }
 
-// 5. WhatsApp redirect URL
+// 6. WhatsApp redirect URL
 $waText = "Expedition Booking Request\n\nTour: " . $tour . "\nDates: " . $dates . "\nName: " . $name . "\nPhone: " . $phone;
 $redirectUrl = 'https://wa.me/79280828413?text=' . urlencode($waText);
 
 echo json_encode([
     'success' => true,
+    'bookingId' => $leadId,
+    'leadId' => $leadId,
     'redirectUrl' => $redirectUrl,
-    'leadId' => $leadId
+    'whatsappUrl' => $redirectUrl
 ], JSON_UNESCAPED_UNICODE);
 ?>
