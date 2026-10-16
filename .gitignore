@@ -43,3 +43,5 @@ next-env.d.ts
 *.secret
 .selectel_creds.json
 scripts/selectel_token.json
+scripts/*.png
+scripts/*.txt
