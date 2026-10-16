@@ -1,0 +1,447 @@
+{
+  "elbrus-barrels.com.": {
+    "zone_info": {
+      "id": "23b5f8ef-7f1b-49e0-b9ed-ca37403ac5a5",
+      "name": "elbrus-barrels.com.",
+      "project_id": "a24677210a304aee8d2a9db33282cc65",
+      "created_at": "2026-10-09T16:36:04+00:00",
+      "updated_at": "2026-10-12T16:31:05+00:00",
+      "comment": null,
+      "disabled": false,
+      "protected": false,
+      "delegation_checked_at": "2026-10-15T09:36:49+00:00",
+      "last_delegated_at": "2026-10-15T09:36:49+00:00",
+      "last_check_status": true
+    },
+    "records": [
+      {
+        "id": "983906ed-6838-4b0a-a8c0-d154efbe7ad2",
+        "name": "elbrus-barrels.com.",
+        "ttl": 3600,
+        "type": "NS",
+        "records": [
+          {
+            "content": "b.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "c.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "a.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "d.ns.selectel.ru.",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "23b5f8ef-7f1b-49e0-b9ed-ca37403ac5a5"
+      },
+      {
+        "id": "17c0a223-0be4-4f0a-aef6-a7c9285f9f42",
+        "name": "elbrus-barrels.com.",
+        "ttl": 3600,
+        "type": "SOA",
+        "records": [
+          {
+            "content": "a.ns.selectel.ru. support.selectel.ru. 2026101202 10800 3600 604800 60",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "23b5f8ef-7f1b-49e0-b9ed-ca37403ac5a5"
+      },
+      {
+        "id": "17594746-d39d-4d66-b669-1afb83ffbcbe",
+        "name": "elbrus-barrels.com.",
+        "ttl": 3600,
+        "type": "A",
+        "records": [
+          {
+            "content": "161.104.35.24",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "23b5f8ef-7f1b-49e0-b9ed-ca37403ac5a5"
+      },
+      {
+        "id": "97d2858d-0a13-43a2-b8b8-d519689499d9",
+        "name": "www.elbrus-barrels.com.",
+        "ttl": 3600,
+        "type": "A",
+        "records": [
+          {
+            "content": "161.104.35.24",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "23b5f8ef-7f1b-49e0-b9ed-ca37403ac5a5"
+      }
+    ]
+  },
+  "elbrus-garabashi.ru.": {
+    "zone_info": {
+      "id": "dbf96987-eda3-465f-a3c7-83a293823bbd",
+      "name": "elbrus-garabashi.ru.",
+      "project_id": "a24677210a304aee8d2a9db33282cc65",
+      "created_at": "2026-10-09T16:35:54+00:00",
+      "updated_at": "2026-10-12T16:31:05+00:00",
+      "comment": null,
+      "disabled": false,
+      "protected": false,
+      "delegation_checked_at": "2026-10-15T05:29:44+00:00",
+      "last_delegated_at": "2026-10-15T05:29:44+00:00",
+      "last_check_status": true
+    },
+    "records": [
+      {
+        "id": "e6b26912-d0dd-4c70-a8d1-9484372170b0",
+        "name": "elbrus-garabashi.ru.",
+        "ttl": 3600,
+        "type": "SOA",
+        "records": [
+          {
+            "content": "a.ns.selectel.ru. support.selectel.ru. 2026101202 10800 3600 604800 60",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "dbf96987-eda3-465f-a3c7-83a293823bbd"
+      },
+      {
+        "id": "a4355279-4b35-4bf2-bc3b-2a9360a80b6d",
+        "name": "elbrus-garabashi.ru.",
+        "ttl": 3600,
+        "type": "A",
+        "records": [
+          {
+            "content": "161.104.35.24",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "dbf96987-eda3-465f-a3c7-83a293823bbd"
+      },
+      {
+        "id": "aa5f0533-94d8-4f40-ba32-6f5fb21e4a95",
+        "name": "elbrus-garabashi.ru.",
+        "ttl": 3600,
+        "type": "NS",
+        "records": [
+          {
+            "content": "d.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "c.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "a.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "b.ns.selectel.ru.",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "dbf96987-eda3-465f-a3c7-83a293823bbd"
+      },
+      {
+        "id": "7284e172-f4f9-4325-bc7b-fb11d44254dc",
+        "name": "www.elbrus-garabashi.ru.",
+        "ttl": 3600,
+        "type": "A",
+        "records": [
+          {
+            "content": "161.104.35.24",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "dbf96987-eda3-465f-a3c7-83a293823bbd"
+      }
+    ]
+  },
+  "gotoelbrus.ru.": {
+    "zone_info": {
+      "id": "7e44cd62-f3a7-4797-9d5e-63f74dbb2c5e",
+      "name": "gotoelbrus.ru.",
+      "project_id": "a24677210a304aee8d2a9db33282cc65",
+      "created_at": "2026-10-09T15:33:51+00:00",
+      "updated_at": "2026-10-12T16:31:19+00:00",
+      "comment": null,
+      "disabled": false,
+      "protected": false,
+      "delegation_checked_at": "2026-10-15T05:39:23+00:00",
+      "last_delegated_at": "2026-10-15T05:39:23+00:00",
+      "last_check_status": true
+    },
+    "records": [
+      {
+        "id": "6dc852bb-ca90-4e43-9a20-0c42e60e4442",
+        "name": "gotoelbrus.ru.",
+        "ttl": 3600,
+        "type": "A",
+        "records": [
+          {
+            "content": "161.104.35.24",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "7e44cd62-f3a7-4797-9d5e-63f74dbb2c5e"
+      },
+      {
+        "id": "ba34883b-31fd-46ec-bf9f-98dd3b88d28a",
+        "name": "gotoelbrus.ru.",
+        "ttl": 3600,
+        "type": "SOA",
+        "records": [
+          {
+            "content": "a.ns.selectel.ru. support.selectel.ru. 2026101202 10800 3600 604800 60",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "7e44cd62-f3a7-4797-9d5e-63f74dbb2c5e"
+      },
+      {
+        "id": "7244f0ef-7156-46c3-9fcd-9b2cd93aa5e2",
+        "name": "gotoelbrus.ru.",
+        "ttl": 3600,
+        "type": "NS",
+        "records": [
+          {
+            "content": "b.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "c.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "a.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "d.ns.selectel.ru.",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "7e44cd62-f3a7-4797-9d5e-63f74dbb2c5e"
+      },
+      {
+        "id": "9ade7f51-1ce9-4f8c-ad42-e7b36fca27f2",
+        "name": "www.gotoelbrus.ru.",
+        "ttl": 3600,
+        "type": "A",
+        "records": [
+          {
+            "content": "161.104.35.24",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "7e44cd62-f3a7-4797-9d5e-63f74dbb2c5e"
+      }
+    ]
+  },
+  "kavkazskitur.com.": {
+    "zone_info": {
+      "id": "02a7aca5-4ec7-46a7-b5fc-f3691aa064fb",
+      "name": "kavkazskitur.com.",
+      "project_id": "a24677210a304aee8d2a9db33282cc65",
+      "created_at": "2026-10-09T15:33:29+00:00",
+      "updated_at": "2026-10-12T16:32:48+00:00",
+      "comment": null,
+      "disabled": false,
+      "protected": false,
+      "delegation_checked_at": "2026-10-15T05:49:28+00:00",
+      "last_delegated_at": "2026-10-15T05:49:28+00:00",
+      "last_check_status": true
+    },
+    "records": [
+      {
+        "id": "47bc9988-72bc-4ffb-999c-55f86488f056",
+        "name": "kavkazskitur.com.",
+        "ttl": 3600,
+        "type": "A",
+        "records": [
+          {
+            "content": "161.104.35.24",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "02a7aca5-4ec7-46a7-b5fc-f3691aa064fb"
+      },
+      {
+        "id": "37aaf8c3-beb8-4c4b-aa2b-02686ca49c06",
+        "name": "kavkazskitur.com.",
+        "ttl": 3600,
+        "type": "NS",
+        "records": [
+          {
+            "content": "b.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "c.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "a.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "d.ns.selectel.ru.",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "02a7aca5-4ec7-46a7-b5fc-f3691aa064fb"
+      },
+      {
+        "id": "bb600777-f70f-4d83-b81d-9d8b03b35a8b",
+        "name": "kavkazskitur.com.",
+        "ttl": 3600,
+        "type": "SOA",
+        "records": [
+          {
+            "content": "a.ns.selectel.ru. support.selectel.ru. 2026101202 10800 3600 604800 60",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "02a7aca5-4ec7-46a7-b5fc-f3691aa064fb"
+      },
+      {
+        "id": "3bfb3feb-b8a8-4a96-baa8-c035d7cd3023",
+        "name": "www.kavkazskitur.com.",
+        "ttl": 3600,
+        "type": "A",
+        "records": [
+          {
+            "content": "161.104.35.24",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "02a7aca5-4ec7-46a7-b5fc-f3691aa064fb"
+      }
+    ]
+  },
+  "kavkazskitur.ru.": {
+    "zone_info": {
+      "id": "f5e6323a-9300-4e35-bea1-c431ad354b51",
+      "name": "kavkazskitur.ru.",
+      "project_id": "a24677210a304aee8d2a9db33282cc65",
+      "created_at": "2026-10-09T15:33:15+00:00",
+      "updated_at": "2026-10-12T16:32:25+00:00",
+      "comment": null,
+      "disabled": false,
+      "protected": false,
+      "delegation_checked_at": "2026-10-15T09:56:52+00:00",
+      "last_delegated_at": "2026-10-15T09:56:52+00:00",
+      "last_check_status": true
+    },
+    "records": [
+      {
+        "id": "dcc2191e-f5e3-42ba-8638-5792091fd4c6",
+        "name": "kavkazskitur.ru.",
+        "ttl": 3600,
+        "type": "A",
+        "records": [
+          {
+            "content": "161.104.35.24",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "f5e6323a-9300-4e35-bea1-c431ad354b51"
+      },
+      {
+        "id": "86c239d1-6f99-434b-af0e-29b622654a1d",
+        "name": "kavkazskitur.ru.",
+        "ttl": 3600,
+        "type": "NS",
+        "records": [
+          {
+            "content": "b.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "c.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "a.ns.selectel.ru.",
+            "disabled": false
+          },
+          {
+            "content": "d.ns.selectel.ru.",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "f5e6323a-9300-4e35-bea1-c431ad354b51"
+      },
+      {
+        "id": "dc0b2798-db3e-4b69-a8b7-f98207ddd65d",
+        "name": "kavkazskitur.ru.",
+        "ttl": 3600,
+        "type": "SOA",
+        "records": [
+          {
+            "content": "a.ns.selectel.ru. support.selectel.ru. 2026101202 10800 3600 604800 60",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "f5e6323a-9300-4e35-bea1-c431ad354b51"
+      },
+      {
+        "id": "0bdeeec7-af6a-47b0-a01c-1263a4c6aa38",
+        "name": "www.kavkazskitur.ru.",
+        "ttl": 3600,
+        "type": "A",
+        "records": [
+          {
+            "content": "161.104.35.24",
+            "disabled": false
+          }
+        ],
+        "comment": null,
+        "managed_by": null,
+        "zone_id": "f5e6323a-9300-4e35-bea1-c431ad354b51"
+      }
+    ]
+  }
+}

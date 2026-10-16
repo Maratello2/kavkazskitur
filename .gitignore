@@ -37,3 +37,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# credentials & tokens
+*token*.json
+*.secret
+.selectel_creds.json
+scripts/selectel_token.json
